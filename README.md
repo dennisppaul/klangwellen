@@ -1,8 +1,10 @@
 # KlangWellen
 
+*KlangWellen* is a C++ library for processing audio signals. each processor ( or class ) is designed around a central `process` method that can either receive and/or emitt samples.
+
 ## processor interface
 
-*KlangWellen* refrains from implementing `process` interfaces. however, most processors supply a *conceptual* interface for processing signals in one or more of the following `process` methods:
+*KlangWellen* refrains from implementing `process` interfaces with the know C++ techniques ( i.e virtual functions ). however, most processors supply a *conceptual* interface for processing signals in one or more of the following `process` methods:
 
 1. [ ] `float process()` :: generate single **mono** signal
 2. [ ] `float process(float)‌` :: single **mono** signal
