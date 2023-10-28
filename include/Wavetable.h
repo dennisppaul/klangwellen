@@ -136,7 +136,7 @@ namespace klangwellen {
             return fourier_table(wavetable, wavetable_size, harmonics, amps, -0.25f);
         }
 
-        static void sawtooth(float* wavetable, uint32_t wavetable_size, bool is_ramp_up) {
+        static void sawtooth_ramp(float* wavetable, uint32_t wavetable_size, bool is_ramp_up) {
             const float mSign = is_ramp_up ? -1.0f : 1.0f;
             for (uint32_t i = 0; i < wavetable_size; i++) {
                 wavetable[i] = mSign * (2.0f * ((float)i / (float)(wavetable_size - 1)) - 1.0f);
