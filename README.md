@@ -2,6 +2,21 @@
 
 *KlangWellen* is a C++ library for processing audio signals. each processor ( or class ) is designed around a central `process` method that either receives and/or emitts samples.
 
+*KlangWellen* is an header-only library which should make it easier to integrate into projects.
+
+## compiling + running tests
+
+to compile and run tests use the CLI as shown below ( example for `klangwellen-to-wav` + only tested on MacOS with Xcode installed ):
+
+```
+$ cd test/
+$ clang++ -std=c++17 klangwellen-to-wav.cpp -I../include/ -I./ -o klangwellen-to-wav
+$ ./klangwellen-to-wav # run test
+$ afplay klangwellen-to-wav.wav # optionally playback WAV with afplay
+```
+
+or use the provided shellscript or
+
 ## processor interface
 
 *KlangWellen* refrains from implementing `process` interfaces with the know C++ techniques ( i.e virtual functions ). however, most processors supply a *conceptual* interface for processing signals in one or more of the following `process` methods:
@@ -14,7 +29,7 @@
 
 note, that *1. `float process()`* only generates a signal. *‌2. `float process(float)‌`* is encouraged to respect the input signal. however, in some cases ( in stereo signal generators ) it may overwrite the input signal regardless.
 
-developers are encouraged to only implement the variants that make sense for a specific processors. developers are also encouraged to add a comment to the head of a processor showing which `process` methods are available.
+developers are encouraged to only implement the variants that make sense for a specific processors. developers are also encouraged to add a comment to the head of a processor marking those `process` methods are available with an `[x]`.
 
 ```
 /**

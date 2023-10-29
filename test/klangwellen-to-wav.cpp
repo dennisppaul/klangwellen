@@ -1,3 +1,6 @@
+#define KLANG_SAMPLES_PER_AUDIO_BLOCK 256
+#define KLANG_SAMPLING_RATE           44100
+
 #include <stdint.h>
 #include <stdio.h>
 
@@ -17,8 +20,8 @@ static const int mNumSamples = klangwellen::KlangWellen::DEFAULT_SAMPLING_RATE *
 float            mAudioBuffer[mNumSamples];
 
 int main() {
-    std::cout << "+++ SAMPLING_RATE .... : " << klangwellen::KlangWellen::DEFAULT_SAMPLING_RATE << std::endl;
-    std::cout << "+++ NUM OF SAMPLES ... : " << mNumSamples << std::endl;
+    std::cout << "SAMPLING_RATE .... : " << klangwellen::KlangWellen::DEFAULT_SAMPLING_RATE << std::endl;
+    std::cout << "NUM OF SAMPLES ... : " << mNumSamples << std::endl;
 
     klangwellen::Wavetable::sawtooth(fWavetable.get_wavetable(), fWavetable.get_wavetable_size(), 5);
     fWavetable.set_frequency(27.5);

@@ -30,6 +30,11 @@
 #define KLANG_SAMPLES_PER_AUDIO_BLOCK 512
 #endif
 
+#ifndef KLANG_SAMPLING_RATE
+#warning KLANG_SAMPLING_RATE not defined - using default value of 48000
+#define KLANG_SAMPLING_RATE 48000
+#endif
+
 #ifndef PI
 #define PI M_PI
 #endif
@@ -50,14 +55,14 @@ namespace klangwellen {
         static const uint8_t      BITS_PER_SAMPLE_32                    = 32;
         static const uint8_t      BITS_PER_SAMPLE_8                     = 8;
         static constexpr float    DEFAULT_ATTACK                        = 0.005f;
-        static const int          DEFAULT_AUDIOBLOCK_SIZE               = 1024;
+        static const int          DEFAULT_AUDIOBLOCK_SIZE               = KLANG_SAMPLES_PER_AUDIO_BLOCK;  // TODO decide for either one
         static const int          DEFAULT_AUDIO_DEVICE                  = -1;
         static const uint8_t      DEFAULT_BITS_PER_SAMPLE               = BITS_PER_SAMPLE_16;
         static constexpr float    DEFAULT_DECAY                         = 0.01f;
         static constexpr float    DEFAULT_FILTER_BANDWIDTH              = 100.0f;
         static constexpr float    DEFAULT_FILTER_FREQUENCY              = 1000.0f;
         static constexpr float    DEFAULT_RELEASE                       = 0.075f;
-        static constexpr uint32_t DEFAULT_SAMPLING_RATE                 = 48000;
+        static constexpr uint32_t DEFAULT_SAMPLING_RATE                 = KLANG_SAMPLING_RATE;                          // TODO decide for either one
         static constexpr uint32_t DEFAULT_INTERPOLATE_AMP_FREQ_DURATION = 5.f / 1000.f * (float)DEFAULT_SAMPLING_RATE;  // KlangWellen::millis_to_samples(5);
         static constexpr float    DEFAULT_SUSTAIN                       = 0.5f;
         static const int          DEFAULT_WAVETABLE_SIZE                = 512;
@@ -155,12 +160,43 @@ namespace klangwellen {
 
         /* --- math --- */
 
-        static uint32_t millis_to_samples(float pMillis, float pSamplingRate);
-        static uint32_t millis_to_samples(float pMillis);
-        static float    random_normalized();
-        static uint32_t x32Seed;
-        static uint32_t xorshift32();
-        static float    random();
+        // static uint32_t millis_to_samples(float pMillis, float pSamplingRate);
+        // static uint32_t millis_to_samples(float pMillis);
+        // static float    random_normalized();
+        // static uint32_t x32Seed;
+        // static uint32_t xorshift32();
+        // static float    random();
+        inline static uint32_t x32Seed = 23;
+
+        static uint32_t millis_to_samples(float pMillis, float pSamplingRate) {
+            return (uint32_t)(pMillis / 1000.0f * pSamplingRate);
+        }
+
+        static uint32_t millis_to_samples(float pMillis) {
+            return (uint32_t)(pMillis / 1000.0f * (float)klangwellen::KlangWellen::DEFAULT_SAMPLING_RATE);
+        }
+
+        /* xorshift32 ( ref: https://en.wikipedia.org/wiki/Xorshift ) */
+        // static uint32_t x32Seed = 23;
+        static uint32_t xorshift32() {
+            x32Seed ^= x32Seed << 13;
+            x32Seed ^= x32Seed >> 17;
+            x32Seed ^= x32Seed << 5;
+            return x32Seed;
+        }
+
+        /**
+         * returns a random number between 0 ... 1
+         */
+        static float random_normalized() {
+            // TODO replace with mapping, without division
+            return ((float)xorshift32() / UINT32_MAX);
+        }
+
+        static float random() {
+            // TODO replace with mapping, without division
+            return ((float)xorshift32() / UINT32_MAX) * 2 - 1;
+        }
 
         inline static float clamp(float value,
                                   float minimum,
@@ -270,11 +306,11 @@ namespace klangwellen {
         }
 #pragma GCC diagnostic pop
 
-        static constexpr float PIf = (float)PI;
+        static constexpr float PIf     = (float)PI;
         static constexpr float TWO_PIf = (float)TWO_PI;
 
         inline static float fast_sin(float x) {
-            if (x < - PIf) {
+            if (x < -PIf) {
                 while (x < -PIf) {
                     x += TWO_PIf;
                 }
@@ -437,4 +473,5 @@ namespace klangwellen {
             }
         }
     };
+
 }  // namespace klangwellen
