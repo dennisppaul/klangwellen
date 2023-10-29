@@ -1,10 +1,8 @@
-// @TODO Delay is broken, fix it
-
 /*
- * Wellen
+ * KlangWellen
  *
- * This file is part of the *wellen* library (https://github.com/dennisppaul/wellen).
- * Copyright (c) 2023 Dennis P Paul.
+ * This file is part of the *KlangWellen* library (https://github.com/dennisppaul/klangwellen).
+ * Copyright (c) 2023 Dennis P Paul
  *
  * This library is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -28,6 +26,8 @@
  * - [x] void process(float*, uint32_t)
  * - [ ] void process(float*, float*, uint32_t)
  */
+
+// @TODO Delay is broken, fix it
 
 #pragma once
 
