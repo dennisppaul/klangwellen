@@ -17,9 +17,9 @@ $ afplay klangwellen-to-wav.wav # optionally playback WAV with afplay
 
 or use the provided shellscript or
 
-## processor interface
+## `processor()` interface
 
-*KlangWellen* refrains from implementing `process` interfaces with the know C++ techniques ( i.e virtual functions ). however, most processors supply a *conceptual* interface for processing signals in one or more of the following `process` methods:
+*KlangWellen* refrains from implementing `process` interfaces with the know C++ techniques[^1]. however, most processors supply a *conceptual* interface for processing signals in one or more of the following `process` methods:
 
 1. [ ] `float process()` :: generate single **mono** signal
 2. [ ] `float process(float)‌` :: single **mono** signal
@@ -42,3 +42,5 @@ developers are encouraged to only implement the variants that make sense for a s
  * - [ ] void process(float*, float*, uint32_t)
  */
 ```
+
+[^1]: i.e *pure virtual functions* ( i.e `virtual float process() = 0;` ) in a base class that are then used in a derived class ( i.e `float process() override {}‌` ). although this is the preferred *object oriented programming* (OOP) approach, my ( possibly faulty ) research has shown that there is a significant ( considering that the process function is called at high very frequencies ) performance decrease when working with virtual methods. this may not be as important on modern *desktop* machine but surely makes a difference on less powerful microcontroller-based platforms which definitely are a targeted platform for this library.
