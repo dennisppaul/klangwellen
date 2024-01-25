@@ -158,6 +158,34 @@ namespace klangwellen {
             return MIDI_NOTE_CONVERSION_BASE_FREQUENCY * pow(2, ((pMidiNote - NOTE_OFFSET) / 12.0));
         }
 
+        static void normalize(float* buffer, const uint32_t numSamples) {
+            if (buffer == nullptr || numSamples == 0) {
+                return;
+            }
+
+            float peakValue = 0.0f;
+
+            // find the peak value in the buffer
+            for (uint32_t i = 0; i < numSamples; i++) {
+                const float sample = std::abs(buffer[i]);
+                if (sample > peakValue) {
+                    peakValue = sample;
+                }
+            }
+
+            // avoid division by zero
+            if (peakValue == 0.0f) {
+                return;
+            }
+
+            const float normalizationFactor = 1.0f / peakValue;
+
+            // normalize the buffer
+            for (uint32_t i = 0; i < numSamples; i++) {
+                buffer[i] *= normalizationFactor;
+            }
+        }
+
         /* --- math --- */
 
         // static uint32_t millis_to_samples(float pMillis, float pSamplingRate);
@@ -202,6 +230,9 @@ namespace klangwellen {
                                   float minimum,
                                   float maximum) {
             return value > maximum ? maximum : (value < minimum ? minimum : value);
+        }
+        inline static float clip(float value) {
+            return clamp(value);
         }
 
         inline static float clamp(float value) {
