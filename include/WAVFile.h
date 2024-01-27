@@ -53,7 +53,7 @@ public:
         std::vector<uint8_t> buffer(num_bytes);
         file.read(reinterpret_cast<char *>(buffer.data()), num_bytes);
 
-        int bytesRead = file.gcount();
+        const int bytesRead = file.gcount();
         buffer.resize(bytesRead);
 
         return buffer;
@@ -65,15 +65,15 @@ public:
 
     std::vector<float> get_sample_block(int num_samples) {
         // Calculate the number of bytes per sample (taking into account the bit depth and number of channels)
-        int bytesPerSample = (fBitDepth / 8);
-        int numBytes       = num_samples * bytesPerSample;
+        const int bytesPerSample = (fBitDepth / 8);
+        const int numBytes       = num_samples * bytesPerSample;
 
         // Create a buffer of the calculated size
         std::vector<uint8_t> buffer(numBytes);
         file.read(reinterpret_cast<char *>(buffer.data()), numBytes);
 
         // Check how many bytes were actually read
-        int bytesRead = file.gcount();
+        const int bytesRead = file.gcount();
         // if (bytesRead < numBytes) {
         //     // Less data than expected - could be EOF or read error
         //     if (file.eof()) {
@@ -90,11 +90,11 @@ public:
         return convertToFloat(buffer, fAudioFormat); // to array `float* array = vec.data();`
     }
 
-    bool end_of_file() {
+    bool end_of_file() const {
         return file.eof();
     }
 
-    float *get_samples(float *samples, uint32_t num_samples) {
+    float *get_samples(float *samples) {
         if (!file.is_open()) {
             throw std::runtime_error("File not open");
         }
@@ -104,15 +104,14 @@ public:
         // const uint32_t numSamples = get_total_samples();
         // auto *         samples    = new float[numSamples];
 
-        // Define a suitable chunk size
-        const size_t chunkSize = 4096; // 4 KB, for example
-        auto *       buffer    = new uint8_t[chunkSize];
+        constexpr size_t chunkSize = 4096; // 4 KB
+        auto *           buffer    = new uint8_t[chunkSize];
 
         try {
             size_t   totalBytesProcessed = 0;
             uint32_t sampleIndex         = 0;
             while (totalBytesProcessed < fDataChunkSize) {
-                size_t bytesToRead = std::min(chunkSize, fDataChunkSize - totalBytesProcessed);
+                const size_t bytesToRead = std::min(chunkSize, fDataChunkSize - totalBytesProcessed);
                 file.read(reinterpret_cast<char *>(buffer), bytesToRead);
 
                 if (!file) {
@@ -120,7 +119,7 @@ public:
                     break;
                 }
 
-                std::streamsize bytesRead = file.gcount();
+                const std::streamsize bytesRead = file.gcount();
                 totalBytesProcessed += bytesRead;
 
                 if (bytesRead < static_cast<std::streamsize>(bytesToRead)) {
@@ -131,7 +130,7 @@ public:
                 for (size_t i = 0; i < bytesRead; i += (fBitDepth / 8)) {
                     if (fBitDepth == 16) {
                         // 16-bit PCM
-                        int16_t val            = buffer[i] | (buffer[i + 1] << 8);
+                        const int16_t val      = buffer[i] | (buffer[i + 1] << 8);
                         samples[sampleIndex++] = static_cast<float>(val) / 32768.0f;
                     } else if (fBitDepth == 8) {
                         // 8-bit PCM
@@ -192,7 +191,7 @@ public:
         file.seekg(fStartOfSampleData);
     }
 
-    std::string get_audio_format_name(uint16_t audio_format_id) const {
+    static std::string get_audio_format_name(uint16_t audio_format_id) {
         switch (audio_format_id) {
             case AUDIO_FORMAT_PCM:
                 return "PCM";
@@ -318,12 +317,12 @@ private:
                 }
             } else if (fBitDepth == 8) {
                 for (size_t i = 0; i < buffer.size(); i++) {
-                    auto sample = static_cast<int8_t>(buffer[i] - 128);
+                    const auto sample = static_cast<int8_t>(buffer[i] - 128);
                     floatBuffer.push_back(static_cast<float>(sample) / 128.0f);
                 }
             } else if (fBitDepth == 32) {
                 for (size_t i = 0; i < buffer.size(); i += 4) {
-                    auto sample = reinterpret_cast<float *>(&buffer[i]);
+                    const auto sample = reinterpret_cast<float *>(&buffer[i]);
                     floatBuffer.push_back(*sample);
                 }
             } else {
@@ -331,7 +330,7 @@ private:
             }
         } else if (format == AUDIO_FORMAT_FLOAT) {
             for (size_t i = 0; i < buffer.size(); i += 4) {
-                auto *sample = reinterpret_cast<float *>(&buffer[i]);
+                const auto *sample = reinterpret_cast<float *>(&buffer[i]);
                 floatBuffer.push_back(*sample);
             }
         } else {
