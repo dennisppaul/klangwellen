@@ -229,8 +229,8 @@ namespace klangwellen {
                 const int32_t mNextIndex  = wrapIndex(mCurrentIndex + 1);
                 const float   mNextSample = convert_sample(fBuffer[mNextIndex]);
                 mSample                   = mSample * (1.0f - mFrac) + mNextSample * mFrac;
-                // mSample = get_sample_linear(fBuffer, fBufferLength, fBufferIndex);
-                // mSample = get_sample_cubic(fBuffer, fBufferLength, fBufferIndex);
+                // mSample = interpolate_samples_linear(fBuffer, fBufferLength, fBufferIndex);
+                // mSample = interpolate_samples_cubic(fBuffer, fBufferLength, fBufferIndex);
             }
             mSample *= fAmplitude;
 
@@ -518,56 +518,6 @@ namespace klangwellen {
         float convert_sample(const BUFFER_TYPE pRawSample) {
             return pRawSample;
         }
-
-        // static float linear_interpolate(float y1, float y2, float mu) {
-        //     return y1 * (1.0f - mu) + y2 * mu;
-        // }
-        //
-        // static float get_sample_linear(float *buffer, size_t bufferSize, float position) {
-        //     int   posInt = static_cast<int>(position);
-        //     float mu     = position - posInt;
-        //
-        //     // Ensure that the positions are valid
-        //     int y1Pos = posInt;
-        //     int y2Pos = (posInt + 1 >= bufferSize) ? bufferSize - 1 : posInt + 1;
-        //
-        //     // Get the samples for interpolation
-        //     float y1 = buffer[y1Pos];
-        //     float y2 = buffer[y2Pos];
-        //
-        //     // Return the interpolated sample
-        //     return linear_interpolate(y1, y2, mu);
-        // }
-        //
-        // static float cubic_interpolate(const float y0, const float y1, const float y2, const float y3, const float mu) {
-        //     const float mu2 = mu * mu;
-        //     const float a0  = y3 - y2 - y0 + y1;
-        //     const float a1  = y0 - y1 - a0;
-        //     const float a2  = y2 - y0;
-        //     const float a3  = y1;
-        //
-        //     return (a0 * mu * mu2 + a1 * mu2 + a2 * mu + a3);
-        // }
-        //
-        // static float get_sample_cubic(float *buffer, const uint32_t bufferSize, const float position) {
-        //     const int   posInt = static_cast<int>(position);
-        //     const float mu     = position - posInt;
-        //
-        //     // Ensure that the positions are valid
-        //     const int y0Pos = (posInt - 1 < 0) ? 0 : posInt - 1;
-        //     const int y1Pos = posInt;
-        //     const int y2Pos = (posInt + 1 >= bufferSize) ? bufferSize - 1 : posInt + 1;
-        //     const int y3Pos = (posInt + 2 >= bufferSize) ? bufferSize - 1 : posInt + 2;
-        //
-        //     // Get the samples for interpolation
-        //     const float y0 = buffer[y0Pos];
-        //     const float y1 = buffer[y1Pos];
-        //     const float y2 = buffer[y2Pos];
-        //     const float y3 = buffer[y3Pos];
-        //
-        //     // Return the interpolated sample
-        //     return cubic_interpolate(y0, y1, y2, y3, mu);
-        // }
     };
 
     template<>
