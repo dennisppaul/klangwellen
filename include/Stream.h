@@ -29,51 +29,58 @@
 
 #pragma once
 
-#include "WAVFile.h"
-
 namespace klangwellen {
-    class WAVStreamer final {
+    class StreamDataProvider {
     public:
-        WAVStreamer(const std::string &filename,
-                    const uint32_t     stream_buffer_size,
-                    const uint8_t      stream_buffer_division = 4,
-                    const uint32_t     sampling_rate          = KlangWellen::DEFAULT_SAMPLING_RATE) : fBufferLength(
-                stream_buffer_size),
-            fBuffer(new float[stream_buffer_size]),
-            fBufferDivision(stream_buffer_division),
-            fSamplingRate(sampling_rate),
-            fAmplitude(1.0f),
-            fStepSize(1.0f),
-            fInterpolateSamples(true),
-            fBufferIndex(0.0f),
-            fBufferIndexPrev(0.0f),
-            fCompleteEvent(NO_EVENT) {
-            fWAVFile = new WAVFile(filename);
-            fWAVFile->print_info();
+        virtual ~StreamDataProvider() = default;
 
-            std::vector<float> mSamples = fWAVFile->get_sample_block(fBufferLength);
-            std::copy(mSamples.begin(), mSamples.end(), fBuffer);
+        virtual void fill_buffer(float *buffer, uint32_t length) {
+            std::fill_n(buffer, length, 0.0f);
+        }
+    };
+
+    class Stream final {
+    public:
+        Stream(StreamDataProvider *stream_data_provider,
+               const uint32_t      stream_buffer_size,
+               const uint8_t       stream_buffer_division      = 4,
+               const uint8_t       stream_buffer_update_offset = 1,
+               const uint32_t      sampling_rate               = KlangWellen::DEFAULT_SAMPLING_RATE)
+            : fStreamDataProvider(stream_data_provider),
+              fBufferLength(stream_buffer_size),
+              fBuffer(new float[stream_buffer_size]),
+              fBufferDivision(stream_buffer_division),
+              fBufferSegmentOffset(stream_buffer_update_offset % stream_buffer_division),
+              fSamplingRate(sampling_rate),
+              fAmplitude(1.0f),
+              fStepSize(1.0f),
+              fInterpolateSamples(true),
+              fBufferIndex(0.0f),
+              fBufferIndexPrev(0.0f),
+              fCompleteEvent(NO_EVENT) {
+            fStreamDataProvider->fill_buffer(fBuffer, fBufferLength);
         }
 
-        ~WAVStreamer() {
+        ~Stream() {
             delete[] fBuffer;
         }
 
         float process() {
             fBufferIndex += fStepSize;
             const int32_t mRoundedIndex = static_cast<int32_t>(fBufferIndex);
-
             const float   mFrac         = fBufferIndex - mRoundedIndex;
             const int32_t mCurrentIndex = wrapIndex(mRoundedIndex);
             fBufferIndex                = mCurrentIndex + mFrac;
 
             float mSample = convert_sample(fBuffer[mCurrentIndex]);
 
-            /* interpolate */
+            /* linear interpolation */
             if (fInterpolateSamples) {
                 const int32_t mNextIndex  = wrapIndex(mCurrentIndex + 1);
                 const float   mNextSample = convert_sample(fBuffer[mNextIndex]);
-                mSample                   = mSample * (1.0f - mFrac) + mNextSample * mFrac;
+                const float   a           = mSample * (1.0f - mFrac);
+                const float   b           = mNextSample * mFrac;
+                mSample                   = a + b;
             }
             mSample *= fAmplitude;
 
@@ -81,16 +88,26 @@ namespace klangwellen {
             int8_t mCompleteEvent = checkCompleteEvent(fBufferDivision);
             if (mCompleteEvent > NO_EVENT) {
                 fCompleteEvent = mCompleteEvent;
-                mCompleteEvent -= 1;
+                mCompleteEvent -= fBufferSegmentOffset;
                 mCompleteEvent += fBufferDivision;
                 mCompleteEvent %= fBufferDivision;
-                replace_buffer(fBuffer, fBufferLength,
-                               fWAVFile->get_sample_block(fBufferLength / fBufferDivision),
-                               mCompleteEvent, fBufferDivision);
+                replace_segment(fBufferDivision, mCompleteEvent);
             }
             fBufferIndexPrev = fBufferIndex;
 
             return mSample;
+        }
+
+        void replace_segment(const uint32_t numberOfSegments, const uint32_t segmentIndex) const {
+            if (segmentIndex >= numberOfSegments) {
+                std::cerr << "Segment index out of range" << std::endl;
+                return;
+            }
+
+            const uint32_t lengthOfSegment = fBufferLength / numberOfSegments;
+            float *        startOfSegment  = fBuffer + (segmentIndex * lengthOfSegment);
+
+            fStreamDataProvider->fill_buffer(startOfSegment, lengthOfSegment);
         }
 
         float *get_buffer() const {
@@ -138,11 +155,12 @@ namespace klangwellen {
     private:
         static constexpr int8_t NO_EVENT = -1;
 
-        WAVFile *fWAVFile = nullptr;
+        StreamDataProvider *fStreamDataProvider;
 
         uint32_t      fBufferLength;
         float *       fBuffer;
         const uint8_t fBufferDivision;
+        const uint8_t fBufferSegmentOffset;
         float         fSamplingRate;
         float         fAmplitude;
         float         fStepSize;
@@ -178,32 +196,6 @@ namespace klangwellen {
             return (border == 0 && prev > current) ||
                    (prev < border && current >= border) ||
                    (prev > current && current >= border);
-        }
-
-        static void replace_buffer(float *                   target, const size_t targetSize,
-                                   const std::vector<float> &source,
-                                   const int                 sectionIndex, const int totalSections) {
-            if (sectionIndex < 0 || sectionIndex > (totalSections - 1)) {
-                std::cerr << "Invalid section index." << std::endl;
-                return;
-            }
-
-            const size_t sectionSize = targetSize / totalSections;
-            const size_t startIndex  = sectionIndex * sectionSize;
-
-            // Check if the source size matches the section size
-            if (source.size() != sectionSize) {
-                std::cerr << "Source vector size does not match the section size." << std::endl;
-                return;
-            }
-
-            // Check for out-of-bounds
-            if (startIndex + sectionSize > targetSize) {
-                std::cerr << "Section replacement exceeds target array bounds." << std::endl;
-                return;
-            }
-
-            std::copy(source.begin(), source.end(), target + startIndex);
         }
     };
 } // namespace klangwellen

@@ -186,6 +186,25 @@ namespace klangwellen {
             }
         }
 
+        static void peak(float* buffer, const uint32_t length, float& min, float& max) {
+            if (buffer == nullptr || length == 0) {
+                return;
+            }
+
+            min  = 0.0f;
+            max  = 0.0f;
+
+            for (uint32_t i = 0; i < length; i++) {
+                const float sample = buffer[i];
+                if (sample < min) {
+                    min = sample;
+                }
+                if (sample > max) {
+                    max = sample;
+                }
+            }
+        }
+
         /* --- math --- */
 
         // static uint32_t millis_to_samples(float pMillis, float pSamplingRate);
@@ -285,12 +304,17 @@ namespace klangwellen {
             // from https://stackoverflow.com/questions/33333363/built-in-mod-vs-custom-mod-function-improve-the-performance-of-modulus-op
         }
 
-        inline static float map(float value,
-                                float inputMin,
-                                float inputMax,
-                                float outputMin,
-                                float outputMax) {
-            return ((value - inputMin) / (inputMax - inputMin) * (outputMax - outputMin) + outputMin);
+        static float map(const float value,
+                         const float inputMin,
+                         const float inputMax,
+                         const float outputMin,
+                         const float outputMax) {
+            const float a = value - inputMin;
+            const float b = inputMax - inputMin;
+            const float c = outputMax - outputMin;
+            const float d = a / b;
+            const float e = d * c;
+            return e + outputMin;
         }
 
         inline static int16_t map_i16(int16_t value,
