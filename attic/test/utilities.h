@@ -55,7 +55,7 @@ void write_WAV_file(const char*  filename,
         }
     }
 
-    write_WAV_file("klangwellen-to-wav.wav",
+    write_WAV_file(filename,
                    sampleRate,
                    numChannels,
                    16,
