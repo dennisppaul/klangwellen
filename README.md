@@ -8,7 +8,7 @@
 
 to compile and run tests use the CLI as shown below ( example for `klangwellen-to-wav` + only tested on MacOS with Xcode installed ):
 
-```
+```zsh
 $ cd test/
 $ clang++ -std=c++17 klangwellen-to-wav.cpp -I../include/ -I./ -o klangwellen-to-wav
 $ ./klangwellen-to-wav # run test
@@ -31,7 +31,7 @@ note, that *1. `float process()`* only generates a signal. *‌2. `float process
 
 developers are encouraged to only implement the variants that make sense for a specific processors. developers are also encouraged to add a comment to the head of a processor marking those `process` methods are available with an `[x]`.
 
-```
+```cpp
 /**
  * PROCESSOR INTERFACE
  *
@@ -43,4 +43,4 @@ developers are encouraged to only implement the variants that make sense for a s
  */
 ```
 
-[^1]: i.e *pure virtual functions* ( i.e `virtual float process() = 0;` ) in a base class that are then used in a derived class ( i.e `float process() override {}‌` ). although this is the preferred *object oriented programming* (OOP) approach, my ( possibly faulty ) research has shown that there is a significant ( considering that the process function is called at high very frequencies ) performance decrease when working with virtual methods. this may not be as important on modern *desktop* machine but surely makes a difference on less powerful microcontroller-based platforms which definitely are a targeted platform for this library.
+[^1]: i.e *pure virtual functions* ( i.e `virtual float process() = 0;` ) in a base class that are then used in a derived class ( i.e `float process() override {}‌` ). although this is the preferred *object oriented programming* (OOP) approach, my ( possibly faulty ) research has shown that there is a significant ( considering that the process function is called at very high frequencies ) performance decrease when working with virtual methods. this may not be as important on modern *desktop* machine but surely makes a difference on less powerful microcontroller-based platforms which definitely are a targeted platform for this library.
