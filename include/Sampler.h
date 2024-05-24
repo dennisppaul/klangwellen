@@ -58,17 +58,16 @@ namespace klangwellen {
         }
 
         explicit SamplerT(int32_t  buffer_length,
-                          uint32_t sampling_rate = KlangWellen::DEFAULT_SAMPLING_RATE) : SamplerT(
-            new BUFFER_TYPE[buffer_length], buffer_length, sampling_rate) {
+                          uint32_t sampling_rate = KlangWellen::DEFAULT_SAMPLING_RATE) : SamplerT(new BUFFER_TYPE[buffer_length], buffer_length, sampling_rate) {
             fAllocatedBuffer = true;
         }
 
-        SamplerT(BUFFER_TYPE *  buffer,
+        SamplerT(BUFFER_TYPE*   buffer,
                  const int32_t  buffer_length,
                  const uint32_t sampling_rate = KlangWellen::DEFAULT_SAMPLING_RATE) : fDirectionForward(true),
-            fInPoint(0),
-            fOutPoint(0),
-            fSpeed(0) {
+                                                                                      fInPoint(0),
+                                                                                      fOutPoint(0),
+                                                                                      fSpeed(0) {
             fSamplingRate = sampling_rate;
             set_buffer(buffer, buffer_length);
             fBufferIndex        = 0;
@@ -90,11 +89,11 @@ namespace klangwellen {
             }
         }
 
-        void add_listener(SamplerListener *sampler_listener) {
+        void add_listener(SamplerListener* sampler_listener) {
             fSamplerListeners.push_back(sampler_listener);
         }
 
-        bool remove_listener(SamplerListener *sampler_listener) {
+        bool remove_listener(SamplerListener* sampler_listener) {
             for (auto it = fSamplerListeners.begin(); it != fSamplerListeners.end(); ++it) {
                 if (*it == sampler_listener) {
                     fSamplerListeners.erase(it);
@@ -150,7 +149,7 @@ namespace klangwellen {
             return fAmplitude;
         }
 
-        BUFFER_TYPE *get_buffer() {
+        BUFFER_TYPE* get_buffer() {
             return fBuffer;
         }
 
@@ -158,7 +157,7 @@ namespace klangwellen {
             return fBufferLength;
         }
 
-        void set_buffer(BUFFER_TYPE *buffer, const int32_t buffer_length) {
+        void set_buffer(BUFFER_TYPE* buffer, const int32_t buffer_length) {
             fAllocatedBuffer = false; // TODO huuui, this is not nice and might cause some trouble somewhere
             fBuffer          = buffer;
             fBufferLength    = buffer_length;
@@ -248,7 +247,7 @@ namespace klangwellen {
             return mSample;
         }
 
-        void process(float *signal_buffer, const uint32_t buffer_length = KLANG_SAMPLES_PER_AUDIO_BLOCK) {
+        void process(float* signal_buffer, const uint32_t buffer_length = KLANG_SAMPLES_PER_AUDIO_BLOCK) {
             for (uint16_t i = 0; i < buffer_length; i++) {
                 signal_buffer[i] = process();
             }
@@ -315,7 +314,7 @@ namespace klangwellen {
             }
         }
 
-        void record(float *samples, int32_t num_samples) {
+        void record(float* samples, int32_t num_samples) {
             if (fIsRecording) {
                 for (int32_t i = 0; i < num_samples; i++) {
                     const float sample = samples[i];
@@ -335,7 +334,7 @@ namespace klangwellen {
         uint32_t end_recording() {
             fIsRecording                = false;
             const int32_t mBufferLength = fRecording.size();
-            float *       mBuffer       = new float[mBufferLength];
+            float*        mBuffer       = new float[mBufferLength];
             for (int32_t i = 0; i < mBufferLength; i++) {
                 mBuffer[i] = fRecording[i];
             }
@@ -431,29 +430,29 @@ namespace klangwellen {
         }
 
     private:
-        std::vector<SamplerListener *> fSamplerListeners;
-        std::vector<BUFFER_TYPE>       fRecording;
-        uint32_t                       fSamplingRate;
-        float                          fAmplitude;
-        BUFFER_TYPE *                  fBuffer;
-        int32_t                        fBufferLength;
-        float                          fBufferIndex;
-        bool                           fDirectionForward;
-        int32_t                        fEdgeFadePadding;
-        bool                           fEvaluateLoop;
-        float                          fFrequency;
-        float                          fFrequencyScale;
-        int32_t                        fInPoint;
-        int32_t                        fOutPoint;
-        int32_t                        fLoopIn;
-        int32_t                        fLoopOut;
-        bool                           fInterpolateSamples;
-        bool                           fIsPlaying;
-        float                          fSpeed;
-        float                          fStepSize;
-        bool                           fIsFlaggedDone;
-        bool                           fIsRecording;
-        bool                           fAllocatedBuffer;
+        std::vector<SamplerListener*> fSamplerListeners;
+        std::vector<BUFFER_TYPE>      fRecording;
+        uint32_t                      fSamplingRate;
+        float                         fAmplitude;
+        BUFFER_TYPE*                  fBuffer;
+        int32_t                       fBufferLength;
+        float                         fBufferIndex;
+        bool                          fDirectionForward;
+        int32_t                       fEdgeFadePadding;
+        bool                          fEvaluateLoop;
+        float                         fFrequency;
+        float                         fFrequencyScale;
+        int32_t                       fInPoint;
+        int32_t                       fOutPoint;
+        int32_t                       fLoopIn;
+        int32_t                       fLoopOut;
+        bool                          fInterpolateSamples;
+        bool                          fIsPlaying;
+        float                         fSpeed;
+        float                         fStepSize;
+        bool                          fIsFlaggedDone;
+        bool                          fIsRecording;
+        bool                          fAllocatedBuffer;
 
         int32_t last_index() const {
             return fBufferLength - 1;
@@ -461,7 +460,7 @@ namespace klangwellen {
 
         void notifyListeners() {
             if (!fIsFlaggedDone) {
-                for (SamplerListener *l: fSamplerListeners) {
+                for (SamplerListener* l: fSamplerListeners) {
                     l->is_done();
                 }
             }
@@ -555,10 +554,10 @@ namespace klangwellen {
         return mRange * 2.0 - 1.0;
     }
 
-    using SamplerUI8 = SamplerT<uint8_t>;
-    using SamplerI8 = SamplerT<int8_t>;
+    using SamplerUI8  = SamplerT<uint8_t>;
+    using SamplerI8   = SamplerT<int8_t>;
     using SamplerUI16 = SamplerT<uint16_t>;
-    using SamplerI16 = SamplerT<int16_t>;
-    using SamplerF32 = SamplerT<float>;
-    using Sampler = SamplerT<float>;
+    using SamplerI16  = SamplerT<int16_t>;
+    using SamplerF32  = SamplerT<float>;
+    using Sampler     = SamplerT<float>;
 } // namespace klangwellen

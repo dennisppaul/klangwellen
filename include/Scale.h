@@ -29,7 +29,7 @@ namespace klangwellen {
         Scale(const std::initializer_list<uint8_t>& note_list) : length(note_list.size()) {
             notes      = new uint8_t[length];
             uint16_t i = 0;
-            for (uint8_t note : note_list) {
+            for (uint8_t note: note_list) {
                 notes[i] = note;
                 i++;
             }
@@ -63,4 +63,4 @@ namespace klangwellen {
             }
         }
     };
-}  // namespace klangwellen
+} // namespace klangwellen

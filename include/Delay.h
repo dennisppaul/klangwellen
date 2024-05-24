@@ -117,7 +117,7 @@ namespace klangwellen {
 
         void adaptEchoLength() {
             if (fNewEchoLength > 0) {
-                const uint32_t mNewBufferLength = (uint32_t)(fSampleRate * fNewEchoLength);
+                const uint32_t mNewBufferLength = (uint32_t) (fSampleRate * fNewEchoLength);
                 float*         mNewBuffer       = new float[mNewBufferLength]{0};
                 if (fBuffer != nullptr) {
                     for (uint32_t i = 0; i < mNewBufferLength; i++) {
@@ -139,4 +139,4 @@ namespace klangwellen {
             fNewEchoLength = -1;
         }
     };
-}  // namespace klangwellen
+} // namespace klangwellen

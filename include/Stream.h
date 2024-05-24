@@ -34,14 +34,14 @@ namespace klangwellen {
     public:
         virtual ~StreamDataProvider() = default;
 
-        virtual void fill_buffer(float *buffer, uint32_t length) {
+        virtual void fill_buffer(float* buffer, uint32_t length) {
             std::fill_n(buffer, length, 0.0f);
         }
     };
 
     class Stream final {
     public:
-        Stream(StreamDataProvider *stream_data_provider,
+        Stream(StreamDataProvider* stream_data_provider,
                const uint32_t      stream_buffer_size,
                const uint8_t       stream_buffer_division      = 4,
                const uint8_t       stream_buffer_update_offset = 1,
@@ -105,12 +105,12 @@ namespace klangwellen {
             }
 
             const uint32_t lengthOfSegment = fBufferLength / numberOfSegments;
-            float *        startOfSegment  = fBuffer + (segmentIndex * lengthOfSegment);
+            float*         startOfSegment  = fBuffer + (segmentIndex * lengthOfSegment);
 
             fStreamDataProvider->fill_buffer(startOfSegment, lengthOfSegment);
         }
 
-        float *get_buffer() const {
+        float* get_buffer() const {
             return fBuffer;
         }
 
@@ -130,7 +130,7 @@ namespace klangwellen {
             return fBufferIndex;
         }
 
-        void process(float *signal_buffer, const uint32_t buffer_length = KLANG_SAMPLES_PER_AUDIO_BLOCK) {
+        void process(float* signal_buffer, const uint32_t buffer_length = KLANG_SAMPLES_PER_AUDIO_BLOCK) {
             for (uint16_t i = 0; i < buffer_length; i++) {
                 signal_buffer[i] = process();
             }
@@ -155,10 +155,10 @@ namespace klangwellen {
     private:
         static constexpr int8_t NO_EVENT = -1;
 
-        StreamDataProvider *fStreamDataProvider;
+        StreamDataProvider* fStreamDataProvider;
 
         uint32_t      fBufferLength;
-        float *       fBuffer;
+        float*        fBuffer;
         const uint8_t fBufferDivision;
         const uint8_t fBufferSegmentOffset;
         float         fSamplingRate;

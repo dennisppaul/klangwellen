@@ -37,4 +37,4 @@ namespace klangwellen {
         static inline const Scale OCTAVE{0};
         static inline const Scale DIMINISHED{0, 3, 6, 9};
     };
-}  // namespace klangwellen
+} // namespace klangwellen

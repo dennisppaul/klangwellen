@@ -240,4 +240,4 @@ namespace klangwellen {
             }
         }
     };
-}  // namespace klangwellen
+} // namespace klangwellen

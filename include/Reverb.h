@@ -632,4 +632,4 @@ namespace klangwellen {
         float                  fslider1;
         float                  fslider2;
     };
-}  // namespace klangwellen
+} // namespace klangwellen

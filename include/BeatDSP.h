@@ -136,10 +136,10 @@ namespace klangwellen {
 
         void fireEvent() {
             fBeat++;
-            for (BeatListener* l : fListeners) {
+            for (BeatListener* l: fListeners) {
                 l->beat(fBeat);
             }
             call_beat(fBeat);
         }
     };
-}  // namespace klangwellen
+} // namespace klangwellen

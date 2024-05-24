@@ -39,4 +39,4 @@ namespace klangwellen {
             right = signal_right;
         }
     };
-}  // namespace klangwellen
+} // namespace klangwellen

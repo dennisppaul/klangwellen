@@ -166,4 +166,4 @@ namespace klangwellen {
             return mSample;
         }
     };
-}  // namespace klangwellen
+} // namespace klangwellen

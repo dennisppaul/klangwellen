@@ -106,4 +106,4 @@ namespace klangwellen {
             return pDuration > 0 ? (pDelta / fSampleRate) / pDuration : pDelta;
         }
     };
-}  // namespace klangwellen
+} // namespace klangwellen

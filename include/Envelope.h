@@ -298,4 +298,4 @@ namespace klangwellen {
             mDelta                = compute_delta_fraction(mDeltaTMP, mEnvelopeStages[mEnvStage].duration);
         }
     };
-}  // namespace klangwellen
+} // namespace klangwellen

@@ -267,7 +267,7 @@ namespace klangwellen {
 
         const uint8_t amplitudeRescale[17] = {
             0, 1, 2, 2, 2, 3, 3, 4,
-            4, 5, 6, 8, 9, 0xB, 0xD, 0xF, 0  // 17 elements?
+            4, 5, 6, 8, 9, 0xB, 0xD, 0xF, 0 // 17 elements?
         };
 
         // Used to decide which phoneme's blend lengths. The candidate with the lower score is selected.
@@ -550,18 +550,18 @@ namespace klangwellen {
 
         // some flags
         const uint8_t tab36376[117] = {
-            0, 0, 0, 0, 0, 0, 0, 0,  // 0-7
-            0, 0, 0, 0, 0, 0, 0, 0,  // 8-15
+            0, 0, 0, 0, 0, 0, 0, 0, // 0-7
+            0, 0, 0, 0, 0, 0, 0, 0, // 8-15
             0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0,
-            0, 2, 2, 2, 2, 2, 2, 130,  // ' ', '!'
+            0, 2, 2, 2, 2, 2, 2, 130, // ' ', '!'
             0, 0, 2, 2, 2, 2, 2, 2,
             3, 3, 3, 3, 3, 3, 3, 3,
             3, 3, 2, 2, 2, 2, 2, 2,
-            2, 192, 168, 176, 172, 192, 160, 184,  // '@', 'A'
+            2, 192, 168, 176, 172, 192, 160, 184, // '@', 'A'
             160, 192, 188, 160, 172, 168, 172, 192,
             160, 160, 172, 180, 164, 192, 168, 168,
-            176, 192, 188, 0, 0, 0, 2, 0,  // 'X', 'Y', 'Z', '[',
+            176, 192, 188, 0, 0, 0, 2, 0, // 'X', 'Y', 'Z', '[',
             32, 32, 155, 32, 192, 185, 32, 205,
             163, 76, 138, 142};
 
@@ -1085,113 +1085,113 @@ namespace klangwellen {
 
         /* offset of 21 > 21–127 */
         const uint8_t SAM_MIDI_NOTE_TOSAM_PITCH_MAP[107] = {
-            0,    // A0
-            0,    // A#0
-            0,    // B0
-            255,  // C1
-            230,  // C#1
-            210,  // D1
-            190,  // D#1
-            175,  // E1
-            165,  // F1
-            158,  // F#1
-            150,  // G1
-            142,  // G#1
-            132,  // A1
-            128,  // A#1
-            121,  // B1
-            114,  // C2
-            108,  // C#2
-            100,  // D2
-            96,   // D#2
-            90,   // E2
-            86,   // F2
-            80,   // F#2
-            76,   // G2
-            72,   // G#2
-            68,   // A2
-            64,   // A#2
-            60,   // B2
-            57,   // C3
-            54,   // C#3
-            51,   // D3
-            48,   // D#3
-            45,   // E3
-            43,   // F3
-            40,   // F#3
-            38,   // G3
-            36,   // G#3
-            34,   // A3
-            32,   // A#3
-            30,   // B3
-            28,   // C4
-            27,   // C#4
-            25,   // D4
-            24,   // D#4
-            23,   // E4
-            21,   // F4
-            20,   // F#4
-            19,   // G4
-            18,   // G#4
-            17,   // A4
-            16,   // A#4
-            15,   // B4
-            14,   // C5
-            13,   // C#5
-            13,   // D5 (^)
-            12,   // D#5
-            11,   // E5
-            11,   // F5 (^)
-            10,   // F#5
-            10,   // G5 (^)
-            9,    // G#5
-            9,    // A5 (^)
-            8,    // A#5
-            8,    // B5 (^)
-            7,    // C6
-            7,    // C#6 (^)
-            7,    // D6 (^)
-            6,    // D#6
-            6,    // E6 (^)
-            6,    // F6 (^)
-            5,    // F#6
-            5,    // G6 (^)
-            5,    // G#6 (^)
-            5,    // A6 (^)
-            4,    // A#6
-            4,    // B6 (^)
-            4,    // C7 (^)
-            4,    // C#7 (^)
-            4,    // D7 (^)
-            3,    // D#7
-            3,    // E7 (^)
-            3,    // F7 (^)
-            3,    // F#7 (^)
-            3,    // G7 (^)
-            3,    // G#7 (^)
-            2,    // A7
-            2,    // A#7 (^)
-            2,    // B7 (^)
-            2,    // C8 (^)
-            2,    // C#8 (^)
-            1,    // D8
-            1,    // D#8 (^)
-            1,    // E8 (^)
-            1,    // F8 (^)
-            1,    // F#8 (^)
-            1,    // G8 (^)
-            0,    // G#8
-            0,    // A8
-            0,    // A#8
-            0,    // B8
-            0,    // C9
-            0,    // C#9
-            0,    // D9
-            0,    // D#9
-            0,    // E9
-            0,    // F9
-            0,    // F#9
-            0     // G9
+            0,   // A0
+            0,   // A#0
+            0,   // B0
+            255, // C1
+            230, // C#1
+            210, // D1
+            190, // D#1
+            175, // E1
+            165, // F1
+            158, // F#1
+            150, // G1
+            142, // G#1
+            132, // A1
+            128, // A#1
+            121, // B1
+            114, // C2
+            108, // C#2
+            100, // D2
+            96,  // D#2
+            90,  // E2
+            86,  // F2
+            80,  // F#2
+            76,  // G2
+            72,  // G#2
+            68,  // A2
+            64,  // A#2
+            60,  // B2
+            57,  // C3
+            54,  // C#3
+            51,  // D3
+            48,  // D#3
+            45,  // E3
+            43,  // F3
+            40,  // F#3
+            38,  // G3
+            36,  // G#3
+            34,  // A3
+            32,  // A#3
+            30,  // B3
+            28,  // C4
+            27,  // C#4
+            25,  // D4
+            24,  // D#4
+            23,  // E4
+            21,  // F4
+            20,  // F#4
+            19,  // G4
+            18,  // G#4
+            17,  // A4
+            16,  // A#4
+            15,  // B4
+            14,  // C5
+            13,  // C#5
+            13,  // D5 (^)
+            12,  // D#5
+            11,  // E5
+            11,  // F5 (^)
+            10,  // F#5
+            10,  // G5 (^)
+            9,   // G#5
+            9,   // A5 (^)
+            8,   // A#5
+            8,   // B5 (^)
+            7,   // C6
+            7,   // C#6 (^)
+            7,   // D6 (^)
+            6,   // D#6
+            6,   // E6 (^)
+            6,   // F6 (^)
+            5,   // F#6
+            5,   // G6 (^)
+            5,   // G#6 (^)
+            5,   // A6 (^)
+            4,   // A#6
+            4,   // B6 (^)
+            4,   // C7 (^)
+            4,   // C#7 (^)
+            4,   // D7 (^)
+            3,   // D#7
+            3,   // E7 (^)
+            3,   // F7 (^)
+            3,   // F#7 (^)
+            3,   // G7 (^)
+            3,   // G#7 (^)
+            2,   // A7
+            2,   // A#7 (^)
+            2,   // B7 (^)
+            2,   // C8 (^)
+            2,   // C#8 (^)
+            1,   // D8
+            1,   // D#8 (^)
+            1,   // E8 (^)
+            1,   // F8 (^)
+            1,   // F#8 (^)
+            1,   // G8 (^)
+            0,   // G#8
+            0,   // A8
+            0,   // A#8
+            0,   // B8
+            0,   // C9
+            0,   // C#9
+            0,   // D9
+            0,   // D#9
+            0,   // E9
+            0,   // F9
+            0,   // F#9
+            0    // G9
         };
 
         // tab45216
@@ -1228,14 +1228,14 @@ namespace klangwellen {
         // extern uint32_t SAM_buffer_max_length;
 
         unsigned oldtimetableindex = 0;
-        uint8_t  inputtemp[256];  // secure copy of input tab36096
+        uint8_t  inputtemp[256]; // secure copy of input tab36096
 
-        int8_t  *SAM_buffer;
+        int8_t*  SAM_buffer;
         uint32_t SAM_buffer_max_length;
 
         int debug = 0;
 
-        char input[256];  // tab39445
+        char input[256]; // tab39445
         // standard sam sound
         uint8_t speed    = 72;
         uint8_t pitch    = 64;
@@ -1256,27 +1256,27 @@ namespace klangwellen {
 
         uint8_t A, X, Y;
 
-        uint8_t stress[256];         // numbers from 0 to 8
-        uint8_t phonemeLength[256];  // tab40160
+        uint8_t stress[256];        // numbers from 0 to 8
+        uint8_t phonemeLength[256]; // tab40160
         uint8_t phonemeindex[256];
 
-        uint8_t phonemeIndexOutput[60];   // tab47296
-        uint8_t stressOutput[60];         // tab47365
-        uint8_t phonemeLengthOutput[60];  // tab47416
+        uint8_t phonemeIndexOutput[60];  // tab47296
+        uint8_t stressOutput[60];        // tab47365
+        uint8_t phonemeLengthOutput[60]; // tab47416
 
         // contains the final soundbuffer
         int bufferpos = 0;
 
         // uint8_t wait1 = 7;
         uint8_t wait2 = 6;
-        uint8_t pitches[256];  // tab43008
+        uint8_t pitches[256]; // tab43008
         uint8_t frequency1[256];
         uint8_t frequency2[256];
         uint8_t frequency3[256];
         uint8_t amplitude1[256];
         uint8_t amplitude2[256];
         uint8_t amplitude3[256];
-        uint8_t sampledConsonantFlag[256];  // tab44800
+        uint8_t sampledConsonantFlag[256]; // tab44800
 
         // timetable for more accurate c64 simulation
         int timetable[5][5] = {
@@ -1297,7 +1297,7 @@ namespace klangwellen {
             return rules[address + Y];
         }
 
-        void PrintPhonemes(uint8_t *phonemeindex, uint8_t *phonemeLength, uint8_t *stress) {
+        void PrintPhonemes(uint8_t* phonemeindex, uint8_t* phonemeLength, uint8_t* stress) {
             int i = 0;
             printf("===========================================\n");
 
@@ -1323,14 +1323,14 @@ namespace klangwellen {
         }
 
         void PrintOutput(
-            uint8_t *flag,
-            uint8_t *f1,
-            uint8_t *f2,
-            uint8_t *f3,
-            uint8_t *a1,
-            uint8_t *a2,
-            uint8_t *a3,
-            uint8_t *p) {
+            uint8_t* flag,
+            uint8_t* f1,
+            uint8_t* f2,
+            uint8_t* f3,
+            uint8_t* a1,
+            uint8_t* a2,
+            uint8_t* a3,
+            uint8_t* p) {
             printf("===========================================\n");
             printf("Final data for speech output:\n\n");
             int i = 0;
@@ -1385,21 +1385,21 @@ namespace klangwellen {
             A = tab36376[Y];
         }
 
-        int TextToPhonemes(char *input)  // Code36484
+        int TextToPhonemes(char* input) // Code36484
         {
             // uint8_t *tab39445 = &mem[39445];   //input and output
             // uint8_t mem29;
-            uint8_t        mem56;  // output position for phonemes
+            uint8_t        mem56; // output position for phonemes
             uint8_t        mem57;
             uint8_t        mem58;
             uint8_t        mem59;
             uint8_t        mem60;
             uint8_t        mem61;
-            unsigned short mem62;  // memory position of current rule
+            unsigned short mem62; // memory position of current rule
 
-            uint8_t mem64;  // position of '=' or current character
-            uint8_t mem65;  // position of ')'
-            uint8_t mem66;  // position of '('
+            uint8_t mem64; // position of '=' or current character
+            uint8_t mem65; // position of ')'
+            uint8_t mem66; // position of '('
             uint8_t mem36653;
 
             inputtemp[0] = 32;
@@ -1439,7 +1439,7 @@ namespace klangwellen {
                     mem56++;
                     X        = mem56;
                     A        = 155;
-                    input[X] = (char)155;
+                    input[X] = (char) 155;
                     // goto pos36542;
                     //           Code39771();    //Code39777();
                     return 1;
@@ -1457,7 +1457,7 @@ namespace klangwellen {
                 X        = mem56;
                 A        = '.';
                 input[X] = '.';
-            }  // while
+            } // while
 
             // pos36607:
             A     = mem64;
@@ -1487,7 +1487,7 @@ namespace klangwellen {
             // 36653 is unknown. Contains position
 
         pos36654:
-            input[X] = (char)155;
+            input[X] = (char) 155;
             A        = mem61;
             mem36653 = A;
             //  mem29 = A; // not used
@@ -1732,9 +1732,9 @@ namespace klangwellen {
             goto pos37184;
         pos37113:
             if ((A == 83) || (A == 68))
-                goto pos37108;  // 'S' 'D'
+                goto pos37108; // 'S' 'D'
             if (A != 76)
-                goto pos37135;  // 'L'
+                goto pos37135; // 'L'
             X++;
             A = inputtemp[X];
             if (A != 89)
@@ -1799,23 +1799,23 @@ namespace klangwellen {
         pos37226:
             A = mem57;
             if (A == 32)
-                goto pos37295;  // ' '
+                goto pos37295; // ' '
             if (A == 35)
-                goto pos37310;  // '#'
+                goto pos37310; // '#'
             if (A == 46)
-                goto pos37320;  // '.'
+                goto pos37320; // '.'
             if (A == 38)
-                goto pos37335;  // '&'
+                goto pos37335; // '&'
             if (A == 64)
-                goto pos37367;  // ''
+                goto pos37367; // ''
             if (A == 94)
-                goto pos37404;  // ''
+                goto pos37404; // ''
             if (A == 43)
-                goto pos37419;  // '+'
+                goto pos37419; // '+'
             if (A == 58)
-                goto pos37440;  // ':'
+                goto pos37440; // ':'
             if (A == 37)
-                goto pos37077;  // '%'
+                goto pos37077; // '%'
             // pos37291:
             //   Code42041(); //Error
             // 37294: BRK
@@ -1935,7 +1935,7 @@ namespace klangwellen {
             // 37478: BIT 57
             // 37480: BPL 37485  //not negative flag
             if ((mem57 & 128) == 0)
-                goto pos37485;  //???
+                goto pos37485; //???
             goto pos36554;
         pos37485:
             Y++;
@@ -2087,7 +2087,7 @@ namespace klangwellen {
         // For voices samples, samples are interleaved between voiced output.
 
         // Code48227()
-        void RenderSample(uint8_t *mem66) {
+        void RenderSample(uint8_t* mem66) {
             int tempA;
             // current phoneme's index
             mem49 = Y;
@@ -2109,7 +2109,7 @@ namespace klangwellen {
 
             // get value from the table
             mem53 = tab48426[X];
-            mem47 = X;  // 46016+mem[56]*256
+            mem47 = X; // 46016+mem[56]*256
 
             // voiced sample?
             A = mem39 & 248;
@@ -2250,17 +2250,17 @@ namespace klangwellen {
 
         // void Code47574()
         void Render() {
-            uint8_t phase1       = 0;  // mem43
+            uint8_t phase1       = 0; // mem43
             uint8_t phase2       = 0;
             uint8_t phase3       = 0;
             uint8_t mem66        = 0;
             uint8_t mem38        = 0;
             uint8_t mem40        = 0;
-            uint8_t speedcounter = 0;  // mem45
+            uint8_t speedcounter = 0; // mem45
             uint8_t mem48        = 0;
             int     i;
             if (phonemeIndexOutput[0] == 255)
-                return;  // exit if no data
+                return; // exit if no data
 
             A     = 0;
             X     = 0;
@@ -2315,14 +2315,14 @@ namespace klangwellen {
 
                 // copy from the source to the frames list
                 do {
-                    frequency1[X]           = freq1data[Y];              // F1 frequency
-                    frequency2[X]           = freq2data[Y];              // F2 frequency
-                    frequency3[X]           = freq3data[Y];              // F3 frequency
-                    amplitude1[X]           = ampl1data[Y];              // F1 amplitude
-                    amplitude2[X]           = ampl2data[Y];              // F2 amplitude
-                    amplitude3[X]           = ampl3data[Y];              // F3 amplitude
-                    sampledConsonantFlag[X] = sampledConsonantFlags[Y];  // phoneme data for sampled consonants
-                    pitches[X]              = pitch + phase1;            // pitch
+                    frequency1[X]           = freq1data[Y];             // F1 frequency
+                    frequency2[X]           = freq2data[Y];             // F2 frequency
+                    frequency3[X]           = freq3data[Y];             // F3 frequency
+                    amplitude1[X]           = ampl1data[Y];             // F1 amplitude
+                    amplitude2[X]           = ampl2data[Y];             // F2 amplitude
+                    amplitude3[X]           = ampl3data[Y];             // F3 amplitude
+                    sampledConsonantFlag[X] = sampledConsonantFlags[Y]; // phoneme data for sampled consonants
+                    pitches[X]              = pitch + phase1;           // pitch
                     X++;
                     phase2--;
                 } while (phase2 != 0);
@@ -2462,9 +2462,9 @@ namespace klangwellen {
 
             A     = 0;
             mem44 = 0;
-            mem49 = 0;  // mem49 starts at as 0
+            mem49 = 0; // mem49 starts at as 0
             X     = 0;
-            while (1)  // while No. 1
+            while (1) // while No. 1
             {
                 // get the current and following phoneme
                 Y = phonemeIndexOutput[X];
@@ -2473,7 +2473,7 @@ namespace klangwellen {
 
                 // exit loop at end token
                 if (A == 255)
-                    break;  // goto pos47970;
+                    break; // goto pos47970;
 
                 // get the ranking of each phoneme
                 X     = A;
@@ -2497,21 +2497,21 @@ namespace klangwellen {
                 }
 
                 Y     = mem44;
-                A     = mem49 + phonemeLengthOutput[mem44];  // A is mem49 + length
-                mem49 = A;                                   // mem49 now holds length + position
-                A     = A + phase2;                          // Maybe Problem because of carry flag
+                A     = mem49 + phonemeLengthOutput[mem44]; // A is mem49 + length
+                mem49 = A;                                  // mem49 now holds length + position
+                A     = A + phase2;                         // Maybe Problem because of carry flag
 
                 // 47776: ADC 42
                 speedcounter = A;
                 mem47        = 168;
-                phase3       = mem49 - phase1;   // what is mem49
-                A            = phase1 + phase2;  // total transition?
+                phase3       = mem49 - phase1;  // what is mem49
+                A            = phase1 + phase2; // total transition?
                 mem38        = A;
 
                 X = A;
                 X -= 2;
                 if ((X & 128) == 0)
-                    do  // while No. 2
+                    do // while No. 2
                     {
                         // pos47810:
 
@@ -2526,7 +2526,7 @@ namespace klangwellen {
 
                         mem40 = mem38;
 
-                        if (mem47 == 168)  // pitch
+                        if (mem47 == 168) // pitch
                         {
                             // unlike the other values, the pitches[] interpolates from
                             // the middle of the current phoneme to the middle of the
@@ -2538,14 +2538,14 @@ namespace klangwellen {
                             // half the width of the next phoneme
                             mem37 = phonemeLengthOutput[mem44 + 1] >> 1;
                             // sum the values
-                            mem40 = mem36 + mem37;       // length of both halves
-                            mem37 += mem49;              // center of next phoneme
-                            mem36 = mem49 - mem36;       // center index of current phoneme
-                            A     = Read(mem47, mem37);  // value at center of next phoneme - end interpolation value
+                            mem40 = mem36 + mem37;      // length of both halves
+                            mem37 += mem49;             // center of next phoneme
+                            mem36 = mem49 - mem36;      // center index of current phoneme
+                            A     = Read(mem47, mem37); // value at center of next phoneme - end interpolation value
                             // A = mem[address];
 
-                            Y     = mem36;                   // start index of interpolation
-                            mem53 = A - Read(mem47, mem36);  // value to center of current phoneme
+                            Y     = mem36;                  // start index of interpolation
+                            mem53 = A - Read(mem47, mem36); // value to center of current phoneme
                         } else {
                             // value to interpolate to
                             A = Read(mem47, speedcounter);
@@ -2559,24 +2559,24 @@ namespace klangwellen {
                         //  ML : Code47503 is division with remainder, and mem50 gets the sign
 
                         // calculate change per frame
-                        int8_t m53     = (int8_t)mem53;
+                        int8_t m53     = (int8_t) mem53;
                         mem50          = mem53 & 128;
                         uint8_t m53abs = abs(m53);
-                        mem51          = m53abs % mem40;  // abs((char)m53) % mem40;
-                        mem53          = (uint8_t)((int8_t)(m53) / mem40);
+                        mem51          = m53abs % mem40; // abs((char)m53) % mem40;
+                        mem53          = (uint8_t) ((int8_t) (m53) / mem40);
 
                         // interpolation range
-                        X = mem40;   // number of frames to interpolate over
-                        Y = phase3;  // starting frame
+                        X = mem40;  // number of frames to interpolate over
+                        Y = phase3; // starting frame
 
                         // linearly interpolate values
 
                         mem56 = 0;
                         // 47907: CLC
                         // pos47908:
-                        while (1)  // while No. 3
+                        while (1) // while No. 3
                         {
-                            A = Read(mem47, Y) + mem53;  // carry alway cleared
+                            A = Read(mem47, Y) + mem53; // carry alway cleared
 
                             mem48 = A;
                             Y++;
@@ -2585,9 +2585,9 @@ namespace klangwellen {
                                 break;
 
                             mem56 += mem51;
-                            if (mem56 >= mem40)  //???
+                            if (mem56 >= mem40) //???
                             {
-                                mem56 -= mem40;  // carry? is set
+                                mem56 -= mem40; // carry? is set
                                 // if ((mem56 & 128)==0)
                                 if ((mem50 & 128) == 0) {
                                     // 47935: BIT 50
@@ -2599,16 +2599,16 @@ namespace klangwellen {
                             }
                             // pos47945:
                             Write(mem47, Y, mem48);
-                        }  // while No. 3
+                        } // while No. 3
 
                         // pos47952:
                         mem47++;
                         // if (mem47 != 175) goto pos47810;
-                    } while (mem47 != 175);  // while No. 2
+                    } while (mem47 != 175); // while No. 2
                 // pos47963:
                 mem44++;
                 X = mem44;
-            }  // while No. 1
+            } // while No. 1
 
             // goto pos47701;
             // pos47970:
@@ -2636,7 +2636,7 @@ namespace klangwellen {
             phase2       = 0;
             phase3       = 0;
             mem49        = 0;
-            speedcounter = 72;  // sam standard speed
+            speedcounter = 72; // sam standard speed
 
             // RESCALE AMPLITUDE
             //
@@ -2654,7 +2654,7 @@ namespace klangwellen {
             A     = pitches[0];
             mem44 = A;
             X     = A;
-            mem38 = A - (A >> 2);  // 3/4*A ???
+            mem38 = A - (A >> 2); // 3/4*A ???
 
             if (debug) {
                 PrintOutput(sampledConsonantFlag, frequency1, frequency2, frequency3, amplitude1, amplitude2, amplitude3, pitches);
@@ -2688,22 +2688,22 @@ namespace klangwellen {
                 } else {
                     // simulate the glottal pulse and formants
                     uint8_t      ary[5];
-                    unsigned int p1 = phase1 * 256;  // Fixed point integers because we need to divide later on
+                    unsigned int p1 = phase1 * 256; // Fixed point integers because we need to divide later on
                     unsigned int p2 = phase2 * 256;
                     unsigned int p3 = phase3 * 256;
                     int          k;
                     for (k = 0; k < 5; k++) {
-                        int8_t     sp1  = (int8_t)sinus[0xff & (p1 >> 8)];
-                        int8_t     sp2  = (int8_t)sinus[0xff & (p2 >> 8)];
-                        int8_t     rp3  = (int8_t)rectangle[0xff & (p3 >> 8)];
-                        signed int sin1 = sp1 * ((uint8_t)amplitude1[Y] & 0x0f);
-                        signed int sin2 = sp2 * ((uint8_t)amplitude2[Y] & 0x0f);
-                        signed int rect = rp3 * ((uint8_t)amplitude3[Y] & 0x0f);
+                        int8_t     sp1  = (int8_t) sinus[0xff & (p1 >> 8)];
+                        int8_t     sp2  = (int8_t) sinus[0xff & (p2 >> 8)];
+                        int8_t     rp3  = (int8_t) rectangle[0xff & (p3 >> 8)];
+                        signed int sin1 = sp1 * ((uint8_t) amplitude1[Y] & 0x0f);
+                        signed int sin2 = sp2 * ((uint8_t) amplitude2[Y] & 0x0f);
+                        signed int rect = rp3 * ((uint8_t) amplitude3[Y] & 0x0f);
                         signed int mux  = sin1 + sin2 + rect;
                         mux /= 32;
-                        mux += 128;  // Go from signed to unsigned amplitude
+                        mux += 128; // Go from signed to unsigned amplitude
                         ary[k] = mux;
-                        p1 += frequency1[Y] * 256 / 4;  // Compromise, this becomes a shift and works well
+                        p1 += frequency1[Y] * 256 / 4; // Compromise, this becomes a shift and works well
                         p2 += frequency2[Y] * 256 / 4;
                         p3 += frequency3[Y] * 256 / 4;
                     }
@@ -2712,7 +2712,7 @@ namespace klangwellen {
                     speedcounter--;
                     if (speedcounter != 0)
                         goto pos48155;
-                    Y++;  // go to next amplitude
+                    Y++; // go to next amplitude
 
                     // decrement the frame count
                     mem48--;
@@ -2761,7 +2761,7 @@ namespace klangwellen {
                 // the sample for the phoneme.
                 RenderSample(&mem66);
                 goto pos48159;
-            }  // while
+            } // while
 
             // The following code is never reached. It's left over from when
             // the voiced sample code was part of this loop, instead of part
@@ -2801,8 +2801,7 @@ namespace klangwellen {
                         }
                     }
 
-                    for (X = wait2; X > 0; X--)
-                        ;  // wait
+                    for (X = wait2; X > 0; X--); // wait
                     mem56--;
                 } while (mem56 != 0);
 
@@ -2860,7 +2859,7 @@ namespace klangwellen {
 
             // exit if the punctuation has been reached
             if (X == mem49)
-                return;  // goto pos47615;
+                return; // goto pos47615;
             if (pitches[X] == 255)
                 goto pos48406;
             A = phase1;
@@ -2897,7 +2896,7 @@ namespace klangwellen {
             // formant 2 frequencies (throat) 48..53
             uint8_t throatFormants48_53[6] = {72, 39, 31, 43, 30, 34};
 
-            uint8_t pos = 5;  // mem39216
+            uint8_t pos = 5; // mem39216
             // pos38942:
             //  recalculate formant frequencies 5..29 for the mouth (F1) and throat (F2)
             while (pos != 30) {
@@ -2954,7 +2953,7 @@ namespace klangwellen {
                                 */
                     carry = 0;
                     A     = mem39215;
-                    temp  = (int)A + (int)mem39213;
+                    temp  = (int) A + (int) mem39213;
                     A     = A + mem39213;
                     if (temp > 255)
                         carry = 1;
@@ -2984,9 +2983,9 @@ namespace klangwellen {
 
         /* ------------------------ */
 
-        void SetInput(char *_input) {
+        void SetInput(char* _input) {
             uint16_t i, l;
-            l = (uint16_t)strlen(_input);
+            l = (uint16_t) strlen(_input);
             if (l > 254)
                 l = 254;
             for (i = 0; i < l; i++)
@@ -3000,7 +2999,7 @@ namespace klangwellen {
         void    SetThroat(uint8_t _throat) { throat = _throat; }
         void    EnableSingmode() { singmode = 1; }
         void    DisableSingmode() { singmode = 0; }
-        int8_t *GetBuffer() { return SAM_buffer; }
+        int8_t* GetBuffer() { return SAM_buffer; }
         int     GetBufferLength() { return bufferpos; }
 
         // 168=pitches
@@ -3027,13 +3026,13 @@ namespace klangwellen {
                 stressOutput[i]        = 0;
                 phonemeLengthOutput[i] = 0;
             }
-            phonemeindex[255] = 255;  // to prevent buffer overflow // ML : changed from 32 to 255 to stop freezing with long inputs
+            phonemeindex[255] = 255; // to prevent buffer overflow // ML : changed from 32 to 255 to stop freezing with long inputs
         }
 
         // int Code39771()
         int SAMMain() {
             Init();
-            phonemeindex[255] = 32;  // to prevent buffer overflow
+            phonemeindex[255] = 32; // to prevent buffer overflow
 
             if (!Parser1())
                 return 0;
@@ -3048,7 +3047,7 @@ namespace klangwellen {
                 A = phonemeindex[X];
                 if (A > 80) {
                     phonemeindex[X] = 255;
-                    break;  // error: delete all behind it
+                    break; // error: delete all behind it
                 }
                 X++;
             } while (X != 0);
@@ -3110,7 +3109,7 @@ namespace klangwellen {
         void InsertBreath() {
             uint8_t mem54;
             uint8_t mem55;
-            uint8_t index;  // variable Y
+            uint8_t index; // variable Y
             mem54 = 255;
             X++;
             mem55         = 0;
@@ -3124,7 +3123,7 @@ namespace klangwellen {
                 mem55 += phonemeLength[X];
 
                 if (mem55 < 232) {
-                    if (index != 254)  // ML : Prevents an index out of bounds problem
+                    if (index != 254) // ML : Prevents an index out of bounds problem
                     {
                         A = flags2[index] & 1;
                         if (A != 0) {
@@ -3142,7 +3141,7 @@ namespace klangwellen {
                     continue;
                 }
                 X                = mem54;
-                phonemeindex[X]  = 31;  // 'Q*' glottal stop
+                phonemeindex[X]  = 31; // 'Q*' glottal stop
                 phonemeLength[X] = 4;
                 stress[X]        = 0;
                 X++;
@@ -3169,7 +3168,7 @@ namespace klangwellen {
         // void Code41883()
         void CopyStress() {
             // loop thought all the phonemes to be output
-            uint8_t pos = 0;  // mem66
+            uint8_t pos = 0; // mem66
             while (1) {
                 // get the phomene
                 Y = phonemeindex[pos];
@@ -3185,7 +3184,7 @@ namespace klangwellen {
                 }
                 // get the next phoneme
                 Y = phonemeindex[pos + 1];
-                if (Y == 255)  // prevent buffer overflow
+                if (Y == 255) // prevent buffer overflow
                 {
                     pos++;
                     continue;
@@ -3222,7 +3221,7 @@ namespace klangwellen {
         // void Code41014()
         void Insert(uint8_t position /*var57*/, uint8_t mem60, uint8_t mem59, uint8_t mem58) {
             int i;
-            for (i = 253; i >= position; i--)  // ML : always keep last safe-guarding 255
+            for (i = 253; i >= position; i--) // ML : always keep last safe-guarding 255
             {
                 phonemeindex[i + 1]  = phonemeindex[i];
                 phonemeLength[i + 1] = phonemeLength[i];
@@ -3307,9 +3306,9 @@ namespace klangwellen {
                 // TEST FOR 155 (�) END OF LINE MARKER
                 if (sign1 == 155) {
                     // MARK ENDPOINT AND RETURN
-                    phonemeindex[position] = 255;  // mark endpoint
+                    phonemeindex[position] = 255; // mark endpoint
                     // REACHED END OF PHONEMES, SO EXIT
-                    return 1;  // all ok
+                    return 1; // all ok
                 }
 
                 // GET THE NEXT CHARACTER FROM THE BUFFER
@@ -3378,7 +3377,7 @@ namespace klangwellen {
                 }
                 Y++;
                 if (Y != 81)
-                    goto pos41134;  // 81 is size of PHONEME NAME table
+                    goto pos41134; // 81 is size of PHONEME NAME table
 
                 // FAILED TO MATCH WITH A WILDCARD. ASSUME THIS IS A STRESS
                 // CHARACTER. SEARCH THROUGH THE STRESS TABLE
@@ -3401,7 +3400,7 @@ namespace klangwellen {
                 }
                 // SET THE STRESS FOR THE PRIOR PHONEME
                 stress[position - 1] = Y;
-            }  // while
+            } // while
         }
 
         // change phonemelength depedendent on stress
@@ -3425,7 +3424,7 @@ namespace klangwellen {
             uint8_t pos = 0;
 
             while (phonemeindex[pos] != 255) {
-                uint8_t index;  // register AC
+                uint8_t index; // register AC
                 X     = pos;
                 index = phonemeindex[pos];
                 if ((flags[index] & 2) == 0) {
@@ -3451,7 +3450,7 @@ namespace klangwellen {
                     if ((A == 36) || (A == 37)) {
                         pos++;
                         continue;
-                    }  // '/H' '/X'
+                    } // '/H' '/X'
                 }
 
                 Insert(pos + 1, index + 1, phonemeLengthTable[index + 1], stress[pos]);
@@ -3488,7 +3487,7 @@ namespace klangwellen {
         void Parser2() {
             if (debug)
                 printf("Parser2\n");
-            uint8_t pos   = 0;  // mem66;
+            uint8_t pos   = 0; // mem66;
             uint8_t mem58 = 0;
 
             // Loop through phonemes
@@ -3535,7 +3534,7 @@ namespace klangwellen {
                 if (A == 0)
                     A = 20;
                 else
-                    A = 21;  // 'WX' = 20 'YX' = 21
+                    A = 21; // 'WX' = 20 'YX' = 21
                 // pos41443:
                 // Insert at WX or YX following, copying the stress
 
@@ -3560,8 +3559,8 @@ namespace klangwellen {
                 A = phonemeindex[X];
                 // Skip this rule if phoneme is not UL
                 if (A != 78)
-                    goto pos41487;  // 'UL'
-                A = 24;             // 'L'                 //change 'UL' to 'AX L'
+                    goto pos41487; // 'UL'
+                A = 24;            // 'L'                 //change 'UL' to 'AX L'
 
                 if (debug)
                     printf("RULE: UL -> AX L\n");
@@ -3571,8 +3570,8 @@ namespace klangwellen {
                 mem58 = stress[X];
 
                 // Change UL to AX
-                phonemeindex[X] = 13;  // 'AX'
-                                       // Perform insert. Note code below may jump up here with different values
+                phonemeindex[X] = 13; // 'AX'
+                                      // Perform insert. Note code below may jump up here with different values
                 Insert(X + 1, A, mem59, mem58);
                 pos++;
                 // Move to next phoneme
@@ -3586,9 +3585,9 @@ namespace klangwellen {
 
                 // Skip rule if phoneme != UM
                 if (A != 79)
-                    goto pos41495;  // 'UM'
+                    goto pos41495; // 'UM'
                 // Jump up to branch - replaces current phoneme with AX and continues
-                A = 27;  // 'M'  //change 'UM' to  'AX M'
+                A = 27; // 'M'  //change 'UM' to  'AX M'
                 if (debug)
                     printf("RULE: UM -> AX M\n");
                 goto pos41466;
@@ -3600,10 +3599,10 @@ namespace klangwellen {
 
                 // Skip rule if phoneme != UN
                 if (A != 80)
-                    goto pos41503;  // 'UN'
+                    goto pos41503; // 'UN'
 
                 // Jump up to branch - replaces current phoneme with AX and continues
-                A = 28;  // 'N' //change UN to 'AX N'
+                A = 28; // 'N' //change UN to 'AX N'
                 if (debug)
                     printf("RULE: UN -> AX N\n");
                 goto pos41466;
@@ -3635,7 +3634,7 @@ namespace klangwellen {
                             Y = phonemeindex[X];
 
                             // Check for end of buffer flag
-                            if (Y == 255)  // buffer overflow
+                            if (Y == 255) // buffer overflow
                                 // ??? Not sure about these flags
                                 A = 65 & 128;
                             else
@@ -3668,13 +3667,13 @@ namespace klangwellen {
                 X = pos;
                 A = phonemeindex[pos];
                 if (A != 23)
-                    goto pos41611;  // 'R'
+                    goto pos41611; // 'R'
 
                 // Look at prior phoneme
                 X--;
                 A = phonemeindex[pos - 1];
                 // pos41567:
-                if (A == 69)  // 'T'
+                if (A == 69) // 'T'
                 {
                     // Change T to CH
                     if (debug)
@@ -3688,7 +3687,7 @@ namespace klangwellen {
                 // Example: DRY
 
                 // Prior phonemes D?
-                if (A == 57)  // 'D'
+                if (A == 57) // 'D'
                 {
                     // Change D to J
                     phonemeindex[pos - 1] = 44;
@@ -3706,7 +3705,7 @@ namespace klangwellen {
                 if (debug)
                     printf("RULE: R -> RX\n");
                 if (A != 0)
-                    phonemeindex[pos] = 18;  // 'RX'
+                    phonemeindex[pos] = 18; // 'RX'
 
                 // continue to next phoneme
                 pos++;
@@ -3719,7 +3718,7 @@ namespace klangwellen {
                 // Example: ALL
 
                 // Is phoneme L?
-                if (A == 24)  // 'L'
+                if (A == 24) // 'L'
                 {
                     // If prior phoneme does not have VOWEL flag set, move to next phoneme
                     if ((flags[phonemeindex[pos - 1]] & 128) == 0) {
@@ -3729,7 +3728,7 @@ namespace klangwellen {
                     // Prior phoneme has VOWEL flag set, so change L to LX and move to next phoneme
                     if (debug)
                         printf("RULE: <VOWEL> L -> <VOWEL> LX\n");
-                    phonemeindex[X] = 19;  // 'LX'
+                    phonemeindex[X] = 19; // 'LX'
                     pos++;
                     continue;
                 }
@@ -3742,7 +3741,7 @@ namespace klangwellen {
                 //       2. Reciter already replaces GS -> GZ
 
                 // Is current phoneme S?
-                if (A == 32)  // 'S'
+                if (A == 32) // 'S'
                 {
                     // If prior phoneme is not G, move to next phoneme
                     if (phonemeindex[pos - 1] != 60) {
@@ -3752,7 +3751,7 @@ namespace klangwellen {
                     // Replace S with Z and move on
                     if (debug)
                         printf("RULE: G S -> G Z\n");
-                    phonemeindex[pos] = 38;  // 'Z'
+                    phonemeindex[pos] = 38; // 'Z'
                     pos++;
                     continue;
                 }
@@ -3762,13 +3761,13 @@ namespace klangwellen {
                 // Example: COW
 
                 // Is current phoneme K?
-                if (A == 72)  // 'K'
+                if (A == 72) // 'K'
                 {
                     // Get next phoneme
                     Y = phonemeindex[pos + 1];
                     // If at end, replace current phoneme with KX
                     if (Y == 255)
-                        phonemeindex[pos] = 75;  // ML : prevents an index out of bounds problem
+                        phonemeindex[pos] = 75; // ML : prevents an index out of bounds problem
                     else {
                         // VOWELS AND DIPHTONGS ENDING WITH IY SOUND flag set?
                         A = flags[Y] & 32;
@@ -3777,7 +3776,7 @@ namespace klangwellen {
                                 printf("RULE: K <VOWEL OR DIPHTONG NOT ENDING WITH IY> -> KX <VOWEL OR DIPHTONG NOT ENDING WITH IY>\n");
                         // Replace with KX
                         if (A == 0)
-                            phonemeindex[pos] = 75;  // 'KX'
+                            phonemeindex[pos] = 75; // 'KX'
                     }
                 } else
 
@@ -3786,13 +3785,13 @@ namespace klangwellen {
                     // Example: GO
 
                     // Is character a G?
-                    if (A == 60)  // 'G'
+                    if (A == 60) // 'G'
                     {
                         // Get the following character
                         uint8_t index = phonemeindex[pos + 1];
 
                         // At end of buffer?
-                        if (index == 255)  // prevent buffer overflow
+                        if (index == 255) // prevent buffer overflow
                         {
                             pos++;
                             continue;
@@ -3805,7 +3804,7 @@ namespace klangwellen {
                         // replace G with GX and continue processing next phoneme
                         if (debug)
                             printf("RULE: G <VOWEL OR DIPHTONG NOT ENDING WITH IY> -> GX <VOWEL OR DIPHTONG NOT ENDING WITH IY>\n");
-                        phonemeindex[pos] = 63;  // 'GX'
+                        phonemeindex[pos] = 63; // 'GX'
                         pos++;
                         continue;
                     }
@@ -3824,7 +3823,7 @@ namespace klangwellen {
                 if (A == 0)
                     goto pos41749;
                 A = phonemeindex[pos - 1];
-                if (A != 32)  // 'S'
+                if (A != 32) // 'S'
                 {
                     A = Y;
                     goto pos41812;
@@ -3846,7 +3845,7 @@ namespace klangwellen {
                 //       UW -> UX
 
                 A = phonemeindex[X];
-                if (A == 53)  // 'UW'
+                if (A == 53) // 'UW'
                 {
                     // ALVEOLAR flag set?
                     Y = phonemeindex[X - 1];
@@ -3868,7 +3867,7 @@ namespace klangwellen {
                 //       CH -> CH CH' (CH requires two phonemes to represent it)
                 // Example: CHEW
 
-                if (A == 42)  // 'CH'
+                if (A == 42) // 'CH'
                 {
                     //        pos41783:
                     if (debug)
@@ -3884,7 +3883,7 @@ namespace klangwellen {
                 //       J -> J J' (J requires two phonemes to represent it)
                 // Example: JAY
 
-                if (A == 44)  // 'J'
+                if (A == 44) // 'J'
                 {
                     if (debug)
                         printf("J -> J J+1\n");
@@ -3904,11 +3903,11 @@ namespace klangwellen {
 
                 // Past this point, only process if phoneme is T or D
 
-                if (A != 69)  // 'T'
+                if (A != 69) // 'T'
                     if (A != 57) {
                         pos++;
                         continue;
-                    }  // 'D'
+                    } // 'D'
                 // pos41825:
 
                 // If prior phoneme is not a vowel, continue processing phonemes
@@ -3938,10 +3937,10 @@ namespace klangwellen {
                     //  Set phonemes to DX
                     if (debug)
                         printf("RULE: Soften T or D following vowel or ER and preceding a pause -> DX\n");
-                    phonemeindex[pos] = 30;  // 'DX'
+                    phonemeindex[pos] = 30; // 'DX'
                 } else {
                     A = phonemeindex[X + 1];
-                    if (A == 255)  // prevent buffer overflow
+                    if (A == 255) // prevent buffer overflow
                         A = 65 & 128;
                     else
                         // Is next phoneme a vowel or ER?
@@ -3950,12 +3949,12 @@ namespace klangwellen {
                         if (A != 0)
                             printf("RULE: Soften T or D following vowel or ER and preceding a pause -> DX\n");
                     if (A != 0)
-                        phonemeindex[pos] = 30;  // 'DX'
+                        phonemeindex[pos] = 30; // 'DX'
                 }
 
                 pos++;
 
-            }  // while
+            } // while
         }
 
         // Applies various rules that adjust the lengths of phonemes
@@ -4014,18 +4013,18 @@ namespace klangwellen {
                 // get the preceding phoneme
                 index = phonemeindex[X];
 
-                if (index != 255)  // inserted to prevent access overrun
+                if (index != 255) // inserted to prevent access overrun
                     if ((flags[index] & 128) == 0)
-                        goto pos48644;  // if not a vowel, continue looping
+                        goto pos48644; // if not a vowel, continue looping
 
                 // pos48657:
                 do {
                     // test for vowel
                     index = phonemeindex[X];
 
-                    if (index != 255)  // inserted to prevent access overrun
+                    if (index != 255) // inserted to prevent access overrun
                         // test for fricative/unvoiced or not voiced
-                        if (((flags2[index] & 32) == 0) || ((flags[index] & 4) != 0))  // nochmal �berpr�fen
+                        if (((flags2[index] & 32) == 0) || ((flags[index] & 4) != 0)) // nochmal �berpr�fen
                         {
                             // A = flags[Y] & 4;
                             // if(A == 0) goto pos48688;
@@ -4054,7 +4053,7 @@ namespace klangwellen {
                 } while (X != loopIndex);
                 //  if (X != loopIndex) goto pos48657;
                 X++;
-            }  // while
+            } // while
 
             // Similar to the above routine, but shorten vowels under some circumstances
 
@@ -4080,14 +4079,14 @@ namespace klangwellen {
 
                     // get flags
                     if (index == 255)
-                        mem56 = 65;  // use if end marker
+                        mem56 = 65; // use if end marker
                     else
                         mem56 = flags[index];
 
                     // not a consonant
                     if ((flags[index] & 64) == 0) {
                         // RX or LX?
-                        if ((index == 18) || (index == 19))  // 'RX' & 'LX'
+                        if ((index == 18) || (index == 19)) // 'RX' & 'LX'
                         {
                             // get the next phoneme
                             X++;
@@ -4176,7 +4175,7 @@ namespace klangwellen {
 
                     // decrease length
                     A                    = phonemeLength[X - 1];
-                    phonemeLength[X - 1] = (A >> 2) + A + 1;  // 5/4*A + 1
+                    phonemeLength[X - 1] = (A >> 2) + A + 1; // 5/4*A + 1
 
                     if (debug)
                         printf("POST\n");
@@ -4206,9 +4205,9 @@ namespace klangwellen {
 
                     // end of buffer?
                     if (index == 255)
-                        A = 65 & 2;  // prevent buffer overflow
+                        A = 65 & 2; // prevent buffer overflow
                     else
-                        A = flags[index] & 2;  // check for stop consonant
+                        A = flags[index] & 2; // check for stop consonant
 
                     // is next phoneme a stop consonant?
                     if (A != 0)
@@ -4260,7 +4259,7 @@ namespace klangwellen {
                     } while (index == 0);
 
                     // check for end of buffer
-                    if (index == 255)  // buffer overflow
+                    if (index == 255) // buffer overflow
                     {
                         // ignore, overflow code
                         if ((65 & 2) == 0) {
@@ -4380,7 +4379,7 @@ namespace klangwellen {
             setDefaults();
         }
 
-        SAM(int8_t *pBuffer, uint32_t pBufferLength) {
+        SAM(int8_t* pBuffer, uint32_t pBufferLength) {
             SAM_buffer            = pBuffer;
             SAM_buffer_max_length = pBufferLength;
             fAllocatedBuffer      = false;
@@ -4393,19 +4392,19 @@ namespace klangwellen {
             }
         }
 
-        void set_buffer(int8_t *pBuffer, uint32_t pBufferLength) {
+        void set_buffer(int8_t* pBuffer, uint32_t pBufferLength) {
             SAM_buffer            = pBuffer;
             SAM_buffer_max_length = pBufferLength;
         }
 
         void set_pitch(uint8_t pPitch) {
             mPitch = pPitch;
-            SetPitch(pPitch);  // default: pitch = 64
+            SetPitch(pPitch); // default: pitch = 64
         }
 
         void set_throat(uint8_t pThroat) {
             mThroat = pThroat;
-            SetThroat(pThroat);  // default: throat = 128
+            SetThroat(pThroat); // default: throat = 128
         }
 
         void set_speed(uint8_t pSpeed) {
@@ -4449,7 +4448,7 @@ namespace klangwellen {
 
         void speak_ascii(int pASCIIValue) {
             stringstream ss;
-            ss << (char)pASCIIValue;
+            ss << (char) pASCIIValue;
             string s;
             ss >> s;
             speak(s);
@@ -4478,8 +4477,8 @@ namespace klangwellen {
             return GetBufferLength() / 50;
         }
 
-        void process(float *signal_buffer, const uint32_t buffer_length = KLANG_SAMPLES_PER_AUDIO_BLOCK) {
-            uint8_t       *mBuffer       = (uint8_t *)GetBuffer();
+        void process(float* signal_buffer, const uint32_t buffer_length = KLANG_SAMPLES_PER_AUDIO_BLOCK) {
+            uint8_t*       mBuffer       = (uint8_t*) GetBuffer();
             const uint32_t mBufferLength = get_used_buffer_length();
             for (uint32_t i = 0; i < buffer_length; i += 2) {
                 float mSample = 0.0;
@@ -4491,7 +4490,7 @@ namespace klangwellen {
                     }
                     mCounter %= mBufferLength;
                 }
-                signal_buffer[i] = mSample;
+                signal_buffer[i]     = mSample;
                 signal_buffer[i + 1] = mSample;
             }
         }
@@ -4522,4 +4521,4 @@ namespace klangwellen {
             set_mouth(128);
         }
     };
-}  // namespace klangwellen
+} // namespace klangwellen

@@ -41,4 +41,4 @@ namespace klangwellen {
         static const uint8_t C6 = 72;
         static const uint8_t C7 = 84;
     };
-}  // namespace klangwellen
+} // namespace klangwellen

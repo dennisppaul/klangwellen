@@ -82,7 +82,7 @@ namespace klangwellen {
             memory[2]      = memory[1];
             memory[1]      = memory[0];
             memory[0]      = mSignal;
-            return (float)mSignal;
+            return (float) mSignal;
         }
 
         void lerp_vowel(uint8_t vowelA, uint8_t vowelB, double lerp) {
@@ -113,7 +113,7 @@ namespace klangwellen {
                 -154.337906, 181.6233289,
                 -151.8651235, 89.09614114,
                 -35.10298511, 8.388101016,
-                -0.923313471  /// A
+                -0.923313471 /// A
             },
             {
                 4.36215e-06, 8.90438318,
@@ -121,7 +121,7 @@ namespace klangwellen {
                 -152.422234, 179.1170248,
                 -149.6496211, 87.78352223,
                 -34.60687431, 8.282228154,
-                -0.914150747  /// E
+                -0.914150747 /// E
             },
             {
                 3.33819e-06, 8.893102966,
@@ -129,7 +129,7 @@ namespace klangwellen {
                 -152.4545478, 179.4835618,
                 -150.315433, 88.43409371,
                 -34.98612086, 8.407803364,
-                -0.932568035  /// I
+                -0.932568035 /// I
             },
             {
                 1.13572e-06, 8.994734087,
@@ -137,7 +137,7 @@ namespace klangwellen {
                 -156.6929844, 184.596544,
                 -154.3755513, 90.49663749,
                 -35.58964535, 8.478996281,
-                -0.929252233  /// O
+                -0.929252233 /// O
             },
             {
                 4.09431e-07, 8.997322763,
@@ -145,7 +145,7 @@ namespace klangwellen {
                 -156.2530937, 183.7080141,
                 -153.2631681, 89.59539726,
                 -35.12454591, 8.338655623,
-                -0.910251753  /// U
+                -0.910251753 /// U
             }};
 
         void clearMemory() {
@@ -158,4 +158,4 @@ namespace klangwellen {
             return value > max ? max : (value < min ? min : value);
         }
     };
-}  // namespace klangwellen
+} // namespace klangwellen

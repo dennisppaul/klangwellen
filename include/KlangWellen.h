@@ -50,19 +50,19 @@
 namespace klangwellen {
     class KlangWellen {
     public:
-        static const uint8_t      BITS_PER_SAMPLE_16 = 16;
-        static const uint8_t      BITS_PER_SAMPLE_24 = 24;
-        static const uint8_t      BITS_PER_SAMPLE_32 = 32;
-        static const uint8_t      BITS_PER_SAMPLE_8 = 8;
-        static constexpr float    DEFAULT_ATTACK = 0.005f;
-        static const int          DEFAULT_AUDIOBLOCK_SIZE = KLANG_SAMPLES_PER_AUDIO_BLOCK; // TODO decide for either one
-        static const int          DEFAULT_AUDIO_DEVICE = -1;
-        static const uint8_t      DEFAULT_BITS_PER_SAMPLE = BITS_PER_SAMPLE_16;
-        static constexpr float    DEFAULT_DECAY = 0.01f;
-        static constexpr float    DEFAULT_FILTER_BANDWIDTH = 100.0f;
-        static constexpr float    DEFAULT_FILTER_FREQUENCY = 1000.0f;
-        static constexpr float    DEFAULT_RELEASE = 0.075f;
-        static constexpr uint32_t DEFAULT_SAMPLING_RATE = KLANG_SAMPLING_RATE; // TODO decide for either one
+        static const uint8_t      BITS_PER_SAMPLE_16                    = 16;
+        static const uint8_t      BITS_PER_SAMPLE_24                    = 24;
+        static const uint8_t      BITS_PER_SAMPLE_32                    = 32;
+        static const uint8_t      BITS_PER_SAMPLE_8                     = 8;
+        static constexpr float    DEFAULT_ATTACK                        = 0.005f;
+        static const int          DEFAULT_AUDIOBLOCK_SIZE               = KLANG_SAMPLES_PER_AUDIO_BLOCK; // TODO decide for either one
+        static const int          DEFAULT_AUDIO_DEVICE                  = -1;
+        static const uint8_t      DEFAULT_BITS_PER_SAMPLE               = BITS_PER_SAMPLE_16;
+        static constexpr float    DEFAULT_DECAY                         = 0.01f;
+        static constexpr float    DEFAULT_FILTER_BANDWIDTH              = 100.0f;
+        static constexpr float    DEFAULT_FILTER_FREQUENCY              = 1000.0f;
+        static constexpr float    DEFAULT_RELEASE                       = 0.075f;
+        static constexpr uint32_t DEFAULT_SAMPLING_RATE                 = KLANG_SAMPLING_RATE; // TODO decide for either one
         static constexpr uint32_t DEFAULT_INTERPOLATE_AMP_FREQ_DURATION = 5.f / 1000.f * (float) DEFAULT_SAMPLING_RATE;
         // KlangWellen::millis_to_samples(5);
         static constexpr float DEFAULT_SUSTAIN                       = 0.5f;
@@ -160,7 +160,7 @@ namespace klangwellen {
             return MIDI_NOTE_CONVERSION_BASE_FREQUENCY * pow(2, ((pMidiNote - NOTE_OFFSET) / 12.0));
         }
 
-        static void normalize(float *buffer, const uint32_t numSamples) {
+        static void normalize(float* buffer, const uint32_t numSamples) {
             if (buffer == nullptr || numSamples == 0) {
                 return;
             }
@@ -188,7 +188,7 @@ namespace klangwellen {
             }
         }
 
-        static void peak(float *buffer, const uint32_t length, float &min, float &max) {
+        static void peak(float* buffer, const uint32_t length, float& min, float& max) {
             if (buffer == nullptr || length == 0) {
                 return;
             }
@@ -357,9 +357,9 @@ namespace klangwellen {
 #pragma GCC diagnostic ignored "-Wuninitialized"
         static float fast_inv_sqrt(float x) {
             const float xhalf = 0.5f * x;
-            int         i     = *(int *) &x;
+            int         i     = *(int*) &x;
             i                 = 0x5f3759df - (i >> 1);
-            x                 = *(float *) &i;
+            x                 = *(float*) &i;
             return x * (1.5f - xhalf * x * x);
         }
 #pragma GCC diagnostic pop
@@ -463,7 +463,7 @@ namespace klangwellen {
             return y1 * (1.0f - mu) + y2 * mu;
         }
 
-        static float interpolate_samples_linear(const float *buffer, const size_t bufferSize, const float position) {
+        static float interpolate_samples_linear(const float* buffer, const size_t bufferSize, const float position) {
             const int   posInt = static_cast<int>(position);
             const float mu     = position - posInt;
 
@@ -489,7 +489,7 @@ namespace klangwellen {
             return (a0 * mu * mu2 + a1 * mu2 + a2 * mu + a3);
         }
 
-        static float interpolate_samples_cubic(const float *buffer, const uint32_t bufferSize, const float position) {
+        static float interpolate_samples_cubic(const float* buffer, const uint32_t bufferSize, const float position) {
             const int   posInt = static_cast<int>(position);
             const float mu     = position - posInt;
 
@@ -511,7 +511,7 @@ namespace klangwellen {
 
         /* --- buffer --- */
 
-        inline static void fill(float *buffer, float value, uint32_t length = KLANG_SAMPLES_PER_AUDIO_BLOCK) {
+        inline static void fill(float* buffer, float value, uint32_t length = KLANG_SAMPLES_PER_AUDIO_BLOCK) {
             for (uint32_t i = 0; i < length; i++) {
                 buffer[i] = value;
             }
@@ -520,20 +520,20 @@ namespace klangwellen {
         /**
          * copies src into dst. dst will be overwritten.
          */
-        inline static void copy(float *src, float *dst, uint32_t length = KLANG_SAMPLES_PER_AUDIO_BLOCK) {
+        inline static void copy(float* src, float* dst, uint32_t length = KLANG_SAMPLES_PER_AUDIO_BLOCK) {
             std::copy(src, src + length, dst);
         }
 
         /**
          * adds buffer_b to buffer_a. result will be stored in buffer_a, buffer_b will not be changed.
          */
-        inline static void add(float *buffer_a, float *buffer_b, uint32_t length = KLANG_SAMPLES_PER_AUDIO_BLOCK) {
+        inline static void add(float* buffer_a, float* buffer_b, uint32_t length = KLANG_SAMPLES_PER_AUDIO_BLOCK) {
             for (uint32_t i = 0; i < length; i++) {
                 buffer_a[i] += buffer_b[i];
             }
         }
 
-        inline static void add(float *buffer_a, float scalar, uint32_t length = KLANG_SAMPLES_PER_AUDIO_BLOCK) {
+        inline static void add(float* buffer_a, float scalar, uint32_t length = KLANG_SAMPLES_PER_AUDIO_BLOCK) {
             for (uint32_t i = 0; i < length; i++) {
                 buffer_a[i] += scalar;
             }
@@ -542,13 +542,13 @@ namespace klangwellen {
         /**
          * subtracts buffer_b from buffer_a. result will be stored in buffer_a, buffer_b will not be changed.
          */
-        inline static void sub(float *buffer_a, float *buffer_b, uint32_t length = KLANG_SAMPLES_PER_AUDIO_BLOCK) {
+        inline static void sub(float* buffer_a, float* buffer_b, uint32_t length = KLANG_SAMPLES_PER_AUDIO_BLOCK) {
             for (uint32_t i = 0; i < length; i++) {
                 buffer_a[i] -= buffer_b[i];
             }
         }
 
-        inline static void sub(float *buffer_a, float scalar, uint32_t length = KLANG_SAMPLES_PER_AUDIO_BLOCK) {
+        inline static void sub(float* buffer_a, float scalar, uint32_t length = KLANG_SAMPLES_PER_AUDIO_BLOCK) {
             for (uint32_t i = 0; i < length; i++) {
                 buffer_a[i] -= scalar;
             }
@@ -557,13 +557,13 @@ namespace klangwellen {
         /**
          * multiplies buffer_b with buffer_a. result will be stored in buffer_a, buffer_b will not be changed.
          */
-        inline static void mult(float *buffer_a, float *buffer_b, uint32_t length = KLANG_SAMPLES_PER_AUDIO_BLOCK) {
+        inline static void mult(float* buffer_a, float* buffer_b, uint32_t length = KLANG_SAMPLES_PER_AUDIO_BLOCK) {
             for (uint32_t i = 0; i < length; i++) {
                 buffer_a[i] *= buffer_b[i];
             }
         }
 
-        inline static void mult(float *buffer_a, float scalar, uint32_t length = KLANG_SAMPLES_PER_AUDIO_BLOCK) {
+        inline static void mult(float* buffer_a, float scalar, uint32_t length = KLANG_SAMPLES_PER_AUDIO_BLOCK) {
             for (uint32_t i = 0; i < length; i++) {
                 buffer_a[i] *= scalar;
             }
@@ -572,13 +572,13 @@ namespace klangwellen {
         /**
          * divides buffer_b from buffer_a. result will be stored in buffer_a, buffer_b will not be changed.
          */
-        inline static void div(float *buffer_a, float *buffer_b, uint32_t length = KLANG_SAMPLES_PER_AUDIO_BLOCK) {
+        inline static void div(float* buffer_a, float* buffer_b, uint32_t length = KLANG_SAMPLES_PER_AUDIO_BLOCK) {
             for (uint32_t i = 0; i < length; i++) {
                 buffer_a[i] /= buffer_b[i];
             }
         }
 
-        inline static void div(float *buffer_a, float scalar, uint32_t length = KLANG_SAMPLES_PER_AUDIO_BLOCK) {
+        inline static void div(float* buffer_a, float scalar, uint32_t length = KLANG_SAMPLES_PER_AUDIO_BLOCK) {
             for (uint32_t i = 0; i < length; i++) {
                 buffer_a[i] /= scalar;
             }

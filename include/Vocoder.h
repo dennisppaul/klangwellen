@@ -483,7 +483,7 @@ namespace klangwellen {
         }
 
         void envelope_configure(envelope& envelope, float time_in_seconds, float sample_rate) {
-            envelope.coef = (float)(KlangWellen::pow(0.01, 1.0 / (time_in_seconds * sample_rate)));
+            envelope.coef = (float) (KlangWellen::pow(0.01, 1.0 / (time_in_seconds * sample_rate)));
         }
 
         /* Reset the envelope history. */
@@ -565,9 +565,9 @@ namespace klangwellen {
                     BiQuad_new(synthesis_bands[i].filters[0],
                                VOCLIB_BPF,
                                0.0f,
-                               (float)(lastfreq * formant_shift),
-                               (float)sample_rate,
-                               (float)bandwidth);
+                               (float) (lastfreq * formant_shift),
+                               (float) sample_rate,
+                               (float) bandwidth);
                 } else {
                     synthesis_bands[i].filters[0].a0 = analysis_bands[i].filters[0].a0;
                     synthesis_bands[i].filters[0].a1 = analysis_bands[i].filters[0].a1;
@@ -611,4 +611,4 @@ namespace klangwellen {
          * Initial release.
          */
     };
-}  // namespace klangwellen
+} // namespace klangwellen

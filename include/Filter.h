@@ -194,4 +194,4 @@ namespace klangwellen {
         const bool             __USE_FAST_TRIG;
     };
 
-}  // namespace klangwellen
+} // namespace klangwellen

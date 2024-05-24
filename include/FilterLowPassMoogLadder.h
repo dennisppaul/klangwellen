@@ -162,7 +162,7 @@ namespace klangwellen {
             } else if (x < 0.5f) {
                 return x * sign;
             }
-            return sign * (float)tanh(x);
+            return sign * (float) tanh(x);
         }
     };
-}  // namespace klangwellen
+} // namespace klangwellen

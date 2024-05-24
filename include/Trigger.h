@@ -116,10 +116,10 @@ namespace klangwellen {
         }
 
         void fireEvent(int event) {
-            for (TriggerListener* l : fListeners) {
+            for (TriggerListener* l: fListeners) {
                 l->trigger(event);
             }
             call_trigger(event);
         }
     };
-}  // namespace klangwellen
+} // namespace klangwellen
