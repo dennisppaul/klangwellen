@@ -34,26 +34,26 @@
 namespace klangwellen {
     class ExponentialMovingAverage {
     public:
-        ExponentialMovingAverage(float alpha) : alpha(alpha), ema(0), initialized(false) {}
+        ExponentialMovingAverage(float alpha) : fAlpha(alpha), fEMA(0.0f), fInitialized(false) {}
 
         float process(float sample) {
             float absSample = std::abs(sample);
-            if (!initialized) {
-                ema         = absSample;
-                initialized = true;
+            if (!fInitialized) {
+                fEMA         = absSample;
+                fInitialized = true;
             } else {
-                ema = alpha * absSample + (1.0f - alpha) * ema;
+                fEMA = fAlpha * absSample + (1.0f - fAlpha) * fEMA;
             }
-            return ema;
+            return fEMA;
         }
 
         float get_current() const {
-            return ema;
+            return fEMA;
         }
 
     private:
-        float alpha;
-        float ema;
-        bool  initialized;
+        float fAlpha;
+        float fEMA;
+        bool  fInitialized;
     };
 } // namespace klangwellen

@@ -21,7 +21,7 @@
  * PROCESSOR INTERFACE
  *
  * - [ ] float process()
- * - [ ] float process(float)‌
+ * - [ ] float process(float)
  * - [ ] void process(Signal&)
  * - [x] void process(float*, uint32_t)
  * - [ ] void process(float*, float*, uint32_t)
@@ -2801,7 +2801,8 @@ namespace klangwellen {
                         }
                     }
 
-                    for (X = wait2; X > 0; X--); // wait
+                    for (X = wait2; X > 0; X--)
+                        ; // wait
                     mem56--;
                 } while (mem56 != 0);
 
@@ -3456,7 +3457,7 @@ namespace klangwellen {
                 Insert(pos + 1, index + 1, phonemeLengthTable[index + 1], stress[pos]);
                 Insert(pos + 2, index + 2, phonemeLengthTable[index + 2], stress[pos]);
                 pos += 3;
-            };
+            }
         }
 
         // Rewrites the phonemes using the following rules:

@@ -29,6 +29,8 @@
 
 #pragma once
 
+#include <stdint.h>
+
 namespace klangwellen {
     class StreamDataProvider {
     public:
@@ -45,13 +47,13 @@ namespace klangwellen {
                const uint32_t      stream_buffer_size,
                const uint8_t       stream_buffer_division      = 4,
                const uint8_t       stream_buffer_update_offset = 1,
-               const uint32_t      sampling_rate               = KlangWellen::DEFAULT_SAMPLING_RATE)
+               const uint32_t      sample_rate                 = KlangWellen::DEFAULT_SAMPLE_RATE)
             : fStreamDataProvider(stream_data_provider),
               fBufferLength(stream_buffer_size),
               fBuffer(new float[stream_buffer_size]),
               fBufferDivision(stream_buffer_division),
               fBufferSegmentOffset(stream_buffer_update_offset % stream_buffer_division),
-              fSamplingRate(sampling_rate),
+              fSampleRate(sample_rate),
               fAmplitude(1.0f),
               fStepSize(1.0f),
               fInterpolateSamples(true),
@@ -161,7 +163,7 @@ namespace klangwellen {
         float*        fBuffer;
         const uint8_t fBufferDivision;
         const uint8_t fBufferSegmentOffset;
-        float         fSamplingRate;
+        float         fSampleRate;
         float         fAmplitude;
         float         fStepSize;
         bool          fInterpolateSamples;

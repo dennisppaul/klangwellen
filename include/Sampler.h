@@ -21,7 +21,7 @@
  * PROCESSOR INTERFACE
  *
  * - [x] float process()
- * - [ ] float process(float)‌
+ * - [ ] float process(float)
  * - [ ] void process(Signal&)
  * - [x] void process(float*, uint32_t) *overwrite*
  * - [ ] void process(float*, float*, uint32_t)
@@ -58,17 +58,17 @@ namespace klangwellen {
         }
 
         explicit SamplerT(int32_t  buffer_length,
-                          uint32_t sampling_rate = KlangWellen::DEFAULT_SAMPLING_RATE) : SamplerT(new BUFFER_TYPE[buffer_length], buffer_length, sampling_rate) {
+                          uint32_t sample_rate = KlangWellen::DEFAULT_SAMPLE_RATE) : SamplerT(new BUFFER_TYPE[buffer_length], buffer_length, sample_rate) {
             fAllocatedBuffer = true;
         }
 
         SamplerT(BUFFER_TYPE*   buffer,
                  const int32_t  buffer_length,
-                 const uint32_t sampling_rate = KlangWellen::DEFAULT_SAMPLING_RATE) : fDirectionForward(true),
-                                                                                      fInPoint(0),
-                                                                                      fOutPoint(0),
-                                                                                      fSpeed(0) {
-            fSamplingRate = sampling_rate;
+                 const uint32_t sample_rate = KlangWellen::DEFAULT_SAMPLE_RATE) : fSampleRate(sample_rate),
+                                                                                  fDirectionForward(true),
+                                                                                  fInPoint(0),
+                                                                                  fOutPoint(0),
+                                                                                  fSpeed(0) {
             set_buffer(buffer, buffer_length);
             fBufferIndex        = 0;
             fInterpolateSamples = false;
@@ -129,12 +129,12 @@ namespace klangwellen {
         void set_speed(const float speed) {
             fSpeed            = speed;
             fDirectionForward = speed > 0;
-            set_frequency(KlangWellen::abs(speed) * fSamplingRate / fBufferLength); /* aka `step_size = speed` */
+            set_frequency(KlangWellen::abs(speed) * fSampleRate / fBufferLength); /* aka `step_size = speed` */
         }
 
         void set_frequency(const float frequency) {
             fFrequency = frequency;
-            fStepSize  = fFrequency / fFrequencyScale * (static_cast<float>(fBufferLength) / fSamplingRate);
+            fStepSize  = fFrequency / fFrequencyScale * (static_cast<float>(fBufferLength) / fSampleRate);
         }
 
         float get_frequency() const {
@@ -416,7 +416,7 @@ namespace klangwellen {
             if (fBufferLength == 0 || seconds == 0.0f) {
                 return;
             }
-            const float mNormDurationSec = (static_cast<float>(fBufferLength) / static_cast<float>(fSamplingRate));
+            const float mNormDurationSec = (static_cast<float>(fBufferLength) / static_cast<float>(fSampleRate));
             const float mSpeed           = mNormDurationSec / seconds;
             set_speed(mSpeed);
         }
@@ -425,14 +425,14 @@ namespace klangwellen {
             if (fBufferLength == 0 || fSpeed == 0.0f) {
                 return 0;
             }
-            const float mNormDurationSec = (static_cast<float>(fBufferLength) / static_cast<float>(fSamplingRate));
+            const float mNormDurationSec = (static_cast<float>(fBufferLength) / static_cast<float>(fSampleRate));
             return mNormDurationSec / fSpeed;
         }
 
     private:
         std::vector<SamplerListener*> fSamplerListeners;
         std::vector<BUFFER_TYPE>      fRecording;
-        uint32_t                      fSamplingRate;
+        const uint32_t                fSampleRate;
         float                         fAmplitude;
         BUFFER_TYPE*                  fBuffer;
         int32_t                       fBufferLength;

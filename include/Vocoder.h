@@ -21,11 +21,11 @@
  * PROCESSOR INTERFACE
  *
  * - [ ] float process()
- * - [ ] float process(float)‌
+ * - [ ] float process(float)
  * - [ ] void process(Signal&)
  * - [ ] void process(float*, uint32_t)
  * - [ ] void process(float*, float*, uint32_t)
- * - [x] float process(float, float)‌
+ * - [x] float process(float, float)
  * - [x] void process(float*, float*, float*, uint32_t)
  *
  */
@@ -115,7 +115,7 @@ namespace klangwellen {
          * Tom St Denis -- http://tomstdenis.home.dhs.org
          */
 
-        /* Initialize a instance structure.
+        /* Initialize instance structure.
          *
          * Call this function to initialize the instance structure.
          * bands is the number of bands that the vocoder should use; recommended values are between 12 and 64.
@@ -128,9 +128,9 @@ namespace klangwellen {
          */
         Vocoder(uint8_t  pBands          = 24,
                 uint8_t  pFiltersPerBand = 4,
-                uint32_t pSampleRate     = KlangWellen::DEFAULT_SAMPLING_RATE) : bands(pBands),
-                                                                             filters_per_band(pFiltersPerBand),
-                                                                             sample_rate(pSampleRate) {
+                uint32_t pSampleRate     = KlangWellen::DEFAULT_SAMPLE_RATE) : fBands(pBands),
+                                                                           fFiltersPerBand(pFiltersPerBand),
+                                                                           fSampleRate(pSampleRate) {
             // if (pBands < 4 || pBands > VOCLIB_MAX_BANDS) {
             //     // System.out.println("ERROR @" + Vocoder.class.getSimpleName() + " / bands: " + pBands);
             // }
@@ -144,8 +144,8 @@ namespace klangwellen {
             //     // System.out.println("ERROR @" + Vocoder.class.getSimpleName() + " / carrier channels: " + pCarrierChannels);
             // }
 
-            reaction_time = 0.03;
-            formant_shift = 1.0;
+            fReactionTime = 0.03;
+            fFormantShift = 1.0;
 
             reset_history();
             initialize_filterbank(false);
@@ -182,15 +182,15 @@ namespace klangwellen {
                 float out = 0.0f;
 
                 /* Run the bands in parallel and accumulate the output. */
-                for (uint8_t j = 0; j < bands; ++j) {
-                    float analysis_band  = BiQuad(modulator_buffer[i], analysis_bands[j].filters[0]);
-                    float synthesis_band = BiQuad(carrier_buffer[i], synthesis_bands[j].filters[0]);
+                for (uint8_t j = 0; j < fBands; ++j) {
+                    float analysis_band  = BiQuad(modulator_buffer[i], fAnalysisBands[j].filters[0]);
+                    float synthesis_band = BiQuad(carrier_buffer[i], fSynthesisBands[j].filters[0]);
 
-                    for (uint8_t k = 1; k < filters_per_band; ++k) {
-                        analysis_band  = BiQuad(analysis_band, analysis_bands[j].filters[k]);
-                        synthesis_band = BiQuad(synthesis_band, synthesis_bands[j].filters[k]);
+                    for (uint8_t k = 1; k < fFiltersPerBand; ++k) {
+                        analysis_band  = BiQuad(analysis_band, fAnalysisBands[j].filters[k]);
+                        synthesis_band = BiQuad(synthesis_band, fSynthesisBands[j].filters[k]);
                     }
-                    analysis_band = envelope_tick(analysis_envelopes[j], analysis_band);
+                    analysis_band = envelope_tick(fAnalysisEnvelopes[j], analysis_band);
                     out += synthesis_band * analysis_band;
                 }
                 output_buffer[i] = out * fRectifyVolume;
@@ -209,17 +209,17 @@ namespace klangwellen {
                 float out_right = 0.0f;
 
                 /* Run the bands in parallel and accumulate the output. */
-                for (uint8_t j = 0; j < bands; ++j) {
-                    float analysis_band        = BiQuad(modulator_buffer[j], analysis_bands[j].filters[0]);
-                    float synthesis_band_left  = BiQuad(carrier_buffer_left[i], synthesis_bands[j].filters[0]);
-                    float synthesis_band_right = BiQuad(carrier_buffer_right[i], synthesis_bands[j + VOCLIB_MAX_BANDS].filters[0]);
+                for (uint8_t j = 0; j < fBands; ++j) {
+                    float analysis_band        = BiQuad(modulator_buffer[j], fAnalysisBands[j].filters[0]);
+                    float synthesis_band_left  = BiQuad(carrier_buffer_left[i], fSynthesisBands[j].filters[0]);
+                    float synthesis_band_right = BiQuad(carrier_buffer_right[i], fSynthesisBands[j + VOCLIB_MAX_BANDS].filters[0]);
 
-                    for (uint8_t k = 1; k < filters_per_band; ++k) {
-                        analysis_band        = BiQuad(analysis_band, analysis_bands[j].filters[k]);
-                        synthesis_band_left  = BiQuad(synthesis_band_left, synthesis_bands[j].filters[k]);
-                        synthesis_band_right = BiQuad(synthesis_band_right, synthesis_bands[j + VOCLIB_MAX_BANDS].filters[k]);
+                    for (uint8_t k = 1; k < fFiltersPerBand; ++k) {
+                        analysis_band        = BiQuad(analysis_band, fAnalysisBands[j].filters[k]);
+                        synthesis_band_left  = BiQuad(synthesis_band_left, fSynthesisBands[j].filters[k]);
+                        synthesis_band_right = BiQuad(synthesis_band_right, fSynthesisBands[j + VOCLIB_MAX_BANDS].filters[k]);
                     }
-                    analysis_band = envelope_tick(analysis_envelopes[j], analysis_band);
+                    analysis_band = envelope_tick(fAnalysisEnvelopes[j], analysis_band);
                     out_left += synthesis_band_left * analysis_band;
                     out_right += synthesis_band_right * analysis_band;
                 }
@@ -238,11 +238,11 @@ namespace klangwellen {
          * The function will only fail if the parameter is invalid.
          */
         uint8_t set_formant_shift(float pFormant_shift) {
-            if (formant_shift < 0.25f || formant_shift > 4.0f) {
+            if (fFormantShift < 0.25f || fFormantShift > 4.0f) {
                 return 0;
             }
 
-            formant_shift = pFormant_shift;
+            fFormantShift = pFormant_shift;
             initialize_filterbank(true);
             return 1;
         }
@@ -254,12 +254,12 @@ namespace klangwellen {
          * Resetting the history in the middle of a stream will cause clicks.
          */
         void reset_history() {
-            for (uint8_t i = 0; i < bands; ++i) {
-                for (uint8_t j = 0; j < filters_per_band; ++j) {
-                    BiQuad_reset(analysis_bands[i].filters[j]);
-                    BiQuad_reset(synthesis_bands[i].filters[j]);
+            for (uint8_t i = 0; i < fBands; ++i) {
+                for (uint8_t j = 0; j < fFiltersPerBand; ++j) {
+                    BiQuad_reset(fAnalysisBands[i].filters[j]);
+                    BiQuad_reset(fSynthesisBands[i].filters[j]);
                 }
-                envelope_reset(analysis_envelopes[i]);
+                envelope_reset(fAnalysisEnvelopes[i]);
             }
         }
 
@@ -274,23 +274,23 @@ namespace klangwellen {
          * The function will only fail if the parameter is invalid.
          */
         uint8_t set_reaction_time(float pReaction_time) {
-            if (reaction_time < 0.002f || reaction_time > 2.0f) {
+            if (fReactionTime < 0.002f || fReactionTime > 2.0f) {
                 return 0;
             }
 
-            reaction_time = pReaction_time;
+            fReactionTime = pReaction_time;
             initialize_envelopes();
             return 1;
         }
 
         /* Get the current formant shift of the vocoder in octaves. */
         float get_formant_shift() {
-            return formant_shift;
+            return fFormantShift;
         }
 
         /* Get the current reaction time of the vocoder in seconds. */
         float get_reaction_time() {
-            return reaction_time;
+            return fReactionTime;
         }
 
         float process(float pCarrierSample, float pModulatorSample) {
@@ -349,14 +349,14 @@ namespace klangwellen {
         static const uint8_t   VOCLIB_MAX_BANDS = 96;                     /* The maximum number of bands that the vocoder can be initialized with (lower this number to save memory). */
         static constexpr float VOCLIB_M_LN2     = 0.69314718055994530942; /**/
         static constexpr float VOCLIB_M_PI      = 3.14159265358979323846; /**/
-        band                   analysis_bands[VOCLIB_MAX_BANDS];          /* The filterbank used for analysis (these are applied to the modulator). */
-        const uint8_t          bands;                                     /**/
-        const uint8_t          filters_per_band;                          /**/
-        envelope               analysis_envelopes[VOCLIB_MAX_BANDS];      /* The envelopes used to smooth the analysis bands. */
-        float                  formant_shift;                             /* In octaves. 1.0 is unchanged. */
-        float                  reaction_time;                             /* In seconds. Higher values make the vocoder respond more slowly to changes in the modulator. */
-        band                   synthesis_bands[VOCLIB_MAX_BANDS * 2];     /* The filterbank used for synthesis (these are applied to the carrier). The second half of the array is only used for stereo carriers. */
-        const uint32_t         sample_rate;                               /* in Hz */
+        const uint32_t         fSampleRate;                               /* in Hz */
+        band                   fAnalysisBands[VOCLIB_MAX_BANDS];          /* The filterbank used for analysis (these are applied to the modulator). */
+        const uint8_t          fBands;                                    /**/
+        const uint8_t          fFiltersPerBand;                           /**/
+        envelope               fAnalysisEnvelopes[VOCLIB_MAX_BANDS];      /* The envelopes used to smooth the analysis bands. */
+        float                  fFormantShift;                             /* In octaves. 1.0 is unchanged. */
+        float                  fReactionTime;                             /* In seconds. Higher values make the vocoder respond more slowly to changes in the modulator. */
+        band                   fSynthesisBands[VOCLIB_MAX_BANDS * 2];     /* The filterbank used for synthesis (these are applied to the carrier). The second half of the array is only used for stereo carriers. */
         float                  fRectifyVolume;                            /**/
 
         /* Computes a BiQuad filter on a sample. */
@@ -516,9 +516,9 @@ namespace klangwellen {
         void initialize_envelopes() {
             uint8_t i;
 
-            envelope_configure(analysis_envelopes[0], reaction_time, sample_rate);
-            for (i = 1; i < bands; ++i) {
-                analysis_envelopes[i].coef = analysis_envelopes[0].coef;
+            envelope_configure(fAnalysisEnvelopes[0], fReactionTime, fSampleRate);
+            for (i = 1; i < fBands; ++i) {
+                fAnalysisEnvelopes[i].coef = fAnalysisEnvelopes[0].coef;
             }
         }
 
@@ -528,13 +528,13 @@ namespace klangwellen {
             float   step;
             float   lastfreq = 0.0;
             float   minfreq  = 80.0;
-            float   maxfreq  = sample_rate;
+            float   maxfreq  = fSampleRate;
             if (maxfreq > 12000.0) {
                 maxfreq = 12000.0;
             }
-            step = KlangWellen::pow((maxfreq / minfreq), (1.0 / bands));
+            step = KlangWellen::pow((maxfreq / minfreq), (1.0 / fBands));
 
-            for (i = 0; i < bands; ++i) {
+            for (i = 0; i < fBands; ++i) {
                 float bandwidth, nextfreq;
                 float priorfreq = lastfreq;
                 if (lastfreq > 0.0) {
@@ -546,54 +546,54 @@ namespace klangwellen {
                 bandwidth = (nextfreq - priorfreq) / lastfreq;
 
                 if (!pCarrier_only) {
-                    BiQuad_new(analysis_bands[i].filters[0],
+                    BiQuad_new(fAnalysisBands[i].filters[0],
                                VOCLIB_BPF,
                                0.0f,
                                lastfreq,
-                               sample_rate,
+                               fSampleRate,
                                bandwidth);
-                    for (uint8_t j = 1; j < filters_per_band; ++j) {
-                        analysis_bands[i].filters[j].a0 = analysis_bands[i].filters[0].a0;
-                        analysis_bands[i].filters[j].a1 = analysis_bands[i].filters[0].a1;
-                        analysis_bands[i].filters[j].a2 = analysis_bands[i].filters[0].a2;
-                        analysis_bands[i].filters[j].a3 = analysis_bands[i].filters[0].a3;
-                        analysis_bands[i].filters[j].a4 = analysis_bands[i].filters[0].a4;
+                    for (uint8_t j = 1; j < fFiltersPerBand; ++j) {
+                        fAnalysisBands[i].filters[j].a0 = fAnalysisBands[i].filters[0].a0;
+                        fAnalysisBands[i].filters[j].a1 = fAnalysisBands[i].filters[0].a1;
+                        fAnalysisBands[i].filters[j].a2 = fAnalysisBands[i].filters[0].a2;
+                        fAnalysisBands[i].filters[j].a3 = fAnalysisBands[i].filters[0].a3;
+                        fAnalysisBands[i].filters[j].a4 = fAnalysisBands[i].filters[0].a4;
                     }
                 }
 
-                if (formant_shift != 1.0f) {
-                    BiQuad_new(synthesis_bands[i].filters[0],
+                if (fFormantShift != 1.0f) {
+                    BiQuad_new(fSynthesisBands[i].filters[0],
                                VOCLIB_BPF,
                                0.0f,
-                               (float) (lastfreq * formant_shift),
-                               (float) sample_rate,
+                               (float) (lastfreq * fFormantShift),
+                               (float) fSampleRate,
                                (float) bandwidth);
                 } else {
-                    synthesis_bands[i].filters[0].a0 = analysis_bands[i].filters[0].a0;
-                    synthesis_bands[i].filters[0].a1 = analysis_bands[i].filters[0].a1;
-                    synthesis_bands[i].filters[0].a2 = analysis_bands[i].filters[0].a2;
-                    synthesis_bands[i].filters[0].a3 = analysis_bands[i].filters[0].a3;
-                    synthesis_bands[i].filters[0].a4 = analysis_bands[i].filters[0].a4;
+                    fSynthesisBands[i].filters[0].a0 = fAnalysisBands[i].filters[0].a0;
+                    fSynthesisBands[i].filters[0].a1 = fAnalysisBands[i].filters[0].a1;
+                    fSynthesisBands[i].filters[0].a2 = fAnalysisBands[i].filters[0].a2;
+                    fSynthesisBands[i].filters[0].a3 = fAnalysisBands[i].filters[0].a3;
+                    fSynthesisBands[i].filters[0].a4 = fAnalysisBands[i].filters[0].a4;
                 }
 
-                synthesis_bands[i + VOCLIB_MAX_BANDS].filters[0].a0 = synthesis_bands[i].filters[0].a0;
-                synthesis_bands[i + VOCLIB_MAX_BANDS].filters[0].a1 = synthesis_bands[i].filters[0].a1;
-                synthesis_bands[i + VOCLIB_MAX_BANDS].filters[0].a2 = synthesis_bands[i].filters[0].a2;
-                synthesis_bands[i + VOCLIB_MAX_BANDS].filters[0].a3 = synthesis_bands[i].filters[0].a3;
-                synthesis_bands[i + VOCLIB_MAX_BANDS].filters[0].a4 = synthesis_bands[i].filters[0].a4;
+                fSynthesisBands[i + VOCLIB_MAX_BANDS].filters[0].a0 = fSynthesisBands[i].filters[0].a0;
+                fSynthesisBands[i + VOCLIB_MAX_BANDS].filters[0].a1 = fSynthesisBands[i].filters[0].a1;
+                fSynthesisBands[i + VOCLIB_MAX_BANDS].filters[0].a2 = fSynthesisBands[i].filters[0].a2;
+                fSynthesisBands[i + VOCLIB_MAX_BANDS].filters[0].a3 = fSynthesisBands[i].filters[0].a3;
+                fSynthesisBands[i + VOCLIB_MAX_BANDS].filters[0].a4 = fSynthesisBands[i].filters[0].a4;
 
-                for (uint8_t j = 1; j < filters_per_band; ++j) {
-                    synthesis_bands[i].filters[j].a0 = synthesis_bands[i].filters[0].a0;
-                    synthesis_bands[i].filters[j].a1 = synthesis_bands[i].filters[0].a1;
-                    synthesis_bands[i].filters[j].a2 = synthesis_bands[i].filters[0].a2;
-                    synthesis_bands[i].filters[j].a3 = synthesis_bands[i].filters[0].a3;
-                    synthesis_bands[i].filters[j].a4 = synthesis_bands[i].filters[0].a4;
+                for (uint8_t j = 1; j < fFiltersPerBand; ++j) {
+                    fSynthesisBands[i].filters[j].a0 = fSynthesisBands[i].filters[0].a0;
+                    fSynthesisBands[i].filters[j].a1 = fSynthesisBands[i].filters[0].a1;
+                    fSynthesisBands[i].filters[j].a2 = fSynthesisBands[i].filters[0].a2;
+                    fSynthesisBands[i].filters[j].a3 = fSynthesisBands[i].filters[0].a3;
+                    fSynthesisBands[i].filters[j].a4 = fSynthesisBands[i].filters[0].a4;
 
-                    synthesis_bands[i + VOCLIB_MAX_BANDS].filters[j].a0 = synthesis_bands[i].filters[0].a0;
-                    synthesis_bands[i + VOCLIB_MAX_BANDS].filters[j].a1 = synthesis_bands[i].filters[0].a1;
-                    synthesis_bands[i + VOCLIB_MAX_BANDS].filters[j].a2 = synthesis_bands[i].filters[0].a2;
-                    synthesis_bands[i + VOCLIB_MAX_BANDS].filters[j].a3 = synthesis_bands[i].filters[0].a3;
-                    synthesis_bands[i + VOCLIB_MAX_BANDS].filters[j].a4 = synthesis_bands[i].filters[0].a4;
+                    fSynthesisBands[i + VOCLIB_MAX_BANDS].filters[j].a0 = fSynthesisBands[i].filters[0].a0;
+                    fSynthesisBands[i + VOCLIB_MAX_BANDS].filters[j].a1 = fSynthesisBands[i].filters[0].a1;
+                    fSynthesisBands[i + VOCLIB_MAX_BANDS].filters[j].a2 = fSynthesisBands[i].filters[0].a2;
+                    fSynthesisBands[i + VOCLIB_MAX_BANDS].filters[j].a3 = fSynthesisBands[i].filters[0].a3;
+                    fSynthesisBands[i + VOCLIB_MAX_BANDS].filters[j].a4 = fSynthesisBands[i].filters[0].a4;
                 }
             }
         }

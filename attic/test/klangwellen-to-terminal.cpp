@@ -6,11 +6,11 @@
 #include "KlangWellen.h"
 #include "Wavetable.h"
 
-klangwellen::Wavetable fWavetable(1024, klangwellen::KlangWellen::DEFAULT_SAMPLING_RATE);
+klangwellen::Wavetable fWavetable(1024, klangwellen::KlangWellen::DEFAULT_SAMPLE_RATE);
 const float            mNumSamples = 512;
 
 int main() {
-    std::cout << "SAMPLING_RATE ...... : " << klangwellen::KlangWellen::DEFAULT_SAMPLING_RATE << std::endl;
+    std::cout << "SAMPLE_RATE ...... : " << klangwellen::KlangWellen::DEFAULT_SAMPLE_RATE << std::endl;
 
     klangwellen::Wavetable::sine(fWavetable.get_wavetable(), fWavetable.get_wavetable_size());
 

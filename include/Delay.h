@@ -21,7 +21,7 @@
  * PROCESSOR INTERFACE
  *
  * - [ ] float process()
- * - [x] float process(float)‌
+ * - [x] float process(float)
  * - [ ] void process(Signal&)
  * - [x] void process(float*, uint32_t)
  * - [ ] void process(float*, float*, uint32_t)
@@ -48,7 +48,7 @@ namespace klangwellen {
          * @param sample_rate the sample rate in Hz.
          * @param decay_rate  the decay of the echo, a value between 0 and 1. 1 meaning no decay, 0 means immediate decay
          */
-        Delay(float echo_length = 0.5, float decay_rate = 0.75, float wet = 0.8, uint32_t sample_rate = KlangWellen::DEFAULT_SAMPLING_RATE) : fSampleRate(sample_rate) {
+        Delay(float echo_length = 0.5, float decay_rate = 0.75, float wet = 0.8, uint32_t sample_rate = KlangWellen::DEFAULT_SAMPLE_RATE) : fSampleRate(sample_rate) {
             set_decay_rate(decay_rate);
             set_echo_length(echo_length);
             set_wet(wet);

@@ -35,40 +35,40 @@
 namespace klangwellen {
     class RootMeanSquare {
     public:
-        RootMeanSquare(size_t windowSize = 16) : windowSize(windowSize), sum(0.0f), bufferIndex(0) {
-            buffer.resize(windowSize, 0.0f);
-            rms = 0.0f;
+        RootMeanSquare(size_t windowSize = 16) : fWindowSize(windowSize), fSum(0.0f), fBufferIndex(0) {
+            fBuffer.resize(windowSize, 0.0f);
+            fRMS = 0.0f;
         }
 
         float process(float sample) {
             // Remove the oldest sample's contribution
-            sum -= buffer[bufferIndex] * buffer[bufferIndex];
+            fSum -= fBuffer[fBufferIndex] * fBuffer[fBufferIndex];
 
             // Add the new sample to the buffer
-            buffer[bufferIndex] = sample;
-            bufferIndex         = (bufferIndex + 1) % windowSize;
+            fBuffer[fBufferIndex] = sample;
+            fBufferIndex          = (fBufferIndex + 1) % fWindowSize;
 
             // Add the new sample's contribution
-            sum += sample * sample;
+            fSum += sample * sample;
 
             // Calculate the RMS value
-            if (sum > 0) {
-                rms = std::sqrt(sum / windowSize);
+            if (fSum > 0) {
+                fRMS = std::sqrt(fSum / fWindowSize);
             } else {
-                rms = 0.0f;
+                fRMS = 0.0f;
             }
-            return rms;
+            return fRMS;
         }
 
         float get_current() const {
-            return rms;
+            return fRMS;
         }
 
     private:
-        const size_t       windowSize;
-        std::vector<float> buffer;
-        size_t             bufferIndex;
-        float              sum;
-        float              rms;
+        const size_t       fWindowSize;
+        std::vector<float> fBuffer;
+        size_t             fBufferIndex;
+        float              fSum;
+        float              fRMS;
     };
 } // namespace klangwellen

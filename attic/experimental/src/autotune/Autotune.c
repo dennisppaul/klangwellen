@@ -9,23 +9,23 @@
 #error KLANG_SAMPLES_PER_AUDIO_BLOCK is not defined
 #endif
 
-#define BUF_SIZE     KLANG_SAMPLES_PER_AUDIO_BLOCK
-#define CONCERT_A    440.0
-#define KEY_C        'c'
-#define FIXED_PITCH  0.0
-#define FIXED_PULL   0.2
-#define CORR_STR     1.0
-#define CORR_SMOOTH  0.0
-#define PITCH_SHIFT  0.0
+#define BUF_SIZE KLANG_SAMPLES_PER_AUDIO_BLOCK
+#define CONCERT_A 440.0
+#define KEY_C 'c'
+#define FIXED_PITCH 0.0
+#define FIXED_PULL 0.2
+#define CORR_STR 1.0
+#define CORR_SMOOTH 0.0
+#define PITCH_SHIFT 0.0
 #define SCALE_ROTATE 0
-#define LFO_DEPTH    0.0
-#define LFO_RATE     5.0
-#define LFO_SHAPE    0.0
-#define LFO_SYMM     0.0
-#define LFO_QUANT    0
-#define FORM_CORR    0
-#define FORM_WARP    0.0
-#define MIX          0.4
+#define LFO_DEPTH 0.0
+#define LFO_RATE 5.0
+#define LFO_SHAPE 0.0
+#define LFO_SYMM 0.0
+#define LFO_QUANT 0
+#define FORM_CORR 0
+#define FORM_WARP 0.0
+#define MIX 0.4
 
 void autotune_init() {
     float concert_a    = CONCERT_A;

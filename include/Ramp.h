@@ -21,7 +21,7 @@
  * PROCESSOR INTERFACE
  *
  * - [x] float process()
- * - [ ] float process(float)‌
+ * - [ ] float process(float)
  * - [ ] void process(Signal&)
  * - [x] void process(float*, uint32_t)
  * - [ ] void process(float*, float*, uint32_t)
@@ -38,7 +38,7 @@
 namespace klangwellen {
     class Ramp {
     public:
-        Ramp(uint32_t sample_rate = KlangWellen::DEFAULT_SAMPLING_RATE) : fSampleRate(sample_rate) {
+        Ramp(uint32_t sample_rate = KlangWellen::DEFAULT_SAMPLE_RATE) : fSampleRate(sample_rate) {
             fStartValue   = 0;
             fEndValue     = 0;
             fCurrentValue = 0;

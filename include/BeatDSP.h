@@ -21,7 +21,7 @@
  * PROCESSOR INTERFACE
  *
  * - [x] float process()
- * - [ ] float process(float)‌
+ * - [ ] float process(float)
  * - [ ] void process(Signal&)
  * - [x] void process(float*, uint32_t) *no overwrites*
  * - [ ] void process(float*, float*, uint32_t)
@@ -46,7 +46,7 @@ namespace klangwellen {
 
     class BeatDSP {
     public:
-        BeatDSP(uint32_t sampling_rate = KlangWellen::DEFAULT_SAMPLING_RATE) : fSamplingRate(sampling_rate), fBeat(-1) {
+        BeatDSP(uint32_t sample_rate = KlangWellen::DEFAULT_SAMPLE_RATE) : fSampleRate(sample_rate), fBeat(-1) {
             set_bpm(120);
         }
 
@@ -66,7 +66,7 @@ namespace klangwellen {
 
         void set_bpm(float BPM) {
             const float mPeriod = 60.0f / BPM;
-            fTickInterval       = fSamplingRate * mPeriod;
+            fTickInterval       = fSampleRate * mPeriod;
         }
 
         /**
@@ -84,7 +84,7 @@ namespace klangwellen {
          * @param interval in seconds
          */
         void set_interval_sec(float interval) {
-            fTickInterval = fSamplingRate * interval;
+            fTickInterval = fSampleRate * interval;
         }
 
         int get_beat_count() {
@@ -101,6 +101,7 @@ namespace klangwellen {
         }
 
         void process(float* signal_buffer, const uint32_t buffer_length = KLANG_SAMPLES_PER_AUDIO_BLOCK) {
+            (void) signal_buffer;
             for (uint16_t i = 0; i < buffer_length; i++) {
                 process();
             }
@@ -122,7 +123,7 @@ namespace klangwellen {
         }
 
     private:
-        const uint32_t             fSamplingRate;
+        const uint32_t             fSampleRate;
         int                        fBeat;
         std::vector<BeatListener*> fListeners;
         uint32_t                   fTickCounter;

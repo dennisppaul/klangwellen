@@ -21,7 +21,7 @@
  * PROCESSOR INTERFACE
  *
  * - [ ] float process()
- * - [x] float process(float)‌
+ * - [x] float process(float)
  * - [ ] void process(Signal&)
  * - [x] void process(float*, uint32_t)
  * - [ ] void process(float*, float*, uint32_t)
@@ -50,30 +50,30 @@ namespace klangwellen {
          * Original author(s) : Victor Lazzarini, John ffitch (fast tanh), Bob Moog
          */
 
-        float mCutoffFrequency;
-        float mDelay[6];
-        float mOldAcr;
-        float mOldFreq;
-        float mOldRes;
-        float mOldTune;
-        float mResonance;
-        float mSamplingRate;
-        float mTanhstg[3];
+        const float fSampleRate;
+        float       fCutoffFrequency;
+        float       fDelay[6];
+        float       fOldAcr;
+        float       fOldFreq;
+        float       fOldRes;
+        float       fOldTune;
+        float       fResonance;
+        float       fTanhstg[3];
 
     public:
-        FilterLowPassMoogLadder() : FilterLowPassMoogLadder(KlangWellen::DEFAULT_SAMPLING_RATE) {}
+        FilterLowPassMoogLadder() : FilterLowPassMoogLadder(KlangWellen::DEFAULT_SAMPLE_RATE) {}
 
-        explicit FilterLowPassMoogLadder(uint32_t sampling_rate) : mSamplingRate(sampling_rate) {
-            mResonance       = 0.4f;
-            mCutoffFrequency = 1000.0f;
+        explicit FilterLowPassMoogLadder(uint32_t sample_rate) : fSampleRate(sample_rate) {
+            fResonance       = 0.4f;
+            fCutoffFrequency = 1000.0f;
 
             for (uint8_t i = 0; i < 6; i++) {
-                mDelay[i]       = 0.0f;
-                mTanhstg[i % 3] = 0.0f;
+                fDelay[i]       = 0.0f;
+                fTanhstg[i % 3] = 0.0f;
             }
 
-            mOldFreq = 0.0f;
-            mOldRes  = -1.0f;
+            fOldFreq = 0.0f;
+            fOldRes  = -1.0f;
         }
 
         void process(float*         signal_buffer,
@@ -84,17 +84,17 @@ namespace klangwellen {
         }
 
         float process(float signal) {
-            const float freq = mCutoffFrequency;
-            const float res  = std::max(mResonance, 0.0f);
+            const float freq = fCutoffFrequency;
+            const float res  = std::max(fResonance, 0.0f);
             float       res4;
             float       stg[4];
             float       acr, tune;
             const float THERMAL = 0.000025f;
 
-            if (mOldFreq != freq || mOldRes != res) {
+            if (fOldFreq != freq || fOldRes != res) {
                 float f, fc, fc2, fc3, fcr;
-                mOldFreq = freq;
-                fc       = (freq / mSamplingRate);
+                fOldFreq = freq;
+                fc       = (freq / fSampleRate);
                 f        = 0.5f * fc;
                 fc2      = fc * fc;
                 fc3      = fc2 * fc2;
@@ -103,51 +103,51 @@ namespace klangwellen {
                 acr  = -3.9364f * fc2 + 1.8409f * fc + 0.9968f;
                 tune = ((1.0f - std::exp(-((2 * M_PI) * f * fcr))) / THERMAL);
 
-                mOldRes  = res;
-                mOldAcr  = acr;
-                mOldTune = tune;
+                fOldRes  = res;
+                fOldAcr  = acr;
+                fOldTune = tune;
             } else {
                 //            res = mOldRes;
-                acr  = mOldAcr;
-                tune = mOldTune;
+                acr  = fOldAcr;
+                tune = fOldTune;
             }
 
             res4 = 4.0f * res * acr;
 
             for (uint8_t j = 0; j < 2; j++) {
-                signal -= res4 * mDelay[5];
-                mDelay[0] = stg[0] = mDelay[0] + tune * (my_tanh(signal * THERMAL) - mTanhstg[0]);
+                signal -= res4 * fDelay[5];
+                fDelay[0] = stg[0] = fDelay[0] + tune * (my_tanh(signal * THERMAL) - fTanhstg[0]);
                 for (uint8_t k = 1; k < 4; k++) {
                     signal    = stg[k - 1];
-                    stg[k]    = mDelay[k] + tune * ((mTanhstg[k - 1] = my_tanh(signal * THERMAL)) - (k != 3 ? mTanhstg[k] : my_tanh(mDelay[k] * THERMAL)));
-                    mDelay[k] = stg[k];
+                    stg[k]    = fDelay[k] + tune * ((fTanhstg[k - 1] = my_tanh(signal * THERMAL)) - (k != 3 ? fTanhstg[k] : my_tanh(fDelay[k] * THERMAL)));
+                    fDelay[k] = stg[k];
                 }
-                mDelay[5] = (stg[3] + mDelay[4]) * 0.5f;
-                mDelay[4] = stg[3];
+                fDelay[5] = (stg[3] + fDelay[4]) * 0.5f;
+                fDelay[4] = stg[3];
             }
-            return mDelay[5];
+            return fDelay[5];
         }
 
         float get_frequency() {
-            return mCutoffFrequency;
+            return fCutoffFrequency;
         }
 
         /**
          * @param pCutoffFrequency cutoff frequency in Hz
          */
         void set_frequency(float pCutoffFrequency) {
-            mCutoffFrequency = pCutoffFrequency;
+            fCutoffFrequency = pCutoffFrequency;
         }
 
         float get_resonance() {
-            return mResonance;
+            return fResonance;
         }
 
         /**
          * @param pResonance resonance factor [0.0, 1.0] ( becomes unstable close to 1.0 )
          */
         void set_resonance(float pResonance) {
-            mResonance = pResonance;
+            fResonance = pResonance;
         }
 
     private:

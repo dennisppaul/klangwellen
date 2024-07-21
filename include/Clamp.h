@@ -21,7 +21,7 @@
  * PROCESSOR INTERFACE
  *
  * - [ ] float process()
- * - [x] float process(float)‌
+ * - [x] float process(float)
  * - [x] void process(Signal&)
  * - [x] void process(float*, uint32_t)
  * - [x] void process(float*, float*, uint32_t)
@@ -31,6 +31,7 @@
 
 #include <stdint.h>
 
+#include "KlangWellen.h"
 #include "Signal.h"
 
 namespace klangwellen {

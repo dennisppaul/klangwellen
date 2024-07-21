@@ -23,7 +23,7 @@ void write_WAV_file(const char* filename, int sampleRate, int numChannels, int b
     file.write("fmt ", 4);
     int32_t fmtSize = 16;
     file.write(reinterpret_cast<char*>(&fmtSize), 4);
-    int16_t audioFormat = 1;  // PCM format
+    int16_t audioFormat = 1; // PCM format
     file.write(reinterpret_cast<char*>(&audioFormat), 2);
     file.write(reinterpret_cast<char*>(&numChannels), 2);
     file.write(reinterpret_cast<char*>(&sampleRate), 4);

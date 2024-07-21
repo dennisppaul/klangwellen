@@ -21,7 +21,7 @@
  * PROCESSOR INTERFACE
  *
  * - [x] float process()
- * - [x] float process(float)‌
+ * - [x] float process(float)
  * - [x] void process(Signal&)
  * - [x] void process(float*, uint32_t)
  * - [x] void process(float*, float*, uint32_t)
@@ -52,35 +52,31 @@ namespace klangwellen {
          *
          */
     public:
-        ADSR(uint32_t pSamplingRate) : mSamplingRate(pSamplingRate) {
-            mAmp                   = 0.0f;
-            mAttack                = KlangWellen::DEFAULT_ATTACK;
-            mDecay                 = KlangWellen::DEFAULT_DECAY;
-            mDelta                 = 0.0f;
-            mRelease               = KlangWellen::DEFAULT_RELEASE;
-            mSustain               = KlangWellen::DEFAULT_SUSTAIN;
-            FADE_TO_ZERO_RATE_SEC  = 0.01f;
-            USE_FADE_TO_ZERO_STATE = false;
-            mState                 = ENVELOPE_STATE::IDLE;
+        explicit ADSR(uint32_t sample_rate = KlangWellen::DEFAULT_SAMPLE_RATE) : fSampleRate(sample_rate), FADE_TO_ZERO_RATE_SEC(0.01f), USE_FADE_TO_ZERO_STATE(false) {
+            fAmp     = 0.0f;
+            fAttack  = KlangWellen::DEFAULT_ATTACK;
+            fDecay   = KlangWellen::DEFAULT_DECAY;
+            fDelta   = 0.0f;
+            fRelease = KlangWellen::DEFAULT_RELEASE;
+            fSustain = KlangWellen::DEFAULT_SUSTAIN;
+            fState   = ENVELOPE_STATE::IDLE;
             setState(ENVELOPE_STATE::IDLE);
         }
 
-        ADSR() : ADSR(KlangWellen::DEFAULT_SAMPLING_RATE) {}
-
         float process() {
             step();
-            return mAmp;
+            return fAmp;
         }
 
         float process(float signal) {
             step();
-            return signal * mAmp;
+            return signal * fAmp;
         }
 
         void process(Signal& signal) {
             step();
-            signal.left *= mAmp;
-            signal.right *= mAmp;
+            signal.left *= fAmp;
+            signal.right *= fAmp;
         }
 
         void process(float*         signal_buffer_left,
@@ -88,15 +84,15 @@ namespace klangwellen {
                      const uint32_t buffer_length = KLANG_SAMPLES_PER_AUDIO_BLOCK) {
             for (uint32_t i = 0; i < buffer_length; i++) {
                 step();
-                signal_buffer_left[i] *= mAmp;
-                signal_buffer_right[i] *= mAmp;
+                signal_buffer_left[i] *= fAmp;
+                signal_buffer_right[i] *= fAmp;
             }
         }
 
         void process(float* signal_buffer, const uint32_t buffer_length = KLANG_SAMPLES_PER_AUDIO_BLOCK) {
             for (uint32_t i = 0; i < buffer_length; i++) {
                 step();
-                signal_buffer[i] *= mAmp;
+                signal_buffer[i] *= fAmp;
             }
         }
 
@@ -108,12 +104,12 @@ namespace klangwellen {
             check_scheduled_release_state();
         }
 
-        float get_attack() {
-            return mAttack;
+        float get_attack() const {
+            return fAttack;
         }
 
         void set_attack(float pAttack) {
-            mAttack = pAttack;
+            fAttack = pAttack;
         }
 
         void set_adsr(float pAttack, float pDecay, float pSustain, float pRelease) {
@@ -123,28 +119,26 @@ namespace klangwellen {
             set_release(pRelease);
         }
 
-        float get_decay() {
-            return mDecay;
+        float get_decay() const {
+            return fDecay;
         }
 
         void set_decay(float pDecay) {
-            mDecay = pDecay;
+            fDecay = pDecay;
         }
 
-        float get_sustain() {
-            return mSustain;
+        float get_sustain() const {
+            return fSustain;
         }
 
         void set_sustain(float pSustain) {
-            mSustain = pSustain;
+            fSustain = pSustain;
         }
 
-        float get_release() {
-            return mRelease;
-        }
+        float get_release() const;
 
         void set_release(float pRelease) {
-            mRelease = pRelease;
+            fRelease = pRelease;
         }
 
     private:
@@ -156,88 +150,91 @@ namespace klangwellen {
             RELEASE,
             PRE_ATTACK_FADE_TO_ZERO
         };
-        float          FADE_TO_ZERO_RATE_SEC;
-        bool           USE_FADE_TO_ZERO_STATE;
-        float          mAmp;
-        float          mAttack;
-        float          mDecay;
-        float          mDelta;
-        float          mRelease;
-        uint32_t       mSamplingRate;
-        ENVELOPE_STATE mState;
-        float          mSustain;
+        const uint32_t fSampleRate;
+        const float    FADE_TO_ZERO_RATE_SEC;
+        const bool     USE_FADE_TO_ZERO_STATE;
+        float          fAmp;
+        float          fAttack;
+        float          fDecay;
+        float          fDelta;
+        float          fRelease;
+        ENVELOPE_STATE fState;
+        float          fSustain;
 
         void check_scheduled_attack_state() {
-            if (mAmp > 0.0f) {
+            if (fAmp > 0.0f) {
                 if (USE_FADE_TO_ZERO_STATE) {
-                    if (mState != ENVELOPE_STATE::PRE_ATTACK_FADE_TO_ZERO) {
-                        mDelta = compute_delta_fraction(-mAmp, FADE_TO_ZERO_RATE_SEC);
+                    if (fState != ENVELOPE_STATE::PRE_ATTACK_FADE_TO_ZERO) {
+                        fDelta = compute_delta_fraction(-fAmp, FADE_TO_ZERO_RATE_SEC);
                         setState(ENVELOPE_STATE::PRE_ATTACK_FADE_TO_ZERO);
                     }
                 } else {
-                    mDelta = compute_delta_fraction(1.0f, mAttack);
+                    fDelta = compute_delta_fraction(1.0f, fAttack);
                     setState(ENVELOPE_STATE::ATTACK);
                 }
             } else {
-                mDelta = compute_delta_fraction(1.0f, mAttack);
+                fDelta = compute_delta_fraction(1.0f, fAttack);
                 setState(ENVELOPE_STATE::ATTACK);
             }
         }
 
         void check_scheduled_release_state() {
-            if (mState != ENVELOPE_STATE::RELEASE) {
-                mDelta = compute_delta_fraction(-mAmp, mRelease);
+            if (fState != ENVELOPE_STATE::RELEASE) {
+                fDelta = compute_delta_fraction(-fAmp, fRelease);
                 setState(ENVELOPE_STATE::RELEASE);
             }
         }
 
-        float compute_delta_fraction(float pDelta, float pDuration) {
-            return pDuration > 0 ? (pDelta / mSamplingRate) / pDuration : pDelta;
+        float compute_delta_fraction(float pDelta, float pDuration) const {
+            return pDuration > 0 ? (pDelta / static_cast<float>(fSampleRate)) / pDuration : pDelta;
         }
 
         void setState(ENVELOPE_STATE pState) {
-            mState = pState;
+            fState = pState;
         }
 
         void step() {
-            switch (mState) {
+            switch (fState) {
                 case ENVELOPE_STATE::IDLE:
                 case ENVELOPE_STATE::SUSTAIN:
                     break;
                 case ENVELOPE_STATE::ATTACK:
                     // increase amp to sustain_level in ATTACK sec
-                    mAmp += mDelta;
-                    if (mAmp >= 1.0f) {
-                        mAmp   = 1.0f;
-                        mDelta = compute_delta_fraction(-(1.0f - mSustain), mDecay);
+                    fAmp += fDelta;
+                    if (fAmp >= 1.0f) {
+                        fAmp   = 1.0f;
+                        fDelta = compute_delta_fraction(-(1.0f - fSustain), fDecay);
                         setState(ENVELOPE_STATE::DECAY);
                     }
                     break;
                 case ENVELOPE_STATE::DECAY:
                     // decrease amp to sustain_level in DECAY sec
-                    mAmp += mDelta;
-                    if (mAmp <= mSustain) {
-                        mAmp = mSustain;
+                    fAmp += fDelta;
+                    if (fAmp <= fSustain) {
+                        fAmp = fSustain;
                         setState(ENVELOPE_STATE::SUSTAIN);
                     }
                     break;
                 case ENVELOPE_STATE::RELEASE:
                     // decrease amp to 0.0 in RELEASE sec
-                    mAmp += mDelta;
-                    if (mAmp <= 0.0f) {
-                        mAmp = 0.0f;
+                    fAmp += fDelta;
+                    if (fAmp <= 0.0f) {
+                        fAmp = 0.0f;
                         setState(ENVELOPE_STATE::IDLE);
                     }
                     break;
                 case ENVELOPE_STATE::PRE_ATTACK_FADE_TO_ZERO:
-                    mAmp += mDelta;
-                    if (mAmp <= 0.0f) {
-                        mAmp   = 0.0f;
-                        mDelta = compute_delta_fraction(1.0f, mAttack);
+                    fAmp += fDelta;
+                    if (fAmp <= 0.0f) {
+                        fAmp   = 0.0f;
+                        fDelta = compute_delta_fraction(1.0f, fAttack);
                         setState(ENVELOPE_STATE::ATTACK);
                     }
                     break;
             }
         }
     };
+    float ADSR::get_release() const {
+        return fRelease;
+    }
 } // namespace klangwellen

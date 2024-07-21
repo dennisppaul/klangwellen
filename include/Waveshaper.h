@@ -21,7 +21,7 @@
  * PROCESSOR INTERFACE
  *
  * - [ ] float process()
- * - [ ] float process(float)‌
+ * - [ ] float process(float)
  * - [ ] void process(Signal&)
  * - [x] void process(float*, uint32_t)
  * - [ ] void process(float*, float*, uint32_t)
@@ -32,6 +32,7 @@
 #include <stdint.h>
 
 #include "KlangWellen.h"
+
 namespace klangwellen {
 
     class Waveshaper {

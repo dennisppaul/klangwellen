@@ -26,7 +26,7 @@ namespace klangwellen {
         float right;
 
         Signal() : left(0.0f), right(0.0f) {}
-        Signal(float signal_mono) : left(signal_mono), right(signal_mono) {}
+        explicit Signal(float signal_mono) : left(signal_mono), right(signal_mono) {}
         Signal(float signal_left, float signal_right) : left(signal_left), right(signal_right) {}
 
         void set(float signal_mono) {

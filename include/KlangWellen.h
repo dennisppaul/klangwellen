@@ -30,9 +30,9 @@
 #define KLANG_SAMPLES_PER_AUDIO_BLOCK 512
 #endif
 
-#ifndef KLANG_SAMPLING_RATE
-#warning KLANG_SAMPLING_RATE not defined - using default value of 48000
-#define KLANG_SAMPLING_RATE 48000
+#ifndef KLANG_SAMPLE_RATE
+#warning KLANG_SAMPLE_RATE "not defined - using default value of 48000"
+#define KLANG_SAMPLE_RATE 48000
 #endif
 
 #ifndef PI
@@ -62,94 +62,93 @@ namespace klangwellen {
         static constexpr float    DEFAULT_FILTER_BANDWIDTH              = 100.0f;
         static constexpr float    DEFAULT_FILTER_FREQUENCY              = 1000.0f;
         static constexpr float    DEFAULT_RELEASE                       = 0.075f;
-        static constexpr uint32_t DEFAULT_SAMPLING_RATE                 = KLANG_SAMPLING_RATE; // TODO decide for either one
-        static constexpr uint32_t DEFAULT_INTERPOLATE_AMP_FREQ_DURATION = 5.f / 1000.f * (float) DEFAULT_SAMPLING_RATE;
-        // KlangWellen::millis_to_samples(5);
-        static constexpr float DEFAULT_SUSTAIN                       = 0.5f;
-        static const int       DEFAULT_WAVETABLE_SIZE                = 512;
-        static const uint8_t   DISTORTION_HARD_CLIPPING              = 0;
-        static const uint8_t   DISTORTION_FOLDBACK                   = 1;
-        static const uint8_t   DISTORTION_FOLDBACK_SINGLE            = 2;
-        static const uint8_t   DISTORTION_FULL_WAVE_RECTIFICATION    = 3;
-        static const uint8_t   DISTORTION_HALF_WAVE_RECTIFICATION    = 4;
-        static const uint8_t   DISTORTION_INFINITE_CLIPPING          = 5;
-        static const uint8_t   DISTORTION_SOFT_CLIPPING_CUBIC        = 6;
-        static const uint8_t   DISTORTION_SOFT_CLIPPING_ARC_TANGENT  = 7;
-        static const uint8_t   DISTORTION_BIT_CRUSHING               = 8;
-        static const int       EVENT_UNDEFINED                       = -1;
-        static const int       EVENT_CHANNEL                         = 0;
-        static const int       EVENT_NOTE_ON                         = 0;
-        static const int       EVENT_NOTE                            = 1;
-        static const int       EVENT_NOTE_OFF                        = 1;
-        static const int       EVENT_CONTROLCHANGE                   = 2;
-        static const int       EVENT_PITCHBEND                       = 3;
-        static const int       EVENT_PROGRAMCHANGE                   = 4;
-        static const int       EVENT_VELOCITY                        = 2;
-        static const uint8_t   FILTER_MODE_LOW_PASS                  = 0;
-        static const uint8_t   FILTER_MODE_HIGH_PASS                 = 1;
-        static const uint8_t   FILTER_MODE_BAND_PASS                 = 2;
-        static const uint8_t   FILTER_MODE_NOTCH                     = 3;
-        static const uint8_t   FILTER_MODE_PEAK                      = 4;
-        static const uint8_t   FILTER_MODE_LOWSHELF                  = 5;
-        static const uint8_t   FILTER_MODE_HIGHSHELF                 = 6;
-        static const uint8_t   FILTER_MODE_BAND_REJECT               = 7;
-        static const int       LOOP_INFINITE                         = std::numeric_limits<int>::max();
-        static const uint8_t   MONO                                  = 1;
-        static const uint8_t   NOISE_WHITE                           = 0;
-        static const uint8_t   NOISE_GAUSSIAN_WHITE                  = 1;
-        static const uint8_t   NOISE_GAUSSIAN_WHITE2                 = 2;
-        static const uint8_t   NOISE_PINK                            = 3;
-        static const uint8_t   NOISE_PINK2                           = 4;
-        static const uint8_t   NOISE_PINK3                           = 5;
-        static const uint8_t   NOISE_SIMPLEX                         = 6;
-        static constexpr float NOTE_WHOLE                            = 0.25f;
-        static constexpr float NOTE_HALF                             = 0.5f;
-        static const uint8_t   NOTE_QUARTER                          = 1;
-        static const uint8_t   NOTE_EIGHTH                           = 2;
-        static const uint8_t   NOTE_SIXTEENTH                        = 4;
-        static const uint8_t   NOTE_THIRTYSECOND                     = 8;
-        static const int       NO_AUDIO_DEVICE                       = -2;
-        static const int       NO_CHANNELS                           = 0;
-        static const int       NO_EVENT                              = -1;
-        static const int       NO_INPOINT                            = 0;
-        static const int       NO_LOOP                               = -2;
-        static const int       NO_LOOP_COUNT                         = -1;
-        static const int       NO_OUTPOINT                           = -1;
-        static const int       NO_POSITION                           = -1;
-        static const int       NO_VALUE                              = -1;
-        static const uint8_t   PAN_LINEAR                            = 0;
-        static const uint8_t   PAN_SINE_LAW                          = 2;
-        static const uint8_t   PAN_SQUARE_LAW                        = 1;
-        static const uint8_t   SIGNAL_LEFT                           = 0;
-        static constexpr float SIGNAL_MAX                            = 1.0f;
-        static constexpr float SIGNAL_MIN                            = -1.0f;
-        static const int       SIGNAL_MONO                           = 1;
-        static const int       SIGNAL_PROCESSING_IGNORE_IN_OUTPOINTS = -3;
-        static const int       SIGNAL_RIGHT                          = 1;
-        static const int       SIGNAL_STEREO                         = 2;
-        static const uint8_t   SIG_INT16_BIG_ENDIAN                  = 2;
-        static const uint8_t   SIG_INT16_LITTLE_ENDIAN               = 3;
-        static const uint8_t   SIG_INT24_3_BIG_ENDIAN                = 4;
-        static const uint8_t   SIG_INT24_3_LITTLE_ENDIAN             = 5;
-        static const uint8_t   SIG_INT24_4_BIG_ENDIAN                = 6;
-        static const uint8_t   SIG_INT24_4_LITTLE_ENDIAN             = 7;
-        static const uint8_t   SIG_INT32_BIG_ENDIAN                  = 8;
-        static const uint8_t   SIG_INT32_LITTLE_ENDIAN               = 9;
-        static const uint8_t   SIG_INT8                              = 0;
-        static const uint8_t   SIG_UINT8                             = 1;
-        static const uint8_t   STEREO                                = 2;
-        static const uint8_t   VERSION_MAJOR                         = 0;
-        static const uint8_t   VERSION_MINOR                         = 8;
-        static const uint8_t   WAVEFORM_SINE                         = 0;
-        static const uint8_t   WAVEFORM_TRIANGLE                     = 1;
-        static const uint8_t   WAVEFORM_SAWTOOTH                     = 2;
-        static const uint8_t   WAVEFORM_SQUARE                       = 3;
-        static const uint8_t   WAVEFORM_NOISE                        = 4;
-        static const uint8_t   WAVESHAPE_INTERPOLATE_NONE            = 0;
-        static const uint8_t   WAVESHAPE_INTERPOLATE_LINEAR          = 1;
-        static const uint8_t   WAVESHAPE_INTERPOLATE_CUBIC           = 2;
-        static const uint8_t   WAV_FORMAT_PCM                        = 1;
-        static const uint8_t   WAV_FORMAT_IEEE_FLOAT_32BIT           = 3;
+        static constexpr uint32_t DEFAULT_SAMPLE_RATE                   = KLANG_SAMPLE_RATE;                          // TODO decide for either one
+        static constexpr uint32_t DEFAULT_INTERPOLATE_AMP_FREQ_DURATION = 5.f / 1000.f * (float) DEFAULT_SAMPLE_RATE; // KlangWellen::millis_to_samples(5);
+        static constexpr float    DEFAULT_SUSTAIN                       = 0.5f;
+        static const int          DEFAULT_WAVETABLE_SIZE                = 512;
+        static const uint8_t      DISTORTION_HARD_CLIPPING              = 0;
+        static const uint8_t      DISTORTION_FOLDBACK                   = 1;
+        static const uint8_t      DISTORTION_FOLDBACK_SINGLE            = 2;
+        static const uint8_t      DISTORTION_FULL_WAVE_RECTIFICATION    = 3;
+        static const uint8_t      DISTORTION_HALF_WAVE_RECTIFICATION    = 4;
+        static const uint8_t      DISTORTION_INFINITE_CLIPPING          = 5;
+        static const uint8_t      DISTORTION_SOFT_CLIPPING_CUBIC        = 6;
+        static const uint8_t      DISTORTION_SOFT_CLIPPING_ARC_TANGENT  = 7;
+        static const uint8_t      DISTORTION_BIT_CRUSHING               = 8;
+        static const int          EVENT_UNDEFINED                       = -1;
+        static const int          EVENT_CHANNEL                         = 0;
+        static const int          EVENT_NOTE_ON                         = 0;
+        static const int          EVENT_NOTE                            = 1;
+        static const int          EVENT_NOTE_OFF                        = 1;
+        static const int          EVENT_CONTROLCHANGE                   = 2;
+        static const int          EVENT_PITCHBEND                       = 3;
+        static const int          EVENT_PROGRAMCHANGE                   = 4;
+        static const int          EVENT_VELOCITY                        = 2;
+        static const uint8_t      FILTER_MODE_LOW_PASS                  = 0;
+        static const uint8_t      FILTER_MODE_HIGH_PASS                 = 1;
+        static const uint8_t      FILTER_MODE_BAND_PASS                 = 2;
+        static const uint8_t      FILTER_MODE_NOTCH                     = 3;
+        static const uint8_t      FILTER_MODE_PEAK                      = 4;
+        static const uint8_t      FILTER_MODE_LOWSHELF                  = 5;
+        static const uint8_t      FILTER_MODE_HIGHSHELF                 = 6;
+        static const uint8_t      FILTER_MODE_BAND_REJECT               = 7;
+        static const int          LOOP_INFINITE                         = std::numeric_limits<int>::max();
+        static const uint8_t      MONO                                  = 1;
+        static const uint8_t      NOISE_WHITE                           = 0;
+        static const uint8_t      NOISE_GAUSSIAN_WHITE                  = 1;
+        static const uint8_t      NOISE_GAUSSIAN_WHITE2                 = 2;
+        static const uint8_t      NOISE_PINK                            = 3;
+        static const uint8_t      NOISE_PINK2                           = 4;
+        static const uint8_t      NOISE_PINK3                           = 5;
+        static const uint8_t      NOISE_SIMPLEX                         = 6;
+        static constexpr float    NOTE_WHOLE                            = 0.25f;
+        static constexpr float    NOTE_HALF                             = 0.5f;
+        static const uint8_t      NOTE_QUARTER                          = 1;
+        static const uint8_t      NOTE_EIGHTH                           = 2;
+        static const uint8_t      NOTE_SIXTEENTH                        = 4;
+        static const uint8_t      NOTE_THIRTYSECOND                     = 8;
+        static const int          NO_AUDIO_DEVICE                       = -2;
+        static const int          NO_CHANNELS                           = 0;
+        static const int          NO_EVENT                              = -1;
+        static const int          NO_INPOINT                            = 0;
+        static const int          NO_LOOP                               = -2;
+        static const int          NO_LOOP_COUNT                         = -1;
+        static const int          NO_OUTPOINT                           = -1;
+        static const int          NO_POSITION                           = -1;
+        static const int          NO_VALUE                              = -1;
+        static const uint8_t      PAN_LINEAR                            = 0;
+        static const uint8_t      PAN_SINE_LAW                          = 2;
+        static const uint8_t      PAN_SQUARE_LAW                        = 1;
+        static const uint8_t      SIGNAL_LEFT                           = 0;
+        static constexpr float    SIGNAL_MAX                            = 1.0f;
+        static constexpr float    SIGNAL_MIN                            = -1.0f;
+        static const int          SIGNAL_MONO                           = 1;
+        static const int          SIGNAL_PROCESSING_IGNORE_IN_OUTPOINTS = -3;
+        static const int          SIGNAL_RIGHT                          = 1;
+        static const int          SIGNAL_STEREO                         = 2;
+        static const uint8_t      SIG_INT16_BIG_ENDIAN                  = 2;
+        static const uint8_t      SIG_INT16_LITTLE_ENDIAN               = 3;
+        static const uint8_t      SIG_INT24_3_BIG_ENDIAN                = 4;
+        static const uint8_t      SIG_INT24_3_LITTLE_ENDIAN             = 5;
+        static const uint8_t      SIG_INT24_4_BIG_ENDIAN                = 6;
+        static const uint8_t      SIG_INT24_4_LITTLE_ENDIAN             = 7;
+        static const uint8_t      SIG_INT32_BIG_ENDIAN                  = 8;
+        static const uint8_t      SIG_INT32_LITTLE_ENDIAN               = 9;
+        static const uint8_t      SIG_INT8                              = 0;
+        static const uint8_t      SIG_UINT8                             = 1;
+        static const uint8_t      STEREO                                = 2;
+        static const uint8_t      VERSION_MAJOR                         = 0;
+        static const uint8_t      VERSION_MINOR                         = 8;
+        static const uint8_t      WAVEFORM_SINE                         = 0;
+        static const uint8_t      WAVEFORM_TRIANGLE                     = 1;
+        static const uint8_t      WAVEFORM_SAWTOOTH                     = 2;
+        static const uint8_t      WAVEFORM_SQUARE                       = 3;
+        static const uint8_t      WAVEFORM_NOISE                        = 4;
+        static const uint8_t      WAVESHAPE_INTERPOLATE_NONE            = 0;
+        static const uint8_t      WAVESHAPE_INTERPOLATE_LINEAR          = 1;
+        static const uint8_t      WAVESHAPE_INTERPOLATE_CUBIC           = 2;
+        static const uint8_t      WAV_FORMAT_PCM                        = 1;
+        static const uint8_t      WAV_FORMAT_IEEE_FLOAT_32BIT           = 3;
 
         /* --- sound --- */
 
@@ -209,7 +208,7 @@ namespace klangwellen {
 
         /* --- math --- */
 
-        // static uint32_t millis_to_samples(float pMillis, float pSamplingRate);
+        // static uint32_t millis_to_samples(float pMillis, float pSampleRate);
         // static uint32_t millis_to_samples(float pMillis);
         // static float    random_normalized();
         // static uint32_t x32Seed;
@@ -217,12 +216,12 @@ namespace klangwellen {
         // static float    random();
         inline static uint32_t x32Seed = 23;
 
-        static uint32_t millis_to_samples(const float pMillis, const float pSamplingRate) {
-            return static_cast<uint32_t>(pMillis / 1000.0f * pSamplingRate);
+        static uint32_t millis_to_samples(const float pMillis, const float pSampleRate) {
+            return static_cast<uint32_t>(pMillis / 1000.0f * pSampleRate);
         }
 
         static uint32_t millis_to_samples(const float pMillis) {
-            return static_cast<uint32_t>(pMillis / 1000.0f * static_cast<float>(DEFAULT_SAMPLING_RATE));
+            return static_cast<uint32_t>(pMillis / 1000.0f * static_cast<float>(DEFAULT_SAMPLE_RATE));
         }
 
         /* xorshift32 ( ref: https://en.wikipedia.org/wiki/Xorshift ) */
@@ -239,12 +238,12 @@ namespace klangwellen {
          */
         static float random_normalized() {
             // TODO replace with mapping, without division
-            return ((float) xorshift32() / UINT32_MAX);
+            return ((float) xorshift32() / (float)UINT32_MAX);
         }
 
         static float random() {
             // TODO replace with mapping, without division
-            return ((float) xorshift32() / UINT32_MAX) * 2 - 1;
+            return ((float) xorshift32() / (float)UINT32_MAX) * 2 - 1;
         }
 
         static float clamp(const float value,
@@ -378,8 +377,8 @@ namespace klangwellen {
                 }
             }
             const float x2          = x * x;
-            const float numerator   = -x * (-11511339840l + x2 * (1640635920 + x2 * (-52785432 + x2 * 479249)));
-            const float denominator = 11511339840l + x2 * (277920720 + x2 * (3177720 + x2 * 18361));
+            const float numerator   = -x * ((float)(-11511339840l) + x2 * ((float)(1640635920) + x2 * (-52785432 + x2 * 479249)));
+            const float denominator = (float)(11511339840l) + x2 * ((float)(277920720) + x2 * (3177720 + x2 * 18361));
             return numerator / denominator;
         }
 
@@ -411,8 +410,8 @@ namespace klangwellen {
 
         static float fast_sinh(const float x) {
             const auto x2          = x * x;
-            const auto numerator   = -x * (11511339840 + x2 * (1640635920 + x2 * (52785432 + x2 * 479249)));
-            const auto denominator = -11511339840 + x2 * (277920720 + x2 * (-3177720 + x2 * 18361));
+            const auto numerator   = -x * ((float)(11511339840) + x2 * ((float)(1640635920) + x2 * (52785432 + x2 * 479249)));
+            const auto denominator = (float)(-11511339840) + x2 * ((float)(277920720) + x2 * (-3177720 + x2 * 18361));
             return numerator / denominator;
         }
 

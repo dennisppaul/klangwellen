@@ -21,7 +21,7 @@
  * PROCESSOR INTERFACE
  *
  * - [x] float process()
- * - [ ] float process(float)‌
+ * - [ ] float process(float)
  * - [ ] void process(Signal&)
  * - [x] void process(float*, uint32_t) *overwrite*
  * - [ ] void process(float*, float*, uint32_t)
@@ -110,7 +110,7 @@ namespace klangwellen {
             }
         };
 
-        Envelope(uint32_t sample_rate = KlangWellen::DEFAULT_SAMPLING_RATE) : mSamplingRate(sample_rate) {
+        Envelope(uint32_t sample_rate = KlangWellen::DEFAULT_SAMPLE_RATE) : fSampleRate(sample_rate) {
         }
 
         /**
@@ -120,7 +120,7 @@ namespace klangwellen {
          * @param pLoop flag to enable looping.
          */
         void enable_loop(bool pLoop) {
-            mLoop = pLoop;
+            fLoop = pLoop;
         }
 
         /**
@@ -129,17 +129,17 @@ namespace klangwellen {
          * @return current value
          */
         float process() {
-            if (!mEnvelopeDone) {
-                const int mNumberOfStages = mEnvelopeStages.size();
-                if (mEnvStage < mNumberOfStages) {
-                    mValue += mTimeScale * mDelta;
-                    mStageDuration += mTimeScale * 1.0f / mSamplingRate;
-                    if (mStageDuration > mEnvelopeStages[mEnvStage].duration) {
-                        const float mRemainder = mStageDuration - mEnvelopeStages[mEnvStage].duration;
-                        finished_stage(mEnvStage);
-                        mEnvStage++;
-                        if (mEnvStage < mNumberOfStages - 1) {
-                            prepareNextStage(mEnvStage, mRemainder);
+            if (!fEnvelopeDone) {
+                const int mNumberOfStages = fEnvelopeStages.size();
+                if (fEnvStage < mNumberOfStages) {
+                    fValue += fTimeScale * fDelta;
+                    fStageDuration += fTimeScale * 1.0f / fSampleRate;
+                    if (fStageDuration > fEnvelopeStages[fEnvStage].duration) {
+                        const float mRemainder = fStageDuration - fEnvelopeStages[fEnvStage].duration;
+                        finished_stage(fEnvStage);
+                        fEnvStage++;
+                        if (fEnvStage < mNumberOfStages - 1) {
+                            prepareNextStage(fEnvStage, mRemainder);
                         } else {
                             stop();
                             finished_envelope();
@@ -147,7 +147,7 @@ namespace klangwellen {
                     }
                 }
             }
-            return mValue;
+            return fValue;
         }
 
         void process(float*         signal_buffer,
@@ -165,7 +165,7 @@ namespace klangwellen {
          * @param pDuration   duration of ramp
          */
         void ramp(float pStartValue, float pEndValue, float pDuration) {
-            mEnvelopeStages.clear();
+            fEnvelopeStages.clear();
             add_stage(pStartValue, pDuration);
             add_stage(pEndValue);
         }
@@ -178,8 +178,8 @@ namespace klangwellen {
          * @param pDuration duration of ramp
          */
         void ramp_to(float pValue, float pDuration) {
-            mEnvelopeStages.clear();
-            add_stage(mValue, pDuration);
+            fEnvelopeStages.clear();
+            add_stage(fValue, pDuration);
             add_stage(pValue);
         }
 
@@ -187,7 +187,7 @@ namespace klangwellen {
          * @return list of all stages
          */
         std::vector<Stage>& stages() {
-            return mEnvelopeStages;
+            return fEnvelopeStages;
         }
 
         /**
@@ -195,107 +195,110 @@ namespace klangwellen {
          * @param pDuration duration of stage
          */
         void add_stage(float pValue, float pDuration) {
-            mEnvelopeStages.push_back(Stage(pValue, pDuration));
+            fEnvelopeStages.push_back(Stage(pValue, pDuration));
         }
 
         /**
          * @param pValue value of stage
          */
         void add_stage(float pValue) {
-            mEnvelopeStages.push_back(Stage(pValue, 0.0f));
+            fEnvelopeStages.push_back(Stage(pValue, 0.0f));
         }
 
         /**
          *
          */
         void clear_stages() {
-            mEnvelopeStages.clear();
+            fEnvelopeStages.clear();
         }
 
         /**
          *
          */
         void start() {
-            mEnvelopeDone = false;
-            if (!mEnvelopeStages.empty()) {
+            fEnvelopeDone = false;
+            if (!fEnvelopeStages.empty()) {
                 prepareNextStage(0, 0.0f);
             }
-            mStageDuration = 0.0f;
+            fStageDuration = 0.0f;
         }
 
         /**
          *
          */
         void stop() {
-            mEnvelopeDone = true;
+            fEnvelopeDone = true;
         }
 
         /**
          * @return time scale in seconds
          */
         float get_time_scale() {
-            return mTimeScale;
+            return fTimeScale;
         }
 
         /**
          * @param pTimeScale time scale in seconds
          */
         void set_time_scale(float pTimeScale) {
-            mTimeScale = pTimeScale;
+            fTimeScale = pTimeScale;
         }
 
         /**
          * @return current value
          */
         float get_current_value() {
-            return mValue;
+            return fValue;
         }
 
         /**
          * @param pValue set current value
          */
         void set_current_value(float pValue) {
-            mValue = pValue;
+            fValue = pValue;
         }
 
     private:
-        const float        mSamplingRate;
-        float              mDelta        = 0.0f;
-        int                mEnvStage     = 0;
-        bool               mEnvelopeDone = true;
-        std::vector<Stage> mEnvelopeStages;
-        bool               mLoop          = false;
-        float              mStageDuration = 0.0f;
-        float              mTimeScale     = 1.0f;
-        float              mValue         = 0.0f;
+        const float        fSampleRate;
+        std::vector<Stage> fEnvelopeStages;
+        float              fDelta         = 0.0f;
+        int                fEnvStage      = 0;
+        bool               fEnvelopeDone  = true;
+        bool               fLoop          = false;
+        float              fStageDuration = 0.0f;
+        float              fTimeScale     = 1.0f;
+        float              fValue         = 0.0f;
 
         float compute_delta_fraction(float pDelta, float pDuration) {
-            return pDuration > 0 ? (pDelta / mSamplingRate) / pDuration : pDelta;
+            return pDuration > 0 ? (pDelta / fSampleRate) / pDuration : pDelta;
         }
 
         void finished_envelope() {
-            if (mLoop) {
+            if (fLoop) {
                 start();
             }
         }
 
-        void finished_stage(int mEnvStage) {
+        void finished_stage(int stage) {
+            (void) stage;
+            // TODO implement stage finished callback
         }
 
-        void prepareNextStage(int pEnvStage, float pFraction) {
-            mEnvStage      = pEnvStage;
-            mStageDuration = 0.0f;
+        void prepareNextStage(int stage, float fraction) {
+            fEnvStage      = stage;
+            fStageDuration = 0.0f;
             // @TODO maybe keep fractional part.
+            (void) fraction;
             // @TODO but take care to also factor in the fraction when computing the delta in `setDelta`
-            mValue = mEnvelopeStages[mEnvStage].value;
-            if (mEnvelopeStages.size() > 1) {
-                setDelta(mEnvStage);
+            fValue = fEnvelopeStages[fEnvStage].value;
+            if (fEnvelopeStages.size() > 1) {
+                setDelta(fEnvStage);
             }
         }
 
         void setDelta(int pEnvStage) {
-            const float mDeltaTMP = mEnvelopeStages[pEnvStage + 1].value - mEnvelopeStages[pEnvStage].value;
-            mDelta                = compute_delta_fraction(mDeltaTMP, mEnvelopeStages[mEnvStage].duration);
+            const float mDeltaTMP = fEnvelopeStages[pEnvStage + 1].value - fEnvelopeStages[pEnvStage].value;
+            fDelta                = compute_delta_fraction(mDeltaTMP, fEnvelopeStages[fEnvStage].duration);
         }
     };
 } // namespace klangwellen

@@ -39,45 +39,45 @@ namespace klangwellen {
     public:
         EnvelopeFollower(float attackTime  = 0.01,
                          float releaseTime = 0.1,
-                         float sampleRate  = KlangWellen::DEFAULT_SAMPLING_RATE)
-            : attackTime(attackTime), releaseTime(releaseTime), sampleRate(sampleRate) {
+                         float sampleRate  = KlangWellen::DEFAULT_SAMPLE_RATE)
+            : fAttackTime(attackTime), fReleaseTime(releaseTime), fSampleRate(sampleRate) {
             setAttackTime(attackTime);
             setReleaseTime(releaseTime);
-            envelope = 0.0f;
+            fEnvelope = 0.0f;
         }
 
         void setAttackTime(float attackTime) {
-            this->attackTime = attackTime;
-            attackCoef       = std::exp(-1.0f / (attackTime * sampleRate));
+            this->fAttackTime = attackTime;
+            fAttackCoef       = std::exp(-1.0f / (attackTime * fSampleRate));
         }
 
-        void setReleaseTime(float releaseTime) {
-            this->releaseTime = releaseTime;
-            releaseCoef       = std::exp(-1.0f / (releaseTime * sampleRate));
+        void setReleaseTime(float release_time) {
+            this->fReleaseTime = release_time;
+            fReleaseCoef       = std::exp(-1.0f / (release_time * fSampleRate));
         }
 
         float process(float input) {
             float absInput = std::fabs(input);
-            if (absInput > envelope) {
+            if (absInput > fEnvelope) {
                 // Attack
-                envelope = attackCoef * (envelope - absInput) + absInput;
+                fEnvelope = fAttackCoef * (fEnvelope - absInput) + absInput;
             } else {
                 // Release
-                envelope = releaseCoef * (envelope - absInput) + absInput;
+                fEnvelope = fReleaseCoef * (fEnvelope - absInput) + absInput;
             }
-            return envelope;
+            return fEnvelope;
         }
 
         float get_current() const {
-            return envelope;
+            return fEnvelope;
         }
 
     private:
-        float attackTime;
-        float releaseTime;
-        float sampleRate;
-        float attackCoef;
-        float releaseCoef;
-        float envelope;
+        const float fSampleRate;
+        float       fAttackTime;
+        float       fReleaseTime;
+        float       fAttackCoef;
+        float       fReleaseCoef;
+        float       fEnvelope;
     };
 } // namespace klangwellen

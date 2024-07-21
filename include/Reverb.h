@@ -21,7 +21,7 @@
  * PROCESSOR INTERFACE
  *
  * - [ ] float process()
- * - [x] float process(float)‌
+ * - [x] float process(float)
  * - [x] void process(Signal&)
  * - [ ] void process(float*, uint32_t)
  * - [x] void process(float*, float*, uint32_t)

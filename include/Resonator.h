@@ -21,7 +21,7 @@
  * PROCESSOR INTERFACE
  *
  * - [ ] float process()
- * - [x] float process(float)‌
+ * - [x] float process(float)
  * - [ ] void process(Signal&)
  * - [ ] void process(float*, uint32_t)
  * - [ ] void process(float*, float*, uint32_t)
@@ -39,12 +39,12 @@ namespace klangwellen {
     class Resonator {
     public:
         Resonator()
-            : m_frequency(440.0f), m_sampleRate(KlangWellen::DEFAULT_SAMPLING_RATE), m_qFactor(1.0f) {
+            : fFrequency(440.0f), fSampleRate(KlangWellen::DEFAULT_SAMPLE_RATE), fQFactor(1.0f) {
             calculateCoefficients();
         }
 
         Resonator(float frequency, float sampleRate, float qFactor)
-            : m_frequency(frequency), m_sampleRate(sampleRate), m_qFactor(qFactor) {
+            : fFrequency(frequency), fSampleRate(sampleRate), fQFactor(qFactor) {
             calculateCoefficients();
         }
 
@@ -62,27 +62,27 @@ namespace klangwellen {
         }
 
         void set_frequency(float frequency) {
-            m_frequency = frequency;
+            fFrequency = frequency;
             calculateCoefficients();
         }
 
         const float get_frequency() {
-            return m_frequency;
+            return fFrequency;
         }
 
         void set_Q(float qFactor) {
-            m_qFactor = qFactor;
+            fQFactor = qFactor;
             calculateCoefficients();
         }
 
         float get_Q() {
-            return m_qFactor;
+            return fQFactor;
         }
 
     private:
-        float m_frequency;  // Resonant frequency
-        float m_sampleRate; // Sample rate of the audio
-        float m_qFactor;    // Quality factor
+        const float fSampleRate; // Sample rate of the audio
+        float       fFrequency;  // Resonant frequency
+        float       fQFactor;    // Quality factor
 
         // Filter coefficients
         float a0, a1, a2, b1, b2;
@@ -92,8 +92,8 @@ namespace klangwellen {
 
         void calculateCoefficients() {
             // Calculate the coefficients for the resonator filter
-            float omega = 2 * M_PI * m_frequency / m_sampleRate;
-            float alpha = sin(omega) / (2 * m_qFactor);
+            float omega = 2 * M_PI * fFrequency / fSampleRate;
+            float alpha = sin(omega) / (2 * fQFactor);
 
             a0 = 1 + alpha;
             a1 = -2 * cos(omega);

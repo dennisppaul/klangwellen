@@ -21,7 +21,7 @@
  * PROCESSOR INTERFACE
  *
  * - [ ] float process()
- * - [x] float process(float)‌
+ * - [x] float process(float)
  * - [ ] void process(Signal&)
  * - [x] void process(float*, uint32_t)
  * - [ ] void process(float*, float*, uint32_t)
@@ -47,7 +47,7 @@ namespace klangwellen {
         static const uint8_t NUM_FILTER_TYPES = 7;
 
         Filter(bool use_fast_math = true) : __USE_FAST_TRIG(use_fast_math) {
-            set(LPF, 0.0, 1000, 100, KlangWellen::DEFAULT_SAMPLING_RATE);
+            set(LPF, 0.0, 1000, 100, KlangWellen::DEFAULT_SAMPLE_RATE);
         }
 
         Filter(uint8_t type,
@@ -55,8 +55,8 @@ namespace klangwellen {
                float   center_frequency,
                float   bandwidth,
                bool    use_fast_math = true,
-               float   sampling_rate = KlangWellen::DEFAULT_SAMPLING_RATE) : __USE_FAST_TRIG(use_fast_math) {
-            set(type, dbGain, center_frequency, bandwidth, sampling_rate);
+               float   sample_rate   = KlangWellen::DEFAULT_SAMPLE_RATE) : __USE_FAST_TRIG(use_fast_math) {
+            set(type, dbGain, center_frequency, bandwidth, sample_rate);
         }
 
         float process(float sample) {
@@ -91,12 +91,12 @@ namespace klangwellen {
                  float   dbGain, /* gain of filter */
                  float   center_frequency,
                  float   bandwidth, /* bandwidth in octaves */
-                 float   sampling_rate = KlangWellen::DEFAULT_SAMPLING_RATE) {
+                 float   sample_rate = KlangWellen::DEFAULT_SAMPLE_RATE) {
             // float A, omega, sn, cs, alpha, beta;
             float a0, a1, a2, b0, b1, b2;
 
             const float A     = KlangWellen::pow(10, dbGain / 40.0f);
-            const float omega = (2.0 * FILTER_PI * center_frequency / sampling_rate);
+            const float omega = (2.0 * FILTER_PI * center_frequency / sample_rate);
             float       sn;
             float       cs;
             float       alpha;
