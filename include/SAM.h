@@ -38,6 +38,8 @@
 #include <sstream>
 #include <string>
 
+#include "KlangWellen.h"
+
 using namespace std;
 
 namespace klangwellen {
@@ -4478,7 +4480,7 @@ namespace klangwellen {
             return GetBufferLength() / 50;
         }
 
-        void process(float* signal_buffer, const uint32_t buffer_length = KLANG_SAMPLES_PER_AUDIO_BLOCK) {
+        void process(float* signal_buffer, const uint32_t buffer_length = KlangWellen::DEFAULT_SAMPLE_RATE) {
             uint8_t*       mBuffer       = (uint8_t*) GetBuffer();
             const uint32_t mBufferLength = get_used_buffer_length();
             for (uint32_t i = 0; i < buffer_length; i += 2) {

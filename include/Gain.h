@@ -60,7 +60,7 @@ namespace klangwellen {
 
         void process(float*         signal_buffer_left,
                      float*         signal_buffer_right,
-                     const uint32_t buffer_length = KLANG_SAMPLES_PER_AUDIO_BLOCK) {
+                     const uint32_t buffer_length = KlangWellen::DEFAULT_SAMPLE_RATE) {
             for (int i = 0; i < buffer_length; i++) {
                 signal_buffer_left[i] *= mGain;
                 signal_buffer_right[i] *= mGain;
@@ -68,7 +68,7 @@ namespace klangwellen {
         }
 
         void process(float*         signal_buffer,
-                     const uint32_t buffer_length = KLANG_SAMPLES_PER_AUDIO_BLOCK) {
+                     const uint32_t buffer_length = KlangWellen::DEFAULT_SAMPLE_RATE) {
             for (int i = 0; i < buffer_length; i++) {
                 signal_buffer[i] *= mGain;
             }

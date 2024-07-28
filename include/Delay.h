@@ -34,6 +34,7 @@
 #include <stdint.h>
 #include <stdio.h>
 
+#include "KlangWellen.h"
 #include "Signal.h"
 
 namespace klangwellen {
@@ -99,7 +100,7 @@ namespace klangwellen {
         }
 
         void process(float*         signal_buffer,
-                     const uint32_t length = KLANG_SAMPLES_PER_AUDIO_BLOCK) {
+                     const uint32_t length = KlangWellen::DEFAULT_SAMPLE_RATE) {
             for (uint32_t i = 0; i < length; i++) {
                 signal_buffer[i] = process(signal_buffer[i]);
             }

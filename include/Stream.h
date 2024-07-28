@@ -30,6 +30,9 @@
 #pragma once
 
 #include <stdint.h>
+#include <iostream>
+
+#include "KlangWellen.h"
 
 namespace klangwellen {
     class StreamDataProvider {
@@ -132,7 +135,7 @@ namespace klangwellen {
             return fBufferIndex;
         }
 
-        void process(float* signal_buffer, const uint32_t buffer_length = KLANG_SAMPLES_PER_AUDIO_BLOCK) {
+        void process(float* signal_buffer, const uint32_t buffer_length = KlangWellen::DEFAULT_SAMPLE_RATE) {
             for (uint16_t i = 0; i < buffer_length; i++) {
                 signal_buffer[i] = process();
             }

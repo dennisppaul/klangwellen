@@ -81,7 +81,7 @@ namespace klangwellen {
 
         void process(float*         signal_buffer_left,
                      float*         signal_buffer_right,
-                     const uint32_t buffer_length = KLANG_SAMPLES_PER_AUDIO_BLOCK) {
+                     const uint32_t buffer_length = KlangWellen::DEFAULT_AUDIOBLOCK_SIZE) {
             for (uint32_t i = 0; i < buffer_length; i++) {
                 step();
                 signal_buffer_left[i] *= fAmp;
@@ -89,7 +89,7 @@ namespace klangwellen {
             }
         }
 
-        void process(float* signal_buffer, const uint32_t buffer_length = KLANG_SAMPLES_PER_AUDIO_BLOCK) {
+        void process(float* signal_buffer, const uint32_t buffer_length = KlangWellen::DEFAULT_AUDIOBLOCK_SIZE) {
             for (uint32_t i = 0; i < buffer_length; i++) {
                 step();
                 signal_buffer[i] *= fAmp;

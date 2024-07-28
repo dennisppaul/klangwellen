@@ -176,7 +176,7 @@ namespace klangwellen {
         void process(float*         carrier_buffer,
                      float*         modulator_buffer,
                      float*         output_buffer,
-                     const uint32_t frames = KLANG_SAMPLES_PER_AUDIO_BLOCK) {
+                     const uint32_t frames = KlangWellen::DEFAULT_SAMPLE_RATE) {
             /* Both the carrier and the modulator have a single channel. */
             for (uint32_t i = 0; i < frames; ++i) {
                 float out = 0.0f;
@@ -202,7 +202,7 @@ namespace klangwellen {
                      float*         modulator_buffer,
                      float*         output_buffer_left,
                      float*         output_buffer_right,
-                     const uint32_t frames = KLANG_SAMPLES_PER_AUDIO_BLOCK) {
+                     const uint32_t frames = KlangWellen::DEFAULT_SAMPLE_RATE) {
             /* The carrier has two channels and the modulator has 1. */
             for (uint32_t i = 0; i < frames; i++) {
                 float out_left  = 0.0f;
