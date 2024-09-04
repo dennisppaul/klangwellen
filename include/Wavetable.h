@@ -29,7 +29,23 @@
 
 #pragma once
 
+#include <stdint.h>
+#include <math.h>
+#include <algorithm>
+
 #include "KlangWellen.h"
+
+#ifndef PI
+#define PI M_PI
+#endif
+
+#ifndef TWO_PI
+#define TWO_PI (M_PI * 2)
+#endif
+
+#ifndef HALF_PI
+#define HALF_PI (M_PI / 2)
+#endif
 
 /**
  * plays back a chunk of samples ( i.e arbitrary, single-cycle waveform like sine, triangle, saw or square waves ) at
@@ -38,39 +54,30 @@
 namespace klangwellen {
     class Wavetable {
     public:
-        Wavetable() : Wavetable(KlangWellen::DEFAULT_WAVETABLE_SIZE, KlangWellen::DEFAULT_SAMPLE_RATE) {}
-        Wavetable(uint32_t wavetable_size) : Wavetable(wavetable_size, KlangWellen::DEFAULT_SAMPLE_RATE) {}
-        Wavetable(uint32_t wavetable_size, uint32_t sample_rate) : Wavetable(new float[wavetable_size], wavetable_size, sample_rate) {
-            fDeleteWavetable = true;
-        }
 
-        Wavetable(float*   wavetable,
-                  uint32_t wavetable_size,
-                  uint32_t sample_rate) : fWavetableSize(wavetable_size),
-                                          fSampleRate(sample_rate),
-                                          fFrequency(0) {
-            fWavetable                = wavetable;
+        Wavetable(float* wavetable, const uint32_t wavetable_size, const uint32_t sampling_rate) : mWavetableSize(wavetable_size),
+                                                                                                   mSamplingRate(sampling_rate),
+                                                                                                   fInterpolationType(KlangWellen::WAVESHAPE_INTERPOLATE_NONE),
+                                                                                                   mFrequency(0) {
+            mWavetable                = wavetable;
             fDeleteWavetable          = false;
-            fArrayPtr                 = 0;
-            fJitterRange              = 0.0f;
-            fEnableJitter             = false;
-            fAmplitude                = M_DEFAULT_AMPLITUDE;
-            fPhaseOffset              = 0.0f;
-            fInterpolationType        = KlangWellen::WAVESHAPE_INTERPOLATE_NONE;
-            fDesiredAmplitude         = 0.0f;
-            fDesiredAmplitudeFraction = 0.0f;
-            fDesiredAmplitudeSteps    = 0;
+            mArrayPtr                 = 0;
+            mJitterRange              = 0.0f;
+            mAmplitude                = M_DEFAULT_AMPLITUDE;
+            mPhaseOffset              = 0.0f;
+            mDesiredAmplitude         = 0.0f;
+            mDesiredAmplitudeFraction = 0.0f;
+            mDesiredAmplitudeSteps    = 0;
             set_frequency(M_DEFAULT_FREQUENCY);
         }
 
         ~Wavetable() {
             if (fDeleteWavetable) {
-                delete[] fWavetable;
+                delete[] mWavetable;
             }
         }
 
-        static void fill(float* wavetable, uint32_t wavetable_size, uint8_t waveform) {
-            // @TODO(add some more interesting waveforms like pulse )
+        static void fill(float* wavetable, const uint32_t wavetable_size, const uint8_t waveform) {
             switch (waveform) {
                 case KlangWellen::WAVEFORM_SINE:
                     sine(wavetable, wavetable_size);
@@ -78,44 +85,16 @@ namespace klangwellen {
                 case KlangWellen::WAVEFORM_TRIANGLE:
                     triangle(wavetable, wavetable_size);
                     break;
-                case KlangWellen::WAVEFORM_SAWTOOTH:
-                    sawtooth(wavetable, wavetable_size);
-                    break;
                 case KlangWellen::WAVEFORM_SQUARE:
                     square(wavetable, wavetable_size);
                     break;
-                case KlangWellen::WAVEFORM_NOISE:
-                    noise(wavetable, wavetable_size);
-                    break;
                 default:
                     sine(wavetable, wavetable_size);
             }
         }
 
-        static void fill(float* wavetable, uint32_t wavetable_size, uint8_t harmonics, uint8_t waveform) {
-            switch (waveform) {
-                case KlangWellen::WAVEFORM_TRIANGLE:
-                    triangle(wavetable, wavetable_size, harmonics);
-                    break;
-                case KlangWellen::WAVEFORM_SAWTOOTH:
-                    sawtooth(wavetable, wavetable_size, harmonics);
-                    break;
-                case KlangWellen::WAVEFORM_SQUARE:
-                    square(wavetable, wavetable_size, harmonics);
-                    break;
-                default:
-                    sine(wavetable, wavetable_size);
-            }
-        }
-
-        static void noise(float* wavetable, uint32_t wavetable_size) {
-            for (uint32_t i = 0; i < wavetable_size; i++) {
-                wavetable[i] = KlangWellen::random() * 2.0f - 1.0f;
-            }
-        }
-
-        static void pulse(float* wavetable, uint32_t wavetable_size, float pulse_width) {
-            const uint32_t mThreshold = (uint32_t) (wavetable_size * pulse_width);
+        static void pulse(float* wavetable, const uint32_t wavetable_size, const float pulse_width) {
+            const uint32_t mThreshold = static_cast<uint32_t>(wavetable_size * pulse_width);
             for (uint32_t i = 0; i < wavetable_size; i++) {
                 if (i < mThreshold) {
                     wavetable[i] = 1.0f;
@@ -125,65 +104,27 @@ namespace klangwellen {
             }
         }
 
-        static float* sawtooth(float* wavetable, uint32_t wavetable_size, uint8_t harmonics) {
-            for (uint32_t i = 0; i < wavetable_size; i++) {
-                wavetable[i] = 0.0f;
-            }
-            float amps[harmonics];
-            for (uint8_t i = 0; i < harmonics; i++) {
-                amps[i] = 1.f / (i + 1);
-            }
-            return fourier_table(wavetable, wavetable_size, harmonics, amps, -0.25f);
-        }
-
-        static void sawtooth_ramp(float* wavetable, uint32_t wavetable_size, bool is_ramp_up) {
+        static void sawtooth_ramp(float* wavetable, const uint32_t wavetable_size, const bool is_ramp_up) {
             const float mSign = is_ramp_up ? -1.0f : 1.0f;
             for (uint32_t i = 0; i < wavetable_size; i++) {
-                wavetable[i] = mSign * (2.0f * ((float) i / (float) (wavetable_size - 1)) - 1.0f);
+                wavetable[i] = mSign * (2.0f * (static_cast<float>(i) / static_cast<float>(wavetable_size - 1)) - 1.0f);
             }
         }
 
-        static void sawtooth(float* wavetable, uint32_t wavetable_size) {
-            sawtooth(wavetable, wavetable_size, true);
-        }
-
-        static void sine(float* wavetable, uint32_t wavetable_size) {
+        static void sine(float* wavetable, const uint32_t wavetable_size) {
             for (uint32_t i = 0; i < wavetable_size; i++) {
-                wavetable[i] = KlangWellen::fast_sin(2.0f * PIf * ((float) i / (float) (wavetable_size)));
+                wavetable[i] = sin(2.0f * PIf * (static_cast<float>(i) / static_cast<float>(wavetable_size)));
             }
         }
 
-        static float* square(float* wavetable, uint32_t wavetable_size, uint8_t harmonics) {
-            for (uint32_t i = 0; i < wavetable_size; i++) {
-                wavetable[i] = 0.0f;
-            }
-            float amps[harmonics];
-            for (uint8_t i = 0; i < harmonics; i += 2) {
-                amps[i] = 1.f / (i + 1);
-            }
-            return fourier_table(wavetable, wavetable_size, harmonics, amps, -0.25f);
-        }
-
-        static void square(float* wavetable, uint32_t wavetable_size) {
+        static void square(float* wavetable, const uint32_t wavetable_size) {
             for (uint32_t i = 0; i < wavetable_size / 2; i++) {
                 wavetable[i]                      = 1.0f;
                 wavetable[i + wavetable_size / 2] = -1.0f;
             }
         }
 
-        static float* triangle(float* wavetable, uint32_t wavetable_size, uint8_t harmonics) {
-            for (uint32_t i = 0; i < wavetable_size; i++) {
-                wavetable[i] = 0.0f;
-            }
-
-            float amps[harmonics];
-            for (uint8_t i = 0; i < harmonics; i += 2) {
-                amps[i] = 1.f / ((i + 1) * (i + 1));
-            }
-            return fourier_table(wavetable, wavetable_size, harmonics, amps, 0);
-        }
-
-        static void triangle(float* wavetable, uint32_t wavetable_size) {
+        static void triangle(float* wavetable, const uint32_t wavetable_size) {
             const uint32_t q  = wavetable_size / 4;
             const float    qf = wavetable_size * 0.25f;
             for (uint32_t i = 0; i < q; i++) {
@@ -195,23 +136,19 @@ namespace klangwellen {
             }
         }
 
-        void set_waveform(uint8_t waveform) {
-            fill(fWavetable, fWavetableSize, waveform);
+        void set_waveform(const uint8_t waveform) const {
+            fill(mWavetable, mWavetableSize, waveform);
         }
 
-        void set_waveform(uint8_t waveform, uint8_t harmonics) {
-            fill(fWavetable, fWavetableSize, harmonics, waveform);
+        float get_frequency() const {
+            return mFrequency;
         }
 
-        float get_frequency() {
-            return fFrequency;
-        }
-
-        void set_frequency(float frequency) {
+        void set_frequency(const float frequency) {
             const float mNewFrequency = fabs(frequency);
-            if (fFrequency != mNewFrequency) {
-                fFrequency = mNewFrequency;
-                fStepSize  = computeStepSize();
+            if (mFrequency != mNewFrequency) {
+                mFrequency = mNewFrequency;
+                mStepSize  = computeStepSize();
             }
         }
 
@@ -223,36 +160,36 @@ namespace klangwellen {
          * @param frequency                         destination frequency
          * @param interpolation_duration_in_samples duration of interpolation in samples
          */
-        void set_frequency(float frequency, uint16_t interpolation_duration_in_samples) {
+        void set_frequency(const float frequency, const uint16_t interpolation_duration_in_samples) {
             if (interpolation_duration_in_samples > 0) {
-                fDesiredFrequency           = frequency;
-                fDesiredFrequencySteps      = interpolation_duration_in_samples;
-                const float mFrequencyDelta = fDesiredFrequency - fFrequency;
-                fDesiredFrequencyFraction   = mFrequencyDelta / interpolation_duration_in_samples;
+                mDesiredFrequency           = frequency;
+                mDesiredFrequencySteps      = interpolation_duration_in_samples;
+                const float mFrequencyDelta = mDesiredFrequency - mFrequency;
+                mDesiredFrequencyFraction   = mFrequencyDelta / interpolation_duration_in_samples;
             } else {
                 set_frequency(frequency);
             }
         }
 
-        float get_offset() {
-            return fOffset;
+        float get_offset() const {
+            return mOffset;
         }
 
-        void set_offset(float offset) {
-            fOffset = offset;
+        void set_offset(const float offset) {
+            mOffset = offset;
         }
 
-        float get_amplitude() {
-            return fAmplitude;
+        float get_amplitude() const {
+            return mAmplitude;
         }
 
         /**
          * @param amplitude amplitude
          */
 
-        void set_amplitude(float amplitude) {
-            fAmplitude             = amplitude;
-            fDesiredAmplitudeSteps = 0;
+        void set_amplitude(const float amplitude) {
+            mAmplitude             = amplitude;
+            mDesiredAmplitudeSteps = 0;
         }
 
         /**
@@ -264,64 +201,56 @@ namespace klangwellen {
          * @param amplitude                         destination amplitude
          * @param interpolation_duration_in_samples duration of interpolation in samples
          */
-        void set_amplitude(float amplitude, uint32_t interpolation_duration_in_samples) {
+        void set_amplitude(const float amplitude, const uint32_t interpolation_duration_in_samples) {
             if (interpolation_duration_in_samples > 0) {
-                fDesiredAmplitude           = amplitude;
-                fDesiredAmplitudeSteps      = interpolation_duration_in_samples;
-                const float mAmplitudeDelta = fDesiredAmplitude - fAmplitude;
-                fDesiredAmplitudeFraction   = mAmplitudeDelta / interpolation_duration_in_samples;
+                mDesiredAmplitude           = amplitude;
+                mDesiredAmplitudeSteps      = interpolation_duration_in_samples;
+                const float mAmplitudeDelta = mDesiredAmplitude - mAmplitude;
+                mDesiredAmplitudeFraction   = mAmplitudeDelta / interpolation_duration_in_samples;
             } else {
                 set_amplitude(amplitude);
             }
         }
 
-        float* get_wavetable() {
-            return fWavetable;
+        float* get_wavetable() const {
+            return mWavetable;
         }
 
         uint32_t get_wavetable_size() const {
-            return fWavetableSize;
+            return mWavetableSize;
         }
 
-        void enable_jitter(bool enable_jitter) {
-            fEnableJitter = enable_jitter;
+        float get_phase_offset() const {
+            return mPhaseOffset;
         }
 
-        float get_phase_offset() {
-            return fPhaseOffset;
+        void set_phase_offset(const float phase_offset) {
+            mPhaseOffset = phase_offset < 0 ? 1 + phase_offset : phase_offset;
         }
 
-        void set_phase_offset(float phase_offset) {
-            fPhaseOffset = phase_offset < 0 ? 1 + phase_offset : phase_offset;
+        float get_jitter_range() const {
+            return mJitterRange;
         }
 
-        float get_jitter_range() {
-            return fJitterRange;
-        }
-
-        void set_jitter_range(float jitter_range) {
-            fJitterRange = jitter_range;
+        void set_jitter_range(const float jitter_range) {
+            mJitterRange = jitter_range;
         }
 
         void reset() {
-            fSignal   = 0.0f;
-            fArrayPtr = 0.0f;
+            mSignal   = 0.0f;
+            mArrayPtr = 0.0f;
         }
 
-        float current() {
-            return fSignal;
-        }
-
-        void set_interpolation(int interpolation_type) {
-            fInterpolationType = interpolation_type;
+        float current() const {
+            return mSignal;
         }
 
         /**
          * set speed of oscillator in seconds per phase
          *
-         * @param pFrequency oscillation speed on seconds per phase ( or Hz )
+         * @param frequency oscillation speed on seconds per phase ( or Hz )
          */
-        void set_oscillation_speed(float frequency) {
+        void set_oscillation_speed(const float frequency) {
             set_frequency(1.0f / frequency);
         }
 
@@ -330,51 +259,60 @@ namespace klangwellen {
          * offset. this methods can be particularily helpful when using an oscillator for non-audio applications ( e.g as an
          * LFO that controlls the frequency ).
          *
-         * @param pMin minimum value of oscillator
-         * @param pMax maximum value of oscillator
+         * @param min minimum output value of oscillator
+         * @param max maximum output value of oscillator
          */
-        void set_oscillation_range(float min, float max) {
+        void set_oscillation_range(const float min, const float max) {
             const float mDelta = max - min;
             set_amplitude(mDelta * 0.5f);
             set_offset(mDelta * 0.5f + min);
         }
 
-        float process() {
-            if (fDesiredAmplitudeSteps > 0) {
-                fDesiredAmplitudeSteps--;
-                if (fDesiredAmplitudeSteps == 0) {
-                    fAmplitude = fDesiredAmplitude;
-                } else {
-                    fAmplitude += fDesiredAmplitudeFraction;
-                }
-            }
-
-            if (fDesiredFrequencySteps > 0) {
-                fDesiredFrequencySteps--;
-                if (fDesiredFrequencySteps == 0) {
-                    set_frequency(fDesiredFrequency);
-                } else {
-                    set_frequency(fFrequency + fDesiredFrequencyFraction);
-                }
-            }
-
-            switch (fInterpolationType) {
-                case KlangWellen::WAVESHAPE_INTERPOLATE_LINEAR:
-                    fSignal = next_sample_interpolate_linear();
-                    break;
-                case KlangWellen::WAVESHAPE_INTERPOLATE_CUBIC:
-                    fSignal = next_sample_interpolate_cubic();
-                    break;
-                default:
-                    fSignal = next_sample();
-            }
-
-            fSignal *= fAmplitude;
-            fSignal += fOffset;
-            return fSignal;
+        void set_interpolation(const int interpolation_type) {
+            fInterpolationType = interpolation_type;
         }
 
-        void process(float* signal_buffer, const uint32_t buffer_length = KlangWellen::DEFAULT_AUDIOBLOCK_SIZE) {
+        float process() {
+            if (mDesiredAmplitudeSteps > 0) {
+                mDesiredAmplitudeSteps--;
+                if (mDesiredAmplitudeSteps == 0) {
+                    mAmplitude = mDesiredAmplitude;
+                } else {
+                    mAmplitude += mDesiredAmplitudeFraction;
+                }
+            }
+
+            if (mDesiredFrequencySteps > 0) {
+                mDesiredFrequencySteps--;
+                if (mDesiredFrequencySteps == 0) {
+                    set_frequency(mDesiredFrequency);
+                } else {
+                    set_frequency(mFrequency + mDesiredFrequencyFraction);
+                }
+            }
+
+#if KLANGWELLEN_WAVETABLE_INTERPOLATE_SAMPLES == 0
+            mSignal = next_sample();
+#else
+            switch (fInterpolationType) {
+                case KlangWellen::WAVESHAPE_INTERPOLATE_LINEAR:
+                    mSignal = next_sample_interpolate_linear();
+                    break;
+                case KlangWellen::WAVESHAPE_INTERPOLATE_CUBIC:
+                    mSignal = next_sample_interpolate_cubic();
+                    break;
+                default:
+                    mSignal = next_sample();
+                    break;
+            }
+#endif // KLANGWELLEN_WAVETABLE_INTERPOLATE_SAMPLES
+
+            mSignal *= mAmplitude;
+            mSignal += mOffset;
+            return mSignal;
+        }
+
+        void process(float* signal_buffer, const uint32_t buffer_length) {
             for (uint16_t i = 0; i < buffer_length; i++) {
                 signal_buffer[i] = process();
             }
@@ -385,109 +323,78 @@ namespace klangwellen {
         static constexpr float TWO_PIf             = (float) TWO_PI;
         static constexpr float M_DEFAULT_AMPLITUDE = 0.75f;
         static constexpr float M_DEFAULT_FREQUENCY = 220.0f;
-        const uint32_t         fWavetableSize;
-        const uint32_t         fSampleRate;
-        float*                 fWavetable;
+        float*                 mWavetable;
+        const uint32_t         mWavetableSize;
+        const uint32_t         mSamplingRate;
         bool                   fDeleteWavetable;
-        float                  fAmplitude;
-        float                  fArrayPtr;
-        float                  fDesiredAmplitude;
-        float                  fDesiredAmplitudeFraction;
-        uint16_t               fDesiredAmplitudeSteps;
-        float                  fDesiredFrequency;
-        float                  fDesiredFrequencyFraction;
-        uint16_t               fDesiredFrequencySteps;
-        bool                   fEnableJitter;
-        float                  fFrequency;
-        int                    fInterpolationType;
-        float                  fJitterRange;
-        float                  fOffset;
-        float                  fPhaseOffset;
-        float                  fSignal;
-        float                  fStepSize;
-
-        static float* fourier_table(float* pWavetable, uint32_t wavetable_size, uint8_t pHarmonics, float* pAmps, float pPhase) {
-            float  a;
-            double w;
-            pPhase *= PIf * 2;
-            for (uint8_t i = 0; i < pHarmonics; i++) {
-                for (uint32_t n = 0; n < wavetable_size; n++) {
-                    a = pAmps[i];
-                    // a = (pAmps != nullptr) ? pAmps[i] : 1.f;
-                    w = (i + 1) * (n * 2 * PI / wavetable_size);
-                    pWavetable[n] += (float) (a * KlangWellen::cos((float) w + pPhase));
-                }
-            }
-            normalise_table(pWavetable, wavetable_size);
-            return pWavetable;
-        }
-
-        static void normalise_table(float* pWavetable, uint32_t wavetable_size) {
-            uint32_t n;
-            float    max = 0.f;
-            for (n = 0; n < wavetable_size; n++) {
-                max = std::max(pWavetable[n], max);
-            }
-            if (max > 0) {
-                for (n = 0; n < wavetable_size; n++) {
-                    pWavetable[n] /= max;
-                }
-            }
-        }
+        float                  mAmplitude;
+        float                  mArrayPtr;
+        float                  mDesiredAmplitude;
+        float                  mDesiredAmplitudeFraction;
+        uint16_t               mDesiredAmplitudeSteps;
+        float                  mDesiredFrequency;
+        float                  mDesiredFrequencyFraction;
+        uint16_t               mDesiredFrequencySteps;
+        float                  mFrequency;
+        float                  mJitterRange;
+        float                  mOffset;
+        float                  mPhaseOffset;
+        float                  mSignal;
+        float                  mStepSize;
+        uint8_t                fInterpolationType;
 
         void advance_array_ptr() {
             // mArrayPtr += mStepSize * (mEnableJitter ? (klangwellen::KlangWellen::random() * mJitterRange + 1.0f) : 1.0f);
             // mArrayPtr += mStepSize;
-            fArrayPtr += fStepSize * (fEnableJitter ? (KlangWellen::random() * fJitterRange + 1.0f) : 1.0f);
-            while (fArrayPtr >= fWavetableSize) {
-                fArrayPtr -= fWavetableSize;
+            mArrayPtr += mStepSize;
+            while (mArrayPtr >= mWavetableSize) {
+                mArrayPtr -= mWavetableSize;
             }
-            while (fArrayPtr < 0) {
-                fArrayPtr += fWavetableSize;
+            while (mArrayPtr < 0) {
+                mArrayPtr += mWavetableSize;
             }
         }
 
-        float computeStepSize() {
-            return fFrequency * ((float) fWavetableSize / (float) fSampleRate);
+        float computeStepSize() const {
+            return mFrequency * (static_cast<float>(mWavetableSize) / static_cast<float>(mSamplingRate));
         }
 
         float next_sample() {
-            const float mOutput = fWavetable[(int) (fArrayPtr)];
+            const float mOutput = mWavetable[static_cast<int>(mArrayPtr)];
             advance_array_ptr();
             return mOutput;
         }
 
         float next_sample_interpolate_cubic() {
-            const uint32_t mSampleOffset   = (int) (fPhaseOffset * fWavetableSize) % fWavetableSize;
-            const float    mArrayPtrOffset = fArrayPtr + mSampleOffset;
+            const uint32_t mSampleOffset   = static_cast<int>(mPhaseOffset * mWavetableSize) % mWavetableSize;
+            const float    mArrayPtrOffset = mArrayPtr + mSampleOffset;
             /* cubic interpolation */
-            const float    frac   = mArrayPtrOffset - (int) mArrayPtrOffset;
-            const float    a      = (int) mArrayPtrOffset > 0 ? fWavetable[(int) mArrayPtrOffset - 1] : fWavetable[fWavetableSize - 1];
-            const float    b      = fWavetable[((int) mArrayPtrOffset) % fWavetableSize];
-            const uint32_t p1     = (uint32_t) mArrayPtrOffset + 1;
-            const float    c      = fWavetable[p1 >= fWavetableSize ? p1 - fWavetableSize : p1];
-            const uint32_t p2     = (uint32_t) mArrayPtrOffset + 2;
-            const float    d      = fWavetable[p2 >= fWavetableSize ? p2 - fWavetableSize : p2];
-            const float    tmp    = d + 3.0f * b;
-            const float    fracsq = frac * frac;
-            const float    fracb  = frac * fracsq;
-            const float    mOutput =
-                (fracb * (-a - 3.f * c + tmp) / 6.f + fracsq * ((a + c) / 2.f - b) + frac * (c + (-2.f * a - tmp) / 6.f) + b);
+            const float    frac    = mArrayPtrOffset - static_cast<int>(mArrayPtrOffset);
+            const float    a       = static_cast<int>(mArrayPtrOffset) > 0 ? mWavetable[static_cast<int>(mArrayPtrOffset) - 1] : mWavetable[mWavetableSize - 1];
+            const float    b       = mWavetable[static_cast<int>(mArrayPtrOffset) % mWavetableSize];
+            const uint32_t p1      = static_cast<uint32_t>(mArrayPtrOffset) + 1;
+            const float    c       = mWavetable[p1 >= mWavetableSize ? p1 - mWavetableSize : p1];
+            const uint32_t p2      = static_cast<uint32_t>(mArrayPtrOffset) + 2;
+            const float    d       = mWavetable[p2 >= mWavetableSize ? p2 - mWavetableSize : p2];
+            const float    tmp     = d + 3.0f * b;
+            const float    fracsq  = frac * frac;
+            const float    fracb   = frac * fracsq;
+            const float    mOutput = (fracb * (-a - 3.f * c + tmp) / 6.f + fracsq * ((a + c) / 2.f - b) + frac * (c + (-2.f * a - tmp) / 6.f) + b);
             advance_array_ptr();
             return mOutput;
         }
 
         float next_sample_interpolate_linear() {
-            const uint32_t mSampleOffset   = (uint32_t) (fPhaseOffset * fWavetableSize) % fWavetableSize;
-            const float    mArrayPtrOffset = fArrayPtr + mSampleOffset;
+            const uint32_t mSampleOffset   = static_cast<uint32_t>(mPhaseOffset * mWavetableSize) % mWavetableSize;
+            const float    mArrayPtrOffset = mArrayPtr + mSampleOffset;
             /* linear interpolation */
-            const float    mFrac   = mArrayPtrOffset - (int) mArrayPtrOffset;
-            const float    a       = fWavetable[(int) mArrayPtrOffset];
-            const uint32_t p1      = (uint32_t) mArrayPtrOffset + 1;
-            const float    b       = fWavetable[p1 >= fWavetableSize ? p1 - fWavetableSize : p1];
+            const float    mFrac   = mArrayPtrOffset - static_cast<int>(mArrayPtrOffset);
+            const float    a       = mWavetable[static_cast<int>(mArrayPtrOffset)];
+            const uint32_t p1      = static_cast<uint32_t>(mArrayPtrOffset) + 1;
+            const float    b       = mWavetable[p1 >= mWavetableSize ? p1 - mWavetableSize : p1];
             const float    mOutput = a + mFrac * (b - a);
             advance_array_ptr();
             return mOutput;
         }
     };
-} // namespace klangwellen
+}
