@@ -54,11 +54,14 @@
 namespace klangwellen {
     class Wavetable {
     public:
+        Wavetable(const uint32_t wavetable_size, const uint32_t sampling_rate) : Wavetable(new float[wavetable_size], wavetable_size, sampling_rate) {
+            fDeleteWavetable = true;
+        }
 
         Wavetable(float* wavetable, const uint32_t wavetable_size, const uint32_t sampling_rate) : mWavetableSize(wavetable_size),
                                                                                                    mSamplingRate(sampling_rate),
-                                                                                                   fInterpolationType(KlangWellen::WAVESHAPE_INTERPOLATE_NONE),
-                                                                                                   mFrequency(0) {
+                                                                                                   mFrequency(0),
+                                                                                                   fInterpolationType(KlangWellen::WAVESHAPE_INTERPOLATE_NONE) {
             mWavetable                = wavetable;
             fDeleteWavetable          = false;
             mArrayPtr                 = 0;

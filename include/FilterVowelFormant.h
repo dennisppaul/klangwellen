@@ -31,6 +31,7 @@
 
 #include <stdint.h>
 
+#include "KlangWellen.h"
 #include "Signal.h"
 
 namespace klangwellen {
