@@ -91,6 +91,9 @@ namespace klangwellen {
                 case KlangWellen::WAVEFORM_SQUARE:
                     square(wavetable, wavetable_size);
                     break;
+                case KlangWellen::WAVEFORM_SAWTOOTH:
+                    sawtooth_ramp(wavetable, wavetable_size, false);
+                    break;
                 default:
                     sine(wavetable, wavetable_size);
             }

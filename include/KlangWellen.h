@@ -97,12 +97,11 @@ namespace klangwellen {
         static constexpr int      LOOP_INFINITE                         = std::numeric_limits<int>::max();
         static constexpr uint8_t  MONO                                  = 1;
         static constexpr uint8_t  NOISE_WHITE                           = 0;
-        static constexpr uint8_t  NOISE_GAUSSIAN_WHITE                  = 1;
-        static constexpr uint8_t  NOISE_GAUSSIAN_WHITE2                 = 2;
-        static constexpr uint8_t  NOISE_PINK                            = 3;
-        static constexpr uint8_t  NOISE_PINK2                           = 4;
-        static constexpr uint8_t  NOISE_PINK3                           = 5;
-        static constexpr uint8_t  NOISE_SIMPLEX                         = 6;
+        static constexpr uint8_t  NOISE_WHITE_FAST                      = 1;
+        static constexpr uint8_t  NOISE_PINK                            = 2;
+        static constexpr uint8_t  NOISE_GAUSSIAN_WHITE_FAST                  = 3;
+        static constexpr uint8_t  NOISE_GAUSSIAN_WHITE                 = 4;
+        static constexpr uint8_t  NOISE_SIMPLEX                         = 5;
         static constexpr float    NOTE_WHOLE                            = 0.25f;
         static constexpr float    NOTE_HALF                             = 0.5f;
         static constexpr uint8_t  NOTE_QUARTER                          = 1;
@@ -146,6 +145,7 @@ namespace klangwellen {
         static constexpr uint8_t  WAVEFORM_SAWTOOTH                     = 2;
         static constexpr uint8_t  WAVEFORM_SQUARE                       = 3;
         static constexpr uint8_t  WAVEFORM_NOISE                        = 4;
+        static constexpr uint8_t  WAVEFORM_PULSE                        = 5;
         static constexpr uint8_t  WAVESHAPE_INTERPOLATE_NONE            = 0;
         static constexpr uint8_t  WAVESHAPE_INTERPOLATE_LINEAR          = 1;
         static constexpr uint8_t  WAVESHAPE_INTERPOLATE_CUBIC           = 2;
