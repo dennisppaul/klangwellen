@@ -99,8 +99,8 @@ namespace klangwellen {
         static constexpr uint8_t  NOISE_WHITE                           = 0;
         static constexpr uint8_t  NOISE_WHITE_FAST                      = 1;
         static constexpr uint8_t  NOISE_PINK                            = 2;
-        static constexpr uint8_t  NOISE_GAUSSIAN_WHITE_FAST                  = 3;
-        static constexpr uint8_t  NOISE_GAUSSIAN_WHITE                 = 4;
+        static constexpr uint8_t  NOISE_GAUSSIAN_WHITE_FAST             = 3;
+        static constexpr uint8_t  NOISE_GAUSSIAN_WHITE                  = 4;
         static constexpr uint8_t  NOISE_SIMPLEX                         = 5;
         static constexpr float    NOTE_WHOLE                            = 0.25f;
         static constexpr float    NOTE_HALF                             = 0.5f;
@@ -157,8 +157,8 @@ namespace klangwellen {
         static constexpr float   MIDI_NOTE_CONVERSION_BASE_FREQUENCY = 440.0;
         static constexpr uint8_t NOTE_OFFSET                         = 69;
 
-        static float note_to_frequency(uint8_t pMidiNote) {
-            return MIDI_NOTE_CONVERSION_BASE_FREQUENCY * pow(2, ((pMidiNote - NOTE_OFFSET) / 12.0));
+        static float midi_note_to_frequency(const uint8_t midi_note) {
+            return MIDI_NOTE_CONVERSION_BASE_FREQUENCY * pow(2, ((midi_note - NOTE_OFFSET) / 12.0));
         }
 
         static void normalize(float* buffer, const uint32_t numSamples) {
