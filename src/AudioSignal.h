@@ -20,14 +20,14 @@
 #pragma once
 
 namespace klangwellen {
-    class Signal {
+    class AudioSignal {
     public:
         float left; /* aka MONO */
         float right;
 
-        Signal() : left(0.0f), right(0.0f) {}
-        explicit Signal(float signal_mono) : left(signal_mono), right(signal_mono) {}
-        Signal(float signal_left, float signal_right) : left(signal_left), right(signal_right) {}
+        AudioSignal() : left(0.0f), right(0.0f) {}
+        explicit AudioSignal(float signal_mono) : left(signal_mono), right(signal_mono) {}
+        AudioSignal(float signal_left, float signal_right) : left(signal_left), right(signal_right) {}
 
         void set(float signal_mono) {
             left  = signal_mono;

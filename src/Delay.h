@@ -22,7 +22,7 @@
  *
  * - [ ] float process()
  * - [x] float process(float)
- * - [ ] void process(Signal&)
+ * - [ ] void process(AudioSignal&)
  * - [x] void process(float*, uint32_t)
  * - [ ] void process(float*, float*, uint32_t)
  */
@@ -35,7 +35,7 @@
 #include <stdio.h>
 
 #include "KlangWellen.h"
-#include "Signal.h"
+#include "AudioSignal.h"
 
 namespace klangwellen {
 

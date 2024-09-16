@@ -22,7 +22,7 @@
  *
  * - [x] float process()
  * - [x] float process(float)
- * - [x] void process(Signal&)
+ * - [x] void process(AudioSignal&)
  * - [x] void process(float*, uint32_t)
  * - [x] void process(float*, float*, uint32_t)
  */
@@ -30,7 +30,7 @@
 #pragma once
 
 #include "KlangWellen.h"
-#include "Signal.h"
+#include "AudioSignal.h"
 
 namespace klangwellen {
     class ADSR {
@@ -73,7 +73,7 @@ namespace klangwellen {
             return signal * fAmp;
         }
 
-        void process(Signal& signal) {
+        void process(AudioSignal& signal) {
             step();
             signal.left *= fAmp;
             signal.right *= fAmp;

@@ -22,14 +22,14 @@
  *
  * - [ ] float process()
  * - [x] float process(float)
- * - [x] void process(Signal&)
+ * - [x] void process(AudioSignal&)
  * - [ ] void process(float*, uint32_t)
  * - [x] void process(float*, float*, uint32_t)
  */
 
 #pragma once
 
-#include "Signal.h"
+#include "AudioSignal.h"
 
 /**
  * applies reverb to a signal. {@link Reverb} uses an implementation of freeverb.
@@ -284,7 +284,7 @@ namespace klangwellen {
             }
         }
 
-        void process(Signal& signal) {
+        void process(AudioSignal& signal) {
             fslider0 = damp.get();
             fslider1 = roomSize.get();
             fslider2 = wet.get();
