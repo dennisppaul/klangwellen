@@ -92,7 +92,7 @@ namespace klangwellen {
                     square(wavetable, wavetable_size);
                     break;
                 case KlangWellen::WAVEFORM_SAWTOOTH:
-                    sawtooth_ramp(wavetable, wavetable_size, false);
+                    sawtooth(wavetable, wavetable_size, false);
                     break;
                 default:
                     sine(wavetable, wavetable_size);
@@ -110,7 +110,7 @@ namespace klangwellen {
             }
         }
 
-        static void sawtooth_ramp(float* wavetable, const uint32_t wavetable_size, const bool is_ramp_up) {
+        static void sawtooth(float* wavetable, const uint32_t wavetable_size, const bool is_ramp_up) {
             const float mSign = is_ramp_up ? -1.0f : 1.0f;
             for (uint32_t i = 0; i < wavetable_size; i++) {
                 wavetable[i] = mSign * (2.0f * (static_cast<float>(i) / static_cast<float>(wavetable_size - 1)) - 1.0f);
