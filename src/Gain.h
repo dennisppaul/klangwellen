@@ -22,7 +22,7 @@
  *
  * - [ ] float process()
  * - [x] float process(float)
- * - [x] void process(Signal&)
+ * - [x] void process(AudioSignal&)
  * - [x] void process(float*, uint32_t)
  * - [x] void process(float*, float*, uint32_t)
  */
@@ -31,7 +31,7 @@
 
 #include <stdint.h>
 
-#include "Signal.h"
+#include "AudioSignal.h"
 
 namespace klangwellen {
     class Gain {
@@ -53,7 +53,7 @@ namespace klangwellen {
             return signal * mGain;
         }
 
-        void process(Signal& signal) {
+        void process(AudioSignal& signal) {
             signal.left *= mGain;
             signal.right *= mGain;
         }

@@ -22,7 +22,7 @@
  *
  * - [x] float process()
  * - [ ] float process(float)
- * - [ ] void process(Signal&)
+ * - [ ] void process(AudioSignal&)
  * - [x] void process(float*, uint32_t) *overwrite*
  * - [ ] void process(float*, float*, uint32_t)
  */
@@ -90,6 +90,9 @@ namespace klangwellen {
                     break;
                 case KlangWellen::WAVEFORM_SQUARE:
                     square(wavetable, wavetable_size);
+                    break;
+                case KlangWellen::WAVEFORM_SAWTOOTH:
+                    sawtooth(wavetable, wavetable_size, false);
                     break;
                 default:
                     sine(wavetable, wavetable_size);
