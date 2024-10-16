@@ -29,8 +29,8 @@
 
 #pragma once
 
-#include <stdint.h>
-#include <math.h>
+#include <cstdint>
+#include <cmath>
 #include <algorithm>
 
 #include "KlangWellen.h"
@@ -60,7 +60,7 @@ namespace klangwellen {
 
         Wavetable(float* wavetable, const uint32_t wavetable_size, const uint32_t sampling_rate) : mWavetableSize(wavetable_size),
                                                                                                    mSamplingRate(sampling_rate),
-                                                                                                   mFrequency(0),
+                                                                                                   mFrequency(M_DEFAULT_FREQUENCY),
                                                                                                    fInterpolationType(KlangWellen::WAVESHAPE_INTERPOLATE_NONE) {
             mWavetable                = wavetable;
             fDeleteWavetable          = false;
@@ -100,7 +100,7 @@ namespace klangwellen {
         }
 
         static void pulse(float* wavetable, const uint32_t wavetable_size, const float pulse_width) {
-            const uint32_t mThreshold = static_cast<uint32_t>(wavetable_size * pulse_width);
+            const auto mThreshold = static_cast<uint32_t>(static_cast<float>(wavetable_size) * pulse_width);
             for (uint32_t i = 0; i < wavetable_size; i++) {
                 if (i < mThreshold) {
                     wavetable[i] = 1.0f;
@@ -110,7 +110,7 @@ namespace klangwellen {
             }
         }
 
-        static void sawtooth(float* wavetable, const uint32_t wavetable_size, const bool is_ramp_up) {
+        static void sawtooth(float* wavetable, const uint32_t wavetable_size, const bool is_ramp_up = true) {
             const float mSign = is_ramp_up ? -1.0f : 1.0f;
             for (uint32_t i = 0; i < wavetable_size; i++) {
                 wavetable[i] = mSign * (2.0f * (static_cast<float>(i) / static_cast<float>(wavetable_size - 1)) - 1.0f);
@@ -132,13 +132,13 @@ namespace klangwellen {
 
         static void triangle(float* wavetable, const uint32_t wavetable_size) {
             const uint32_t q  = wavetable_size / 4;
-            const float    qf = wavetable_size * 0.25f;
+            const float    qf = static_cast<float>(wavetable_size) * 0.25f;
             for (uint32_t i = 0; i < q; i++) {
-                wavetable[i] = i / qf;
+                wavetable[i] = static_cast<float>(i) / qf;
                 // noinspection PointlessArithmeticExpression
-                wavetable[i + (q * 1)] = (qf - i) / qf;
-                wavetable[i + (q * 2)] = -i / qf;
-                wavetable[i + (q * 3)] = -(qf - i) / qf;
+                wavetable[i + (q * 1)] = (qf - static_cast<float>(i)) / qf;
+                wavetable[i + (q * 2)] = static_cast<float>(-i) / qf;
+                wavetable[i + (q * 3)] = -(qf - static_cast<float>(i)) / qf;
             }
         }
 
@@ -338,15 +338,15 @@ namespace klangwellen {
         float                  mDesiredAmplitude;
         float                  mDesiredAmplitudeFraction;
         uint16_t               mDesiredAmplitudeSteps;
-        float                  mDesiredFrequency;
-        float                  mDesiredFrequencyFraction;
-        uint16_t               mDesiredFrequencySteps;
+        float                  mDesiredFrequency{};
+        float                  mDesiredFrequencyFraction{};
+        uint16_t               mDesiredFrequencySteps{};
         float                  mFrequency;
         float                  mJitterRange;
-        float                  mOffset;
+        float                  mOffset{};
         float                  mPhaseOffset;
-        float                  mSignal;
-        float                  mStepSize;
+        float                  mSignal{};
+        float                  mStepSize{};
         uint8_t                fInterpolationType;
 
         void advance_array_ptr() {
