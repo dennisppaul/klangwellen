@@ -22,38 +22,53 @@
 *
 * - [ ] float process()
 * - [x] float process(float)
-* - [ ] void process(Signal&)
+* - [ ] void process(AudioSignal&)
 * - [ ] void process(float*, uint32_t)
 * - [ ] void process(float*, float*, uint32_t)
 */
 
 #pragma once
 
+#include <vector>
 #include <cmath>
 
 namespace klangwellen {
-    class ExponentialMovingAverage {
+    class RootMeanSquare {
     public:
-        ExponentialMovingAverage(float alpha) : fAlpha(alpha), fEMA(0.0f), fInitialized(false) {}
+        RootMeanSquare(size_t windowSize = 16) : fWindowSize(windowSize), fSum(0.0f), fBufferIndex(0) {
+            fBuffer.resize(windowSize, 0.0f);
+            fRMS = 0.0f;
+        }
 
         float process(float sample) {
-            float absSample = std::abs(sample);
-            if (!fInitialized) {
-                fEMA         = absSample;
-                fInitialized = true;
+            // Remove the oldest sample's contribution
+            fSum -= fBuffer[fBufferIndex] * fBuffer[fBufferIndex];
+
+            // Add the new sample to the buffer
+            fBuffer[fBufferIndex] = sample;
+            fBufferIndex          = (fBufferIndex + 1) % fWindowSize;
+
+            // Add the new sample's contribution
+            fSum += sample * sample;
+
+            // Calculate the RMS value
+            if (fSum > 0) {
+                fRMS = std::sqrt(fSum / fWindowSize);
             } else {
-                fEMA = fAlpha * absSample + (1.0f - fAlpha) * fEMA;
+                fRMS = 0.0f;
             }
-            return fEMA;
+            return fRMS;
         }
 
         float get_current() const {
-            return fEMA;
+            return fRMS;
         }
 
     private:
-        float fAlpha;
-        float fEMA;
-        bool  fInitialized;
+        const size_t       fWindowSize;
+        std::vector<float> fBuffer;
+        size_t             fBufferIndex;
+        float              fSum;
+        float              fRMS;
     };
 } // namespace klangwellen

@@ -21,8 +21,6 @@
 
 #include <math.h>
 #include <stdint.h>
-
-#include <algorithm>
 #include <limits>
 
 #ifndef PI
@@ -99,8 +97,8 @@ namespace klangwellen {
         static constexpr uint8_t  NOISE_WHITE                           = 0;
         static constexpr uint8_t  NOISE_WHITE_FAST                      = 1;
         static constexpr uint8_t  NOISE_PINK                            = 2;
-        static constexpr uint8_t  NOISE_GAUSSIAN_WHITE_FAST                  = 3;
-        static constexpr uint8_t  NOISE_GAUSSIAN_WHITE                 = 4;
+        static constexpr uint8_t  NOISE_GAUSSIAN_WHITE_FAST             = 3;
+        static constexpr uint8_t  NOISE_GAUSSIAN_WHITE                  = 4;
         static constexpr uint8_t  NOISE_SIMPLEX                         = 5;
         static constexpr float    NOTE_WHOLE                            = 0.25f;
         static constexpr float    NOTE_HALF                             = 0.5f;
@@ -154,11 +152,19 @@ namespace klangwellen {
 
         /* --- sound --- */
 
+        static float dB_to_volume(const float dB) {
+            return pow(10.0f, dB / 20.0f);
+        }
+
+        static float volume_to_dB(const float volume) {
+            return 20.0f * log10(volume);
+        }
+
         static constexpr float   MIDI_NOTE_CONVERSION_BASE_FREQUENCY = 440.0;
         static constexpr uint8_t NOTE_OFFSET                         = 69;
 
-        static float note_to_frequency(uint8_t pMidiNote) {
-            return MIDI_NOTE_CONVERSION_BASE_FREQUENCY * pow(2, ((pMidiNote - NOTE_OFFSET) / 12.0));
+        static float midi_note_to_frequency(const uint8_t midi_note) {
+            return MIDI_NOTE_CONVERSION_BASE_FREQUENCY * pow(2, (midi_note - NOTE_OFFSET) / 12.0);
         }
 
         static void normalize(float* buffer, const uint32_t numSamples) {
@@ -189,7 +195,7 @@ namespace klangwellen {
             }
         }
 
-        static void peak(float* buffer, const uint32_t length, float& min, float& max) {
+        static void peak(const float* buffer, const uint32_t length, float& min, float& max) {
             if (buffer == nullptr || length == 0) {
                 return;
             }
@@ -235,23 +241,27 @@ namespace klangwellen {
             return x32Seed;
         }
 
+        static float constexpr UINT32_MAX_INV = 1.0f / static_cast<float>(UINT32_MAX);
+
         /**
-         * returns a random number between 0 ... 1
+         * returns a random number between 0.0 ... 1.0
          */
         static float random_normalized() {
-            // TODO replace with mapping, without division
-            return (static_cast<float>(xorshift32()) / static_cast<float>(UINT32_MAX));
+            return static_cast<float>(xorshift32()) * UINT32_MAX_INV;
         }
 
+        /**
+         * returns a random number between -1.0 ... 1.0
+         */
         static float random() {
-            // TODO replace with mapping, without division
-            return (static_cast<float>(xorshift32()) / static_cast<float>(UINT32_MAX)) * 2 - 1;
+            return static_cast<float>(xorshift32()) * UINT32_MAX_INV * 2 - 1;
         }
 
         static float clamp(const float value,
                            const float minimum,
                            const float maximum) {
-            return value > maximum ? maximum : (value < minimum ? minimum : value);
+            return value > maximum ? maximum : value < minimum ? minimum
+                                                               : value;
         }
 
         static float clip(const float value) {
@@ -259,7 +269,8 @@ namespace klangwellen {
         }
 
         static float clamp(const float value) {
-            return value > SIGNAL_MAX ? SIGNAL_MAX : (value < SIGNAL_MIN ? SIGNAL_MIN : value);
+            return value > SIGNAL_MAX ? SIGNAL_MAX : value < SIGNAL_MIN ? SIGNAL_MIN
+                                                                        : value;
         }
 
         static uint8_t clamp127(const uint8_t value) {
@@ -268,7 +279,8 @@ namespace klangwellen {
 
         template<typename T>
         static T clamp(T value, T minimum, T maximum) {
-            return value > maximum ? maximum : (value < minimum ? minimum : value);
+            return value > maximum ? maximum : value < minimum ? minimum
+                                                               : value;
         }
 
         static float pow(const float base, const float exponent) {
@@ -302,7 +314,7 @@ namespace klangwellen {
         }
 
         static float mod(const float a, const float b) {
-            return a >= b ? (a - b * static_cast<int>(a / b)) : a;
+            return a >= b ? a - b * static_cast<int>(a / b) : a;
             // return a >= b ? fmodf(a, b) : a;
             // return input >= ceil ? input % ceil : input;
             // from https://stackoverflow.com/questions/33333363/built-in-mod-vs-custom-mod-function-improve-the-performance-of-modulus-op
@@ -326,7 +338,7 @@ namespace klangwellen {
                                const int16_t inputMax,
                                const int16_t outputMin,
                                const int16_t outputMax) {
-            return ((value - inputMin) * (outputMax - outputMin) / (inputMax - inputMin) + outputMin);
+            return (value - inputMin) * (outputMax - outputMin) / (inputMax - inputMin) + outputMin;
         }
 
         static float sin(const float r) {
@@ -445,12 +457,12 @@ namespace klangwellen {
         }
 
         static float fast_atan(const float x) {
-            static constexpr float PI_FOURTH = (PIf / 4.0f);
+            static constexpr float PI_FOURTH = PIf / 4.0f;
             return PI_FOURTH * x - x * (fabs(x) - 1) * (0.2447f + 0.0663f * fabs(x));
         }
 
-        static float fast_atan2(float x) {
-            static constexpr float PI_FOURTH = (PIf / 4.0f);
+        static float fast_atan2(const float x) {
+            static constexpr float PI_FOURTH = PIf / 4.0f;
             static constexpr float A         = 0.0776509570923569;
             static constexpr float B         = -0.287434475393028;
             static constexpr float C         = PI_FOURTH - A - B;
@@ -470,7 +482,7 @@ namespace klangwellen {
 
             // Ensure that the positions are valid
             const int y1Pos = posInt;
-            const int y2Pos = (posInt + 1 >= bufferSize) ? bufferSize - 1 : posInt + 1;
+            const int y2Pos = posInt + 1 >= bufferSize ? bufferSize - 1 : posInt + 1;
 
             // Get the samples for interpolation
             const float y1 = buffer[y1Pos];
@@ -487,7 +499,7 @@ namespace klangwellen {
             const float a2  = y2 - y0;
             const float a3  = y1;
 
-            return (a0 * mu * mu2 + a1 * mu2 + a2 * mu + a3);
+            return a0 * mu * mu2 + a1 * mu2 + a2 * mu + a3;
         }
 
         static float interpolate_samples_cubic(const float* buffer, const uint32_t bufferSize, const float position) {
@@ -495,10 +507,10 @@ namespace klangwellen {
             const float mu     = position - posInt;
 
             // Ensure that the positions are valid
-            const int y0Pos = (posInt - 1 < 0) ? 0 : posInt - 1;
+            const int y0Pos = posInt - 1 < 0 ? 0 : posInt - 1;
             const int y1Pos = posInt;
-            const int y2Pos = (posInt + 1 >= bufferSize) ? bufferSize - 1 : posInt + 1;
-            const int y3Pos = (posInt + 2 >= bufferSize) ? bufferSize - 1 : posInt + 2;
+            const int y2Pos = posInt + 1 >= bufferSize ? bufferSize - 1 : posInt + 1;
+            const int y3Pos = posInt + 2 >= bufferSize ? bufferSize - 1 : posInt + 2;
 
             // Get the samples for interpolation
             const float y0 = buffer[y0Pos];
@@ -512,7 +524,7 @@ namespace klangwellen {
 
         /* --- buffer --- */
 
-        inline static void fill(float* buffer, float value, uint32_t length = KlangWellen::DEFAULT_SAMPLE_RATE) {
+        static void fill(float* buffer, const float value, const uint32_t length = KlangWellen::DEFAULT_AUDIOBLOCK_SIZE) {
             for (uint32_t i = 0; i < length; i++) {
                 buffer[i] = value;
             }
@@ -521,20 +533,20 @@ namespace klangwellen {
         /**
          * copies src into dst. dst will be overwritten.
          */
-        inline static void copy(float* src, float* dst, uint32_t length = KlangWellen::DEFAULT_SAMPLE_RATE) {
+        static void copy(float* src, float* dst, const uint32_t length = KlangWellen::DEFAULT_AUDIOBLOCK_SIZE) {
             std::copy_n(src, length, dst);
         }
 
         /**
          * adds buffer_b to buffer_a. result will be stored in buffer_a, buffer_b will not be changed.
          */
-        inline static void add(float* buffer_a, float* buffer_b, uint32_t length = KlangWellen::DEFAULT_SAMPLE_RATE) {
+        static void add(float* buffer_a, const float* buffer_b, const uint32_t length = KlangWellen::DEFAULT_AUDIOBLOCK_SIZE) {
             for (uint32_t i = 0; i < length; i++) {
                 buffer_a[i] += buffer_b[i];
             }
         }
 
-        inline static void add(float* buffer_a, float scalar, uint32_t length = KlangWellen::DEFAULT_SAMPLE_RATE) {
+        static void add(float* buffer_a, const float scalar, const uint32_t length = KlangWellen::DEFAULT_AUDIOBLOCK_SIZE) {
             for (uint32_t i = 0; i < length; i++) {
                 buffer_a[i] += scalar;
             }
@@ -543,13 +555,13 @@ namespace klangwellen {
         /**
          * subtracts buffer_b from buffer_a. result will be stored in buffer_a, buffer_b will not be changed.
          */
-        inline static void sub(float* buffer_a, float* buffer_b, uint32_t length = KlangWellen::DEFAULT_SAMPLE_RATE) {
+        static void sub(float* buffer_a, const float* buffer_b, const uint32_t length = KlangWellen::DEFAULT_AUDIOBLOCK_SIZE) {
             for (uint32_t i = 0; i < length; i++) {
                 buffer_a[i] -= buffer_b[i];
             }
         }
 
-        inline static void sub(float* buffer_a, float scalar, uint32_t length = KlangWellen::DEFAULT_SAMPLE_RATE) {
+        static void sub(float* buffer_a, const float scalar, const uint32_t length = KlangWellen::DEFAULT_AUDIOBLOCK_SIZE) {
             for (uint32_t i = 0; i < length; i++) {
                 buffer_a[i] -= scalar;
             }
@@ -558,13 +570,13 @@ namespace klangwellen {
         /**
          * multiplies buffer_b with buffer_a. result will be stored in buffer_a, buffer_b will not be changed.
          */
-        inline static void mult(float* buffer_a, float* buffer_b, uint32_t length = KlangWellen::DEFAULT_SAMPLE_RATE) {
+        static void mult(float* buffer_a, const float* buffer_b, const uint32_t length = KlangWellen::DEFAULT_AUDIOBLOCK_SIZE) {
             for (uint32_t i = 0; i < length; i++) {
                 buffer_a[i] *= buffer_b[i];
             }
         }
 
-        inline static void mult(float* buffer_a, float scalar, uint32_t length = KlangWellen::DEFAULT_SAMPLE_RATE) {
+        static void mult(float* buffer_a, const float scalar, const uint32_t length = KlangWellen::DEFAULT_AUDIOBLOCK_SIZE) {
             for (uint32_t i = 0; i < length; i++) {
                 buffer_a[i] *= scalar;
             }
@@ -573,13 +585,13 @@ namespace klangwellen {
         /**
          * divides buffer_b from buffer_a. result will be stored in buffer_a, buffer_b will not be changed.
          */
-        inline static void div(float* buffer_a, float* buffer_b, uint32_t length = KlangWellen::DEFAULT_SAMPLE_RATE) {
+        static void div(float* buffer_a, const float* buffer_b, const uint32_t length = KlangWellen::DEFAULT_AUDIOBLOCK_SIZE) {
             for (uint32_t i = 0; i < length; i++) {
                 buffer_a[i] /= buffer_b[i];
             }
         }
 
-        inline static void div(float* buffer_a, float scalar, uint32_t length = KlangWellen::DEFAULT_SAMPLE_RATE) {
+        static void div(float* buffer_a, const float scalar, const uint32_t length = KlangWellen::DEFAULT_AUDIOBLOCK_SIZE) {
             for (uint32_t i = 0; i < length; i++) {
                 buffer_a[i] /= scalar;
             }
