@@ -29,13 +29,11 @@
 
 #pragma once
 
-#include <stdint.h>
-
+#include <cstdint>
 #include <algorithm>
 #include <cmath>
 
 #include "KlangWellen.h"
-#include "AudioSignal.h"
 
 /**
  * low-pass filter implementing the <em>Moog Ladder</em>.
@@ -52,18 +50,18 @@ namespace klangwellen {
 
         const float fSampleRate;
         float       fCutoffFrequency;
-        float       fDelay[6];
+        float       fDelay[6]{};
         float       fOldAcr;
         float       fOldFreq;
         float       fOldRes;
         float       fOldTune;
         float       fResonance;
-        float       fTanhstg[3];
+        float       fTanhstg[3]{};
 
     public:
         FilterLowPassMoogLadder() : FilterLowPassMoogLadder(KlangWellen::DEFAULT_SAMPLE_RATE) {}
 
-        explicit FilterLowPassMoogLadder(uint32_t sample_rate) : fSampleRate(sample_rate) {
+        explicit FilterLowPassMoogLadder(const float sample_rate) : fSampleRate(sample_rate), fOldAcr(0), fOldTune(0) {
             fResonance       = 0.4f;
             fCutoffFrequency = 1000.0f;
 
@@ -84,24 +82,21 @@ namespace klangwellen {
         }
 
         float process(float signal) {
-            const float freq = fCutoffFrequency;
-            const float res  = std::max(fResonance, 0.0f);
-            float       res4;
-            float       stg[4];
-            float       acr, tune;
-            const float THERMAL = 0.000025f;
+            const float     freq = fCutoffFrequency;
+            const float     res  = std::max(fResonance, 0.0f);
+            float           stg[4];
+            float           acr, tune;
+            constexpr float THERMAL = 0.000025f;
 
             if (fOldFreq != freq || fOldRes != res) {
-                float f, fc, fc2, fc3, fcr;
-                fOldFreq = freq;
-                fc       = (freq / fSampleRate);
-                f        = 0.5f * fc;
-                fc2      = fc * fc;
-                fc3      = fc2 * fc2;
-
-                fcr  = 1.8730f * fc3 + 0.4955f * fc2 - 0.6490f * fc + 0.9988f;
-                acr  = -3.9364f * fc2 + 1.8409f * fc + 0.9968f;
-                tune = ((1.0f - std::exp(-((2 * M_PI) * f * fcr))) / THERMAL);
+                fOldFreq        = freq;
+                const float fc  = (freq / fSampleRate);
+                const float f   = 0.5f * fc;
+                const float fc2 = fc * fc;
+                const float fc3 = fc2 * fc2;
+                const float fcr = 1.8730f * fc3 + 0.4955f * fc2 - 0.6490f * fc + 0.9988f;
+                acr             = -3.9364f * fc2 + 1.8409f * fc + 0.9968f;
+                tune            = (1.0f - std::exp(-((2 * static_cast<float>(M_PI)) * f * fcr))) / THERMAL;
 
                 fOldRes  = res;
                 fOldAcr  = acr;
@@ -112,7 +107,7 @@ namespace klangwellen {
                 tune = fOldTune;
             }
 
-            res4 = 4.0f * res * acr;
+            const float res4 = 4.0f * res * acr;
 
             for (uint8_t j = 0; j < 2; j++) {
                 signal -= res4 * fDelay[5];
@@ -128,41 +123,43 @@ namespace klangwellen {
             return fDelay[5];
         }
 
-        float get_frequency() {
+        float get_frequency() const {
             return fCutoffFrequency;
         }
 
         /**
          * @param pCutoffFrequency cutoff frequency in Hz
          */
-        void set_frequency(float pCutoffFrequency) {
+        void set_frequency(const float pCutoffFrequency) {
             fCutoffFrequency = pCutoffFrequency;
         }
 
-        float get_resonance() {
+        float get_resonance() const {
             return fResonance;
         }
 
         /**
          * @param pResonance resonance factor [0.0, 1.0] ( becomes unstable close to 1.0 )
          */
-        void set_resonance(float pResonance) {
+        void set_resonance(const float pResonance) {
             fResonance = pResonance;
         }
 
     private:
-        float my_tanh(float x) {
-            int8_t sign = 1;
+        static float my_tanh(float x) {
+            float sign = 1;
             if (x < 0) {
                 sign = -1;
                 x    = -x;
                 return x * sign;
-            } else if (x >= 4.0f) {
+            }
+            if (x >= 4.0f) {
                 return sign;
-            } else if (x < 0.5f) {
+            }
+            if (x < 0.5f) {
                 return x * sign;
             }
-            return sign * (float) tanh(x);
+            return sign * tanh(x);
         }
     };
 } // namespace klangwellen
