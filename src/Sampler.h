@@ -247,7 +247,7 @@ namespace klangwellen {
             return mSample;
         }
 
-        void process(float* signal_buffer, const uint32_t buffer_length = KlangWellen::DEFAULT_SAMPLE_RATE) {
+        void process(float* signal_buffer, const uint32_t buffer_length = KlangWellen::DEFAULT_AUDIOBLOCK_SIZE) {
             for (uint16_t i = 0; i < buffer_length; i++) {
                 signal_buffer[i] = process();
             }
@@ -393,7 +393,7 @@ namespace klangwellen {
 
         void note_on(const uint8_t note, const uint8_t velocity) {
             fIsPlaying = true;
-            set_frequency(KlangWellen::note_to_frequency(note));
+            set_frequency(KlangWellen::midi_note_to_frequency(note));
             set_amplitude(KlangWellen::clamp127(velocity) / 127.0f);
             note_on();
         }

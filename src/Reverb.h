@@ -137,7 +137,7 @@ namespace klangwellen {
 
         void process(float*         output_signal_left,
                      float*         output_signal_right,
-                     const uint32_t buffer_length = KlangWellen::DEFAULT_SAMPLE_RATE) {
+                     const uint32_t buffer_length = KlangWellen::DEFAULT_AUDIOBLOCK_SIZE) {
             process(output_signal_left,
                     output_signal_right,
                     output_signal_left, output_signal_right, buffer_length);
@@ -147,7 +147,7 @@ namespace klangwellen {
                      float*         output_signal_right,
                      float*         input_signal_left,
                      float*         input_signal_right,
-                     const uint32_t buffer_length = KlangWellen::DEFAULT_SAMPLE_RATE) {
+                     const uint32_t buffer_length = KlangWellen::DEFAULT_AUDIOBLOCK_SIZE) {
             fslider0 = damp.get();
             fslider1 = roomSize.get();
             fslider2 = wet.get();
