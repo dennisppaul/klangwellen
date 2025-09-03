@@ -22,6 +22,7 @@
 #include <math.h>
 #include <stdint.h>
 #include <limits>
+#include <algorithm>
 
 #ifndef PI
 #define PI M_PI
